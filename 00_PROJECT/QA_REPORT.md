@@ -81,3 +81,4 @@ Node.js 24、Windows 本機 Microsoft Edge（Playwright headless）。沒有實�
 - `npm run check` 通過：語法、四項進度測試、正式建置與公開內容掃描。
 - `node tests/release.mjs` 通過：390×844／1440×1000 Edge headless，正式第二章簡體 Scroll 字形、SC 字型宣告、Page 往返、各章完整分頁、無資源錯誤。
 - 目前瀏覽器測試只確認 CSS 字型宣告與 Windows 字型安裝情況；iPhone Safari 的實際字型與畫面尚未實機驗證。
+- GitHub Actions run `40237266006` 部署成功；正式站 CSS、`language.js`、第二章原稿 HTTP 200。390／1440px Edge headless 線上驗證簡體字形及 SC 字型宣告通過，無頁面腳本錯誤。

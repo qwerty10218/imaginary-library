@@ -78,3 +78,4 @@
 - 第二章繁體原稿使用正確的「抬」；本機重現 OpenCC `tw→cn` 將「抬起頭來」轉為「擡起头来」。只在簡體顯示層將異體「擡」正規化為「抬」，不改正文或進度定位。
 - 簡體模式指定 SC 字型序列，涵蓋 Apple、Noto／思源及 Windows 的 SimSun／Microsoft YaHei；繁體模式仍使用原字型。無新增依賴。
 - 正式瀏覽器回歸新增第二章簡體字形、Scroll／Page 往返及字型宣告檢查；390／1440px 通過。原專案未修改，使用者未追蹤的 `封面.png` 未觸碰。
+- 程式 commit `4b02bba` 已推送；GitHub Actions run `40237266006` build／deploy 成功。正式站 390／1440px Edge headless 再驗第二章簡體「抬起头来」與 SC 字型宣告，無 JS 錯誤。

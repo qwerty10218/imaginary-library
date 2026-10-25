@@ -10,6 +10,8 @@ MVP 0.1 書庫、作品詳情、Markdown 閱讀器與首作前三章已正式上
 
 簡體模式已加 SC 字型序列；OpenCC 將來源「抬」誤轉成異體「擡」時，顯示層改回「抬」。第二章簡體全文在 390／1440px Edge headless 通過字形、字型宣告與 Scroll／Page 往返驗證；原稿、分頁核心與進度格式未改。
 
+簡體修正 commit `4b02bba` 已 Push；GitHub Actions run `40237266006` build／deploy 成功，正式站 390／1440px Edge headless 的第二章簡體字形與 SC 字型宣告通過。iPhone Safari 實機仍未驗證。
+
 讀者提出書內章節標題偏小後，書內大標題與頁頂小章名已適度放大；書頁上方的獨立標題維持原樣，分頁測量同步套用標題尺寸。樣式 commit `68855d5` 的 Pages build／deploy 已成功，390／1440px 線上與本機實測通過；沒有頁面溢出或失敗請求。
 
 ## 驗證與限制
