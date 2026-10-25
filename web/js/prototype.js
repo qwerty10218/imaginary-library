@@ -1,5 +1,6 @@
 import {createReaderCore} from './reader/core.js';
 import {createProgressStore} from './progress.js';
+import {createPageTurn} from './page-turn.js';
 const $=id=>document.getElementById(id);
 let storage; try {storage=window.localStorage;} catch { /* Memory-only reader. */ }
 const store=createProgressStore(storage), core=createReaderCore();
@@ -50,6 +51,9 @@ const markdown=`# 把時間留給一頁書
 
 <section class="footnotes"><p>〔1〕本篇為介面驗收用的通用文字，不是正式小說。</p><p>〔2〕註釋示範：翻頁模式顯示頁底註，滾動模式保留章末註；點擊註碼可開啟完整內容。</p></section>`;
 let model=core.parse(markdown), pages=[], current=0, busy=false, pending=0, saveTimer, resizeTimer, renderVersion=0;
+const pageTurn=createPageTurn();
+let turnVersion=0;
+function cancelTurn(){turnVersion++;pending=0;busy=false;pageTurn.cancel();}
 let anchor=store.load(workId) || {chapterId,block:0,offset:0,percentage:0,contentVersion:revision};
 const step=()=>narrow()?1:2;
 function apply(){
@@ -101,6 +105,7 @@ function pageForAnchor(){
  return Math.floor(found/step())*step();
 }
 async function render(){
+ cancelTurn();
  const version=++renderVersion;apply();
  $('book').hidden=settings.mode!=='page';$('scroll-content').hidden=settings.mode!=='scroll';
  await document.fonts.ready;if(version!==renderVersion)return;
@@ -126,25 +131,19 @@ async function turn(direction){
  if(settings.mode!=='page'||getSelection()?.toString()||document.querySelector('dialog[open]'))return;
  if(busy){pending=direction;return;}
  const next=current+direction*step();if(next<0||next>=pages.length)return;
- const old=$('book').innerHTML;current=next;paint();capture();save();
+ const from=$('book').querySelector(':scope > .spread').cloneNode(true);
+ current=next;paint();capture();save();
  if(settings.motion==='none'||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
- busy=true;const overlay=document.createElement('div');overlay.className='turn-overlay'+(direction<0?' is-back':'');overlay.setAttribute('aria-hidden','true');overlay.inert=true;
- overlay.innerHTML=`<div class="turn-leaf">${old}<div class="turn-fold"></div></div>`;$('book').append(overlay);
- const leaf=overlay.firstElementChild,fold=leaf.lastElementChild;
- const animations=[];
- if(settings.motion==='fold'){
-  // Compositor-only motion. The diagonal ribbon suggests a curled page without a mesh/3D engine.
-  const sign=direction>0?-1:1;
-  animations.push(leaf.animate([{transform:'translateX(0) skewX(0deg)',opacity:1},{transform:`translateX(${sign*40}%) skewX(${sign*3}deg)`,opacity:1,offset:.55},{transform:`translateX(${sign*110}%) skewX(${sign*5}deg)`,opacity:1}],{duration:220,easing:'cubic-bezier(.3,.4,.3,1)'}));
-  animations.push(fold.animate([{transform:`rotate(${direction*17}deg) translateX(${direction*100}%)`,opacity:0},{transform:`rotate(${direction*17}deg) translateX(0)`,opacity:1,offset:.3},{transform:`rotate(${direction*17}deg) translateX(0)`,opacity:1}],{duration:220,easing:'ease-out'}));
- }else animations.push(leaf.animate([{opacity:1,transform:'translateX(0)'},{opacity:0,transform:`translateX(${direction*-10}px)`}],{duration:180,easing:'ease-out'}));
- try{await Promise.all(animations.map(a=>a.finished));}catch{/* Interrupted transition. */}finally{overlay.remove();busy=false;}
+ busy=true;const version=++turnVersion;
+ await pageTurn.play({book:$('book'),from,to:$('book').querySelector(':scope > .spread'),direction,single:narrow(),style:settings.motion});
+ if(version!==turnVersion)return;
+ busy=false;
  if(pending){const d=pending;pending=0;turn(d);}
 }
 $('prev').onclick=()=>turn(-1);$('next').onclick=()=>turn(1);
-for(const [button,id] of [['settings-button','settings'],['contents-button','contents']]) $(button).onclick=()=>$(id).showModal();
+for(const [button,id] of [['settings-button','settings'],['contents-button','contents']]) $(button).onclick=()=>{cancelTurn();$(id).showModal();};
 document.querySelectorAll('dialog').forEach(d=>d.addEventListener('click',e=>{if(e.target===d){const r=d.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)d.close();}}));
-document.addEventListener('click',e=>{const ref=e.target.closest('.fn-ref');if(ref){const note=model.footnotesById.get(ref.dataset.fnId);if(note){$('note-text').textContent=note.marker+' '+note.text;$('note').showModal();}}});
+document.addEventListener('click',e=>{const ref=e.target.closest('.fn-ref');if(ref){cancelTurn();const note=model.footnotesById.get(ref.dataset.fnId);if(note){$('note-text').textContent=note.marker+' '+note.text;$('note').showModal();}}});
 async function change(key,value){capture();flush();settings[key]=value;store.write('prototype:settings',settings);await render();}
 document.querySelectorAll('button[data-mode]').forEach(b=>b.onclick=()=>change('mode',b.dataset.mode));
 document.querySelectorAll('button[data-theme]').forEach(b=>b.onclick=()=>change('theme',b.dataset.theme));
@@ -152,10 +151,14 @@ for(const [id,key] of [['font-size','size'],['line-height','line'],['font-family
 $('chapter-start').onclick=()=>{anchor={chapterId,block:0,offset:0,percentage:0,contentVersion:revision};$('contents').close();render();save();};
 document.addEventListener('keydown',e=>{if(document.querySelector('dialog[open]')||e.target.closest('button,input,select,textarea,[contenteditable]'))return;if(settings.mode==='page'&&['ArrowRight','PageDown','ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();turn(['ArrowRight','PageDown'].includes(e.key)?1:-1);}});
 let start;
+$('book').addEventListener('pointerdown',()=>{if(busy)cancelTurn();},{capture:true});
 $('book').addEventListener('touchstart',e=>{if(e.target.closest('button,a')||e.touches.length!==1){start=null;return;}start={x:e.touches[0].clientX,y:e.touches[0].clientY,t:Date.now()};},{passive:true});
 $('book').addEventListener('touchend',e=>{if(!start)return;const dx=e.changedTouches[0].clientX-start.x,dy=e.changedTouches[0].clientY-start.y;if(Math.abs(dx)>55&&Math.abs(dx)>Math.abs(dy)*1.5&&Date.now()-start.t<600&&!getSelection()?.toString())turn(dx<0?1:-1);start=null;},{passive:true});
 window.addEventListener('scroll',()=>{if(settings.mode==='scroll'){capture();save();$('progress').style.width=`${anchor.percentage*100}%`;}},{passive:true});
-window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{capture();render();},160);});
-window.addEventListener('pagehide',()=>{capture();flush();});
-document.addEventListener('visibilitychange',()=>{if(document.hidden){capture();flush();}});
+window.addEventListener('resize',()=>{cancelTurn();clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{capture();render();},160);});
+window.addEventListener('pagehide',()=>{cancelTurn();capture();flush();});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){cancelTurn();capture();flush();}});
+const motionPreference=matchMedia('(prefers-reduced-motion: reduce)');
+if(motionPreference.addEventListener)motionPreference.addEventListener('change',cancelTurn);
+else motionPreference.addListener?.(cancelTurn);
 await render();

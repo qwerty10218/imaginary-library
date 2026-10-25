@@ -29,3 +29,16 @@ Node.js 24、Windows 本機 Microsoft Edge（Playwright headless）。沒有實�
 - 大圖、超長章末註、表格、長篇效能與跨版本文字錨點恢復。
 - 正式雲端身份、資料表、RLS、衝突與重試。
 - 本報告不能作為整站發布驗收。
+
+## 2026-10-25：480ms 翻頁精修驗證
+
+- npm run check 通過（語法、四個既有資料層測試、建置及公開內容掃描）。套件未變，沒有重跑與本輪無關的套件升級。
+- node tests/browser.mjs：原有 15 組視窗／主題排版與互動回歸通過。
+- node tests/page-turn.mjs：390×844／1440×1000，各 Dark／Light／Warm，前後翻頁、靜止頁與正反頁來源、480ms、固定翻轉軸、頁面清理及不重新分頁。
+- 邊界及互動：首尾頁、奇數雙頁末頁、12 次快速輸入只排一個後續動作、快速反向、設定中斷、Scroll／Page 往返、關閉／淡入動畫、鍵盤、合成觸控、註腳、文字選取與保存／重載位置。
+- 降級：reduced motion、缺少 Web Animations API、缺少 3D 及 CSS.supports API 均直接切換且可繼續前後翻頁。
+- .local/page-turn/results.json 保存專項結果；12 個關鍵影格及四張三階段對照圖供第二輪視覺驗收。
+- Edge CDP 的單次手機動畫中段 220ms 取樣：LayoutCount 增量 0、RecalcStyleCount 增量 2，見 .local/page-turn/performance.json；此取樣不代表實機耗電或完整效能基準。
+- 取捨：固定軸的透視頁面＋動態明暗／邊緣亮帶近似紙張彎曲，沒有連續曲面或拖曳跟手的物理模擬；偏好較輕效果者可選淡入或關閉。
+- iPhone Safari／低階手機實機效能、耗電與掉幀數尚未實測；不得將 Edge 的合成觸控驗證視為實機驗證。
+- 原型目前只有單一示範章節，已測頁面邊界；正式跨章行為尚不存在，未宣稱跨章測試通過。
