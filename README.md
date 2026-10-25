@@ -16,6 +16,8 @@ npm run dev
 
 首頁：[http://127.0.0.1:4173/imaginary-library/](http://127.0.0.1:4173/imaginary-library/)
 
+正式網站：[https://qwerty10218.github.io/imaginary-library/](https://qwerty10218.github.io/imaginary-library/)
+
 建置輸出在 `dist/`，路徑採相對連結，供 GitHub Pages 的 `/imaginary-library/` 子路徑使用。`npm run dev` 只服務 `dist/`；修改來源後先重跑 `npm run build`。正式入口不需要測試查詢參數或原型頁。
 
 ## 新增作品與章節

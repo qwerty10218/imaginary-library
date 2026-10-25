@@ -68,3 +68,5 @@
 - 只讀核對原作 `web/index.html`、`web/js/script.js` 的 OpenCC 1.0.5 `tw→cn` 實作；移入相同版本精簡模組與 MIT 授權。沒有移入原作專用詞庫，也沒有外部 CDN。`language.js` 保存新專案語言偏好；閱讀器重新建立顯示模型後分頁，核心演算法及進度資料結構不變。
 - GitHub Pages 靜態頁面無訪客 IP 資訊；不引入第三方定位 API。預設繁體，讀者可切換並保存偏好。
 - 發布檢查改驗封面與前三章；測試結果見 QA_REPORT。原專案與翻頁動畫未修改。
+- 本機 commit `6e8f8be` 已正常 Push 至指定新 Repository 的 main。首次工作流因 Pages 站點未建立而在 configure-pages 失敗；依 GitHub 正式設定建立 workflow 來源的 Pages 站點，重新觸發 run `40236235609`，build／deploy 均成功。
+- 正式網址、封面、三章、索引與 OpenCC HTTP 200；390／1440px Edge headless 線上從首頁逐章讀到第三章，無失敗資源或 JS 錯誤。iPhone Safari 實機尚未驗證。
