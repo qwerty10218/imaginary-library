@@ -71,3 +71,4 @@
 - 本機 commit `6e8f8be` 已正常 Push 至指定新 Repository 的 main。首次工作流因 Pages 站點未建立而在 configure-pages 失敗；依 GitHub 正式設定建立 workflow 來源的 Pages 站點，重新觸發 run `40236235609`，build／deploy 均成功。
 - 正式網址、封面、三章、索引與 OpenCC HTTP 200；390／1440px Edge headless 線上從首頁逐章讀到第三章，無失敗資源或 JS 錯誤。iPhone Safari 實機尚未驗證。
 - 讀者指出書內章節標題偏小；僅調整 `.book` 的章節大標題與頁頂小章名，並讓分頁測量容器使用相同標題尺寸。書頁上方的獨立標題維持原尺寸，正文、動畫與進度邏輯不變。
+- 樣式 commit `68855d5` 已推送並由 GitHub Actions run `40236804890` 成功部署。線上 390／1440px Edge headless 實測書內大標題 30／39px、頁頂小章名 9／11px，書外標題仍 22／29px；無橫向溢出、JS 錯誤或失敗資源請求。
