@@ -1,16 +1,52 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import {createHash} from 'node:crypto';
+
 const root = path.resolve('dist');
+const source = path.resolve('content/works');
+const slug = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const fail = message => { throw new Error(`作品資料錯誤：${message}`); };
 if (path.dirname(root) !== process.cwd()) throw new Error('Invalid build directory');
+
+const works = [];
+for (const entry of await fs.readdir(source, {withFileTypes:true})) {
+  if (!entry.isDirectory() || !slug.test(entry.name)) fail(`非法作品資料夾 ${entry.name}`);
+  const dir = path.join(source, entry.name);
+  const work = JSON.parse(await fs.readFile(path.join(dir, 'metadata.json'), 'utf8'));
+  if (work.id !== entry.name || !work.title || !work.author || !work.description || !Array.isArray(work.chapters)) fail(`${entry.name}/metadata.json 缺少必要欄位`);
+  if (!['upcoming','serializing','complete'].includes(work.status)) fail(`${work.id} 狀態無效`);
+  if (!Array.isArray(work.genres) || !Array.isArray(work.tags)) fail(`${work.id} 類型或標籤無效`);
+  if (work.cover && !/^cover\.(?:webp|png|jpe?g)$/.test(work.cover)) fail(`${work.id} 封面路徑無效`);
+  const ids = new Set();
+  work.chapters = await Promise.all(work.chapters.map(async chapter => {
+    if (!slug.test(chapter.id) || ids.has(chapter.id) || !chapter.title || chapter.published !== true) fail(`${work.id} 章節 ID、標題或發布狀態無效`);
+    ids.add(chapter.id);
+    const filename = `${chapter.id}.md`;
+    const markdown = await fs.readFile(path.join(dir, 'chapters', filename), 'utf8');
+    if (!markdown.trim()) fail(`${work.id}/${filename} 是空檔案`);
+    return {id:chapter.id,title:chapter.title,volume:chapter.volume || '',file:`content/${work.id}/${filename}`,version:createHash('sha256').update(markdown).digest('hex').slice(0,16)};
+  }));
+  if (work.cover) await fs.access(path.join(dir, work.cover));
+  works.push(work);
+}
+works.sort((a,b)=>a.id.localeCompare(b.id));
 await fs.rm(root, {recursive:true,force:true});
 await fs.mkdir(root, {recursive:true});
-// Allowlist: no drafts, old assets, backups, credentials or development documents.
-for (const name of ['index.html','prototype.html','css','js']) {
+for (const name of ['index.html','work.html','reader.html','prototype.html','css','js']) {
   await fs.cp(path.join('web',name), path.join(root,name), {recursive:true});
+}
+await fs.mkdir(path.join(root,'data'), {recursive:true});
+await fs.writeFile(path.join(root,'data/works.json'),JSON.stringify({schemaVersion:1,works},null,2)+'\n');
+for (const work of works) {
+  const dest = path.join(root,'content',work.id);
+  await fs.mkdir(dest,{recursive:true});
+  const dir = path.join(source,work.id);
+  if (work.cover) await fs.copyFile(path.join(dir,work.cover),path.join(dest,work.cover));
+  for (const chapter of work.chapters) await fs.copyFile(path.join(dir,'chapters',`${chapter.id}.md`),path.join(dest,`${chapter.id}.md`));
 }
 await fs.mkdir(path.join(root,'js/vendor'), {recursive:true});
 await fs.copyFile('node_modules/marked/lib/marked.esm.js', path.join(root,'js/vendor/marked.js'));
 await fs.copyFile('node_modules/dompurify/dist/purify.es.mjs', path.join(root,'js/vendor/purify.js'));
 await fs.copyFile('node_modules/marked/LICENSE.md', path.join(root,'js/vendor/marked-LICENSE.txt'));
 await fs.copyFile('node_modules/dompurify/LICENSE', path.join(root,'js/vendor/purify-LICENSE.txt'));
-console.log('Built local visual prototype. Formal library remains empty.');
+console.log(`Built ${works.length} works and ${works.reduce((n,w)=>n+w.chapters.length,0)} published chapters.`);

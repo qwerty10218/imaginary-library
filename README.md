@@ -2,7 +2,7 @@
 
 Gary's Imaginary Library · Gary Lee
 
-現代原創小說與短篇閱讀空間。現階段是**閱讀頁視覺驗收原型**，正式書庫為空；尚未完成多作品上稿、正式閱讀進度與發布流程。
+原創小說與短篇故事的靜態閱讀網站。MVP 0.1 已有書庫、作品詳情、Markdown 章節目錄與 Page／Scroll 閱讀器。第一部作品《朕都穿越了，怎麼還是你這奸臣？！》目前只有作者提供的設定與簡介；**正式章節尚未上稿**。
 
 ## 本機預覽
 
@@ -14,17 +14,23 @@ npm run check
 npm run dev
 ```
 
-- 空書庫入口：http://127.0.0.1:4173/imaginary-library/
-- 手機／桌面翻頁原型：http://127.0.0.1:4173/imaginary-library/prototype.html?mode=page
-- 手機直接進 prototype.html 預設 Scroll；設定面板可切換翻頁、主題、字級、行距與動畫。
-- 原型文字僅供排版驗收，不是正式作品。
+首頁：[http://127.0.0.1:4173/imaginary-library/](http://127.0.0.1:4173/imaginary-library/)
 
-瀏覽器測試（需先執行預覽服務）：`node tests/browser.mjs`。預設使用本機 Microsoft Edge；可用 `BROWSER_CHANNEL` 指定其他已安裝的 Playwright channel。
+建置輸出在 `dist/`，路徑採相對連結，供 GitHub Pages 的 `/imaginary-library/` 子路徑使用。`npm run dev` 只服務 `dist/`；修改來源後先重跑 `npm run build`。正式入口不需要測試查詢參數或原型頁。
 
-沒有網站 lint 或 TypeScript 設定；`check` 執行 JavaScript 語法、Node 測試、正式靜態建置與舊內容／端點掃描。瀏覽器測試另外執行。
+## 新增作品與章節
 
-## 發布限制
+1. 在 `content/works/` 建立小寫英文 ID 資料夾，例如 `new-story/`。
+2. 建立 `metadata.json`，參照 [第一部作品 metadata](content/works/emperor-and-minister/metadata.json)。至少填寫 `id`、`title`、`author`、`description`、`volume`、`genres`、`tags`、`status`、`updatedAt`、`chapters`。`status` 為 `upcoming`、`serializing` 或 `complete`。
+3. 將作者正文存入 `chapters/<chapter-id>.md`，參照 [Markdown 範本](content/CHAPTER_TEMPLATE.md)。檔名與章節 ID 相同；ID 用小寫英文、數字與連字號。
+4. 在 `metadata.json` 的 `chapters` 陣列按閱讀順序加入 `{"id":"chapter-one","title":"第一章　標題","published":true}`。只有已登錄且明確標記 `published: true` 的章節會進入建置產物；未登錄的 Markdown 不會公開。
+5. 可選：放入 `cover.webp`、`cover.png` 或 `cover.jpg`，並在 metadata 設定 `"cover":"cover.webp"`。未提供封面時使用文字佔位設計。
+6. 執行 `npm run check`、`npm run build`、`npm run dev`，在書庫、作品頁與閱讀頁逐一預覽。上架前確認作者稿與章節順序。
 
-本機 Commit 已獲授權；Push、GitHub Pages、正式部署與雲端資源均未獲授權。不得直接部署目前原型。沒有配置任何雲端端點或登入 SDK。
+作品資料與正文存在 Git，網站從建置時產生的 `data/works.json` 載入索引。新增作品或章節不需要修改閱讀器程式。本機閱讀進度按作品 ID 分開保存在 `imaginary-library:v1:` 命名空間；登入及雲端同步尚未啟用。
 
-參閱 docs/CORE_PROVENANCE.md、docs/CLOUD_SYNC_AUDIT.md 與 00_PROJECT/AI_SYNC_BRIEF.md。
+## 驗證與發布狀態
+
+`npm run check` 執行語法、進度單元測試、建置與公開產物敏感內容掃描。瀏覽器測試需先啟動預覽服務：`node tests/browser.mjs`、`node tests/page-turn.mjs`、`node tests/mvp.mjs`。`node tests/workflow.mjs` 驗證新作品與 Markdown 上稿只複製已登錄章節，測後會重建正式產物。
+
+正式小說章節未取得前，閱讀器只能以測試攔截資料驗證，不會將測試文字當成正式章節發布。Push、GitHub Pages、正式部署及雲端資源須另獲使用者同意。

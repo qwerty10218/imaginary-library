@@ -42,3 +42,12 @@ Node.js 24、Windows 本機 Microsoft Edge（Playwright headless）。沒有實�
 - 取捨：固定軸的透視頁面＋動態明暗／邊緣亮帶近似紙張彎曲，沒有連續曲面或拖曳跟手的物理模擬；偏好較輕效果者可選淡入或關閉。
 - iPhone Safari／低階手機實機效能、耗電與掉幀數尚未實測；不得將 Edge 的合成觸控驗證視為實機驗證。
 - 原型目前只有單一示範章節，已測頁面邊界；正式跨章行為尚不存在，未宣稱跨章測試通過。
+
+## 2026-10-26：MVP 0.1 驗證
+
+- `npm run check`：語法、四個進度測試、建置與公開產物掃描通過；正式產物為 1 部作品、0 篇正式章節。
+- `node tests/workflow.mjs`：暫時建立第二部測試作品，驗證 metadata、已登錄 Markdown 與未登錄草稿的建置取捨；測後移除測試來源並重建正式產物。
+- `node tests/mvp.mjs`：Edge headless 390×844 與 1440×1000。實際首頁／詳情頁顯示首部作品待上稿；隔離攔截的兩部測試作品驗證 Page／Scroll、三主題、最後一頁跨章、重載、腳註、獨立進度與繼續閱讀。沒有頁面錯誤、404 或外部請求。
+- 原有 `node tests/browser.mjs`：15 組尺寸／主題及逐頁腳註排版回歸通過；`node tests/page-turn.mjs`：6 組動畫／主題／尺寸回歸通過。
+- 截圖位於 `.local/mvp/`，只供本機驗收，不進 Git；閱讀器截圖中的文字是明確標記的測試佔位內容。
+- 尚未驗證真實作者正文、長篇正式章節、iPhone Safari 實機與 GitHub Pages 線上環境。尚未 Push 或部署。

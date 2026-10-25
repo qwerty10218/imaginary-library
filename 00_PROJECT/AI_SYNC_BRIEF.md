@@ -1,35 +1,23 @@
 # 臆想書房 — 接續快照
 
-日期：2026-10-25。此文件只描述新專案，不套用原小說工作規則。
+日期：2026-10-26。此文件只描述新專案；不可套用原小說創作規範或原遠端設定。
 
-## 目前節點
+## 現況
 
-已完成安全保全、有效工作區隔離、新根 Git 與可操作閱讀頁視覺原型。使用者完成第一輪檢視後，本輪只精修翻頁。**等待第二輪視覺驗收，不得自行開始下一階段。**
+使用者已授權由閱讀頁原型進入 MVP 0.1。正式首頁、作品詳情、Markdown 建置索引及閱讀頁已在本機完成。首頁 → 作品 → 章節 → 正文 → 下一章的流程，以隔離的測試章節在 390px／1440px Edge 驗證通過。正式作品《朕都穿越了，怎麼還是你這奸臣？！》只有作者提供的名稱、卷名、類型、簡介；**0 篇正式章節**，顯示待上稿。不得把測試佔位文字或原作品正文當新作發布。
 
-預覽：啟動 npm run dev 後開啟 http://127.0.0.1:4173/imaginary-library/prototype.html?mode=page 。手機不帶 mode 參數時預設 Scroll，桌面預設雙頁。
+本機入口：啟動 `npm run dev` 後開啟 http://127.0.0.1:4173/imaginary-library/ 。正式路徑採相對 URL，可於 `/imaginary-library/` 下運作；GitHub Pages 線上環境未部署、未實測。
 
-## 安全與 Git
+## 技術與品質
 
-- 回退區 .migration-backup/2026-10-25：3,703 檔逐檔備份驗證，四類還原抽驗完成。
-- 原專案全量 3,703 檔重驗無變更。
-- 舊內容與舊 web/.git 已可還原地搬入忽略區，非永久刪除；自動審核阻擋了原永久刪除操作。
-- 新倉庫根目錄 main；origin 為 https://github.com/qwerty10218/imaginary-library.git 。遠端仍空。
-- 本機 Commit 可做；Push、Pages、正式部署與正式 Supabase 均未授權，未執行。
-- 已建立獨立 root commit 3fcfb28；以後續文件提交保存本次收斂紀錄。未連接舊歷史。
+- `content/works/<id>/metadata.json` 登錄作品及章節；只有明確 `published: true` 的 Markdown 被複製進 dist。上稿範本與 README 已備妥。
+- `web/reader.html` 沿用 `reader/core.js`、`page-turn.js` 與 `progress.js`：Page／Scroll、桌面雙頁、手機單頁、三主題、腳註、上下章、章末續讀及作品獨立進度。
+- 分頁使用實際紙頁內容盒尺寸；頁眉與正文上緣間距稍增。Markdown 內容 SHA256 短版作進度版本，變更時以百分比安全降級。
+- `npm run check`、原 15 組瀏覽器回歸、6 組動畫回歸、2 組正式流程瀏覽器測試及新作品上稿建置測試已通過。詳細見 QA_REPORT.md；截圖在忽略區 `.local/mvp/`。
+- 未驗證真實作者長篇內容、iPhone Safari 實機或 GitHub Pages 線上環境。
 
-## 功能界線
+## 安全與下一步
 
-- core.js 重用舊未提交腳註與分頁；只針對測量與已重現的長段落問題修復。
-- 三主題、單／雙頁、Scroll、腳註與基本位置恢復皆為原型範圍。
-- 主翻頁為 480ms、固定軸的雙面頁面透視，桌面單頁繞中縫，手機掀走／展開；淡入仍 180ms，關閉／reduced motion 或缺少能力直接切頁。
-- 新 page-turn.js 是瞬時過渡層，沒有改 Markdown／DOM 分頁／腳註／進度資料；每次最多一張翻動頁及一個待處理方向。
-- 正式書庫為空，示範不是新小說。完整資料模型、上稿、書庫詳情及多作品 UI 待後續。
-- 本機進度命名空間獨立。SyncPort 停用，沒有服務連接；第二階段規格見 docs/CLOUD_SYNC_AUDIT.md。
-
-## 下一步
-
-先取得使用者對 480ms 翻頁的第二輪視覺回饋；本輪完成後停止。後續再按明確授權繼續階段 2–5。詳細已驗證項目與限制見 QA_REPORT.md。原型不具正式發布條件。
-
-工程驗證已通過：npm run check、npm audit、15 組尺寸／主題、短手機大字級、富文字／註碼完整性及 HTML 淨化。實機 Safari、完整上稿與多作品 UI 尚未完成。測試截圖與結果僅留 .local，不提交。
-
-本輪再次通過 npm run check、原 15 組瀏覽器回歸及 6 組翻頁專項（含前後、快速／反向、奇數邊界、模式中斷、降級、鍵盤／合成觸控與位置保存）。動畫中段單次 CDP 取樣未增加 LayoutCount。12 個關鍵影格／4 張三階段對照圖在 .local/page-turn，iPhone Safari 尚未實機驗證。沒有 Push、部署或原專案操作。
+- 新 Git 根目錄 `main`，origin 僅指向 `https://github.com/qwerty10218/imaginary-library.git`；前一輪 HEAD 為 `66f9a65`，本輪建立本機 MVP commit 後以 `git log -1` 查最新 SHA。無 Push、Pages、部署或正式 Supabase 操作。
+- `.migration-backup/2026-10-25` 保留已驗證回退資料和舊 Git，不在新提交／公開產物中；原專案未被本輪操作。
+- 下一步等待使用者檢視首頁與測試閱讀畫面，並提供正式章節稿；上稿後須重新驗收真實內容。公開發布及雲端啟用須另獲授權。

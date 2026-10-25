@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>閱讀 · 臆想書房</title><link rel="icon" href="data:,"><link rel="stylesheet" href="css/reader.css"><script type="module" src="js/reader.js"></script></head>
+<body data-theme="dark">
+<header class="site-header"><a class="brand" href="index.html"><span class="brand-mark">臆</span><span>臆想書房<small>GARY'S IMAGINARY LIBRARY</small></span></a><a id="back-to-work" class="text-link" href="index.html">作品詳情 ↗</a><button id="settings-button" class="text-button" aria-label="閱讀設定">Aa <span class="desktop-label">閱讀設定</span></button></header>
+<main class="reading-room"><div class="reading-heading"><div><p class="eyebrow">THE READING ROOM</p><h1 id="reader-title"></h1><p id="reader-byline" class="byline"></p></div><button id="contents-button" class="text-button contents-button" aria-label="章節目錄">☰ <span class="desktop-label">目錄</span></button></div>
+<div id="book" class="book" aria-label="閱讀正文"></div><div id="scroll-content" class="scroll-content prose" hidden></div>
+<nav class="reading-navigation" aria-label="頁面導航"><button id="prev" class="nav-button" aria-label="上一頁">←</button><div class="position"><span id="position" aria-live="polite"></span><div class="progress-track"><span id="progress"></span></div></div><button id="next" class="nav-button" aria-label="下一頁">→</button></nav><nav class="chapter-navigation" aria-label="章節導航"><a id="previous-chapter" class="chapter-nav-link" hidden>← 上一章</a><a id="next-chapter" class="chapter-nav-link" hidden>下一章 →</a></nav><p id="storage-status" class="storage-status" role="status"></p><p id="reader-error" class="library-status" role="alert"></p></main>
+<footer class="room-footer"><span>一頁之間，自有天地。</span><span>GARY LEE <span class="footer-dot">·</span> 臆想書房</span></footer>
+<dialog id="settings" class="panel"><form method="dialog" class="panel-head"><h2>閱讀設定</h2><button class="text-button" aria-label="關閉閱讀設定">✕</button></form><div class="panel-body">
+<fieldset><legend>閱讀方式</legend><div class="segmented"><button data-mode="scroll">滾動</button><button data-mode="page">翻頁</button></div></fieldset>
+<fieldset><legend>紙頁與光</legend><div class="theme-options"><button data-theme="dark"><i class="swatch dark"></i>夜讀</button><button data-theme="light"><i class="swatch light"></i>日光</button><button data-theme="warm"><i class="swatch warm"></i>暖紙</button></div></fieldset>
+<label class="setting-row">字級<select id="font-size"><option value="18">18</option><option value="20">20</option><option value="22">22</option><option value="24">24</option></select></label>
+<label class="setting-row">行距<select id="line-height"><option value="1.7">緊湊</option><option value="1.9">舒適</option><option value="2.1">寬鬆</option></select></label>
+<label class="setting-row">字體<select id="font-family"><option value="serif">明體</option><option value="sans">黑體</option></select></label>
+<label class="setting-row">翻頁效果<select id="motion"><option value="fold">輕摺頁</option><option value="fade">輕淡入</option><option value="none">無動畫</option></select></label><p class="panel-note">設定會保存在此瀏覽器。減少動態效果開啟時，書頁直接切換。</p></div></dialog>
+<dialog id="contents" class="panel"><form method="dialog" class="panel-head"><h2>目錄</h2><button class="text-button" aria-label="關閉目錄">✕</button></form><div class="panel-body"><p id="contents-work" class="eyebrow"></p><div id="contents-chapters"></div></div></dialog>
+<dialog id="note" class="note-dialog"><form method="dialog" class="panel-head"><h2>註釋</h2><button class="text-button" aria-label="關閉註釋">✕</button></form><p id="note-text"></p></dialog>
+</body></html>
