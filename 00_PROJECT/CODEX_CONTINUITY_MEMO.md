@@ -9,3 +9,4 @@
 - 簡繁轉換使用原閱讀器同版 OpenCC 1.0.5 的 `tw→cn` 精簡模組，位於 `web/js/vendor/opencc.js`；全站狀態在 `web/js/language.js`，本機偏好鍵為 `imaginary-library:v1:language`。不使用原作的專有 conversion-dict.js 或舊儲存鍵。
 - 本機驗證與截圖見 `00_PROJECT/QA_REPORT.md` 及忽略區 `.local/mvp/`。Edge headless 已測，iPhone Safari 實機未測。
 - 首作前三章已上線至 `https://qwerty10218.github.io/imaginary-library/`，線上截圖在 `.local/release/live-*.png`；正式編輯後請重新執行 check、release gate 及真實瀏覽器測試。iPhone Safari 實機仍未測。
+- 正式閱讀頁新增緊湊工具列、視窗高度書本與左右側翻頁鍵；Page 底部只留進度，Scroll 上下章連結保留。暖紙等偏好在 HTML 解析時即套用，避免跨章深色首幀。局部測試為 `node tests/immersive.mjs`，前後截圖在 `.local/immersive/`。

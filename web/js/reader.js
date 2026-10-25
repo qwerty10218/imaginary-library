@@ -118,7 +118,7 @@ function wire(){
  document.querySelectorAll('button[data-mode]').forEach(button=>button.onclick=()=>change('mode',button.dataset.mode));
  document.querySelectorAll('button[data-theme]').forEach(button=>button.onclick=()=>change('theme',button.dataset.theme));
  for(const [id,key] of [['font-size','size'],['line-height','line'],['font-family','font'],['motion','motion']]) $(id).onchange=event=>change(key,['size','line'].includes(key)?Number(event.target.value):event.target.value);
- document.addEventListener('keydown',event=>{if(document.querySelector('dialog[open]')||event.target.closest('button,input,select,textarea,[contenteditable]'))return;if(settings.mode==='page'&&['ArrowRight','PageDown','ArrowLeft','PageUp'].includes(event.key)){event.preventDefault();turn(['ArrowRight','PageDown'].includes(event.key)?1:-1);}});
+ document.addEventListener('keydown',event=>{const control=event.target.closest('button,input,select,textarea,[contenteditable]');if(document.querySelector('dialog[open]')||(control&&!control.classList.contains('page-turn-control')))return;if(settings.mode==='page'&&['ArrowRight','PageDown','ArrowLeft','PageUp'].includes(event.key)){event.preventDefault();turn(['ArrowRight','PageDown'].includes(event.key)?1:-1);}});
  let touch;
  $('book').addEventListener('pointerdown',()=>{if(busy)cancelTurn();},{capture:true});
  $('book').addEventListener('touchstart',event=>{if(event.target.closest('button,a')||event.touches.length!==1){touch=null;return;}touch={x:event.touches[0].clientX,y:event.touches[0].clientY,t:Date.now()};},{passive:true});

@@ -64,3 +64,38 @@ dialog{color:var(--ink);background:var(--page);border:1px solid var(--line);padd
 .book .prose h1,.reader-measure-rig .prose h1{font-size:1.95em;line-height:1.45;letter-spacing:.1em}
 .book .page-running{font-size:11px}
 @media(max-width:599px){.book .prose h1,.reader-measure-rig .prose h1{font-size:1.5em;letter-spacing:.08em}.book .page-running{font-size:9px}}
+
+/* The published reader uses a compact toolbar and lets the spread fill the viewport. */
+.visually-hidden{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.reader-page .site-header{height:56px;margin:0;padding:0 clamp(18px,3vw,48px);gap:18px}
+.reader-brand{font:400 17px var(--font-serif);letter-spacing:.16em;white-space:nowrap}
+.reader-page .header-actions{gap:5px}
+.reader-page .header-actions .text-button{min-width:44px}
+.reader-page .header-actions .desktop-label{font-size:11px}
+.reader-page .reading-room{max-width:1220px;padding:14px clamp(50px,5vw,60px) 0}
+.reader-page[data-mode=page]{--book-height:clamp(360px,calc(100dvh - 110px),900px)}
+.reader-page[data-mode=page] .chapter-navigation,.reader-page[data-mode=page] .room-footer{display:none}
+.reader-page[data-mode=page] .reading-navigation{min-height:29px;padding:7px 0 0}
+.reader-page[data-mode=page] .position{width:190px}
+.reader-page[data-mode=page] .progress-track{margin-top:6px}
+.reader-page #storage-status:empty,.reader-page #reader-error:empty{display:none}
+.book-stage{position:relative}
+.reader-page .book{margin:0}
+.page-turn-control{position:absolute;top:50%;z-index:5;transform:translateY(-50%);width:48px;height:88px;border:0;background:none;color:var(--accent);font-size:20px;display:grid;place-items:center;opacity:.78;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+.page-turn-control::before{content:"";position:absolute;left:4px;top:50%;transform:translateY(-50%);width:38px;height:38px;border:1px solid var(--line);border-radius:50%;background:var(--bg);box-shadow:0 5px 18px var(--shade);z-index:-1}
+.page-turn-control:hover:not(:disabled),.page-turn-control:focus-visible{opacity:1}
+.page-turn-prev{left:-54px}.page-turn-next{right:-54px}
+.reader-page[data-mode=scroll] .book-stage{display:none}
+.reader-page:not([data-ready=true]) .page-turn-control{display:none}
+.reader-page[data-theme=warm]{--bg:#ded8cb;--page:#f7f1e6;--line:#ccc2b0;--shade:rgba(55,43,27,.27)}
+.reader-page[data-theme=light]{--bg:#e6e9e4;--page:#fdfcf7;--shade:rgba(40,48,40,.19)}
+.reader-page[data-theme=dark]{--bg:#111614;--page:#222925;--line:#455047;--shade:rgba(0,0,0,.5)}
+.reader-page .book:after{box-shadow:0 22px 48px var(--shade)}
+.reader-page .spread:after{width:34px;background:linear-gradient(90deg,transparent,rgba(0,0,0,.07) 27%,rgba(0,0,0,.22) 49%,rgba(255,255,255,.07) 54%,transparent)}
+.reader-page[data-theme=warm] .sheet{background:linear-gradient(105deg,rgba(113,83,42,.022),transparent 24%,rgba(255,255,255,.04) 78%,rgba(113,83,42,.025))}
+.reader-page[data-theme=warm] .turn-face-shade{background:linear-gradient(90deg,rgba(78,58,34,.25),transparent 45%,rgba(78,58,34,.09))}
+.reader-page[data-theme=warm] .turn-back .turn-face-shade{background:linear-gradient(90deg,transparent 40%,rgba(78,58,34,.27))}
+.reader-page[data-theme=warm] .turn-shadow-under{background:linear-gradient(90deg,rgba(78,58,34,.42),transparent 85%)}
+.reader-page[data-theme=warm] .turn-shadow-landing{background:linear-gradient(90deg,transparent 8%,rgba(78,58,34,.36))}
+@media(max-width:959px){.reader-page[data-mode=page]{--book-height:calc(100dvh - 130px - env(safe-area-inset-top) - env(safe-area-inset-bottom))}.reader-page .reading-room{padding-inline:50px}}
+@media(max-width:599px){.reader-page .site-header{height:calc(56px + env(safe-area-inset-top));padding-top:env(safe-area-inset-top);padding-inline:16px}.reader-page .reader-brand{font-size:15px;letter-spacing:.08em}.reader-page .header-actions{gap:0}.reader-page .header-actions .text-link{font-size:10px}.reader-page .reading-room{padding:12px 19px 0}.reader-page[data-mode=page]{--book-height:calc(100dvh - 143px - env(safe-area-inset-top) - env(safe-area-inset-bottom))}.page-turn-control{width:40px;height:78px;font-size:18px;opacity:.68}.page-turn-control::before{left:2px;width:34px;height:34px}.page-turn-prev{left:-16px}.page-turn-next{right:-16px}.reader-page .room-footer{display:none}}

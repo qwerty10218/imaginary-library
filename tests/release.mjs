@@ -22,8 +22,8 @@ async function scanPages(page){
  throw Error('Published chapter has too many or nonterminating pages');
 }
 try{
- for(const width of [390,1440]){
-  const context=await browser.newContext({viewport:{width,height:width===390?844:1000}});
+ for(const width of [390,1440,1720]){
+  const context=await browser.newContext({viewport:{width,height:width===390?844:width===1720?864:900}});
   const page=await context.newPage();const errors=[],failed=[];
   page.on('pageerror',error=>errors.push(error.message));
   page.on('response',response=>{if(response.status()>=400)failed.push(response.url());});
@@ -53,7 +53,7 @@ try{
   assert.equal(await page.locator('.sheet').count(),width===390?1:2);
   const after=await page.evaluate(()=>JSON.parse(localStorage.getItem('imaginary-library:v1:progress:zhen-du-chuanyue')));
   assert.equal(after.chapterId,before?.chapterId||'001');
-  await page.locator('#next-chapter').click();await page.locator('body[data-ready=true]').waitFor();
+  await page.locator('#next').click();await page.locator('body[data-ready=true]').waitFor();
   assert.match(await page.locator('#reader-title').innerText(),/御花園遇和珅/);
   await page.locator('[data-language-toggle]').click();
   await page.locator('#settings-button').click();await page.locator('button[data-mode=scroll]').click();await page.locator('#settings .panel-head button').click();
@@ -65,7 +65,7 @@ try{
   await page.screenshot({path:`.local/release/reader-simplified-${width}.png`,fullPage:true});
   await scanPages(page);
   await page.locator('[data-language-toggle]').click();
-  await page.locator('#next-chapter').click();await page.locator('body[data-ready=true]').waitFor();
+  await page.locator('#next').click();await page.locator('body[data-ready=true]').waitFor();
   assert.match(await page.locator('#reader-title').innerText(),/暢音閣點戲/);
   await scanPages(page);
   await page.locator('[data-language-toggle]').click();await page.reload();await page.locator('body[data-ready=true]').waitFor();
@@ -74,5 +74,5 @@ try{
   assert.deepEqual(errors,[]);assert.deepEqual(failed,[]);
   await context.close();
  }
- console.log('PASS: published chapters, cover, Traditional/Simplified preference and page navigation at 390/1440px.');
+ console.log('PASS: published chapters, cover, Traditional/Simplified preference and page navigation at 390/1440/1720px.');
 }finally{await browser.close();}

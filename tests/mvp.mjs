@@ -44,7 +44,8 @@ try {
     }
     await page.locator('#next').click();await page.waitForFunction(()=>!document.querySelector('.turn-overlay'));
     // The next-page control crosses the last page into the next chapter.
-    assert.equal(await page.locator('#next-chapter').isVisible(),true,`chapter link hidden: ${await page.locator('#reader-error').innerText()}`);
+    assert.equal(await page.locator('#next-chapter').count(),1,`chapter link missing: ${await page.locator('#reader-error').innerText()}`);
+    assert.equal(await page.locator('#next-chapter').isVisible(),false,'page mode should keep the lower edge clear');
     await page.locator('#settings-button').click();await page.locator('#motion').selectOption('none');await page.locator('[aria-label="關閉閱讀設定"]').click();
     let pageTurns=0;
     while(pageTurns<30){
@@ -65,6 +66,7 @@ try {
     await page.locator('#contents-button').click();assert.equal(await page.locator('#contents-chapters a').count(),2);
     await page.locator('[aria-label="關閉目錄"]').click();
     await page.locator('#settings-button').click();await page.locator('button[data-mode=scroll]').click();await page.locator('[aria-label="關閉閱讀設定"]').click();
+    assert.equal(await page.locator('#previous-chapter').isVisible(),true,'scroll mode chapter navigation is hidden');
     await page.locator('.fn-ref').first().click();assert.equal(await page.locator('#note').evaluate(d=>d.open),true);await page.keyboard.press('Escape');
     await page.locator('[data-language-toggle]').click();
     await page.locator('.fn-ref').first().click();

@@ -82,3 +82,10 @@ Node.js 24、Windows 本機 Microsoft Edge（Playwright headless）。沒有實�
 - `node tests/release.mjs` 通過：390×844／1440×1000 Edge headless，正式第二章簡體 Scroll 字形、SC 字型宣告、Page 往返、各章完整分頁、無資源錯誤。
 - 目前瀏覽器測試只確認 CSS 字型宣告與 Windows 字型安裝情況；iPhone Safari 的實際字型與畫面尚未實機驗證。
 - GitHub Actions run `40237266006` 部署成功；正式站 CSS、`language.js`、第二章原稿 HTTP 200。390／1440px Edge headless 線上驗證簡體字形及 SC 字型宣告通過，無頁面腳本錯誤。
+
+## 2026-10-26：沉浸式布局與主題閃動
+
+- 修改前／後暖紙截圖：`.local/immersive/before-{1440,1720,390}.png`、`after-{1440,1720,390}.png`；1720px 翻頁中段：`after-turn-warm-1720.png`。這些圖片留在忽略區，未進公開產物。
+- `npm run check` 通過：語法、進度測試、建置、公開內容掃描。`node tests/immersive.mjs` 通過：1440×900、1720×864、390×844，高度分別 790、754、701px；左右按鈕置中且無水平溢出，暖紙前後翻頁、按鈕焦點後鍵盤、Page／Scroll、進度、簡繁與跨章首幀主題均正常；本機儲存被封鎖時仍可閱讀。
+- `node tests/release.mjs` 通過：三尺寸正式前三章逐頁掃描，無空白、正文／腳註溢出，章末右側翻頁進入下一章。`node tests/mvp.mjs` 通過：兩尺寸測試作品、獨立進度及腳註。`node tests/page-turn.mjs` 通過 6 組動畫回歸，`node tests/browser.mjs` 通過 15 組原型排版回歸。
+- 暖紙模式連續翻頁未重現持續切換主題；已確認舊 HTML 跨章載入時先顯示預設 Dark Mode，改為解析 body 時立即還原偏好。實機 iPhone Safari 尚未驗證。
