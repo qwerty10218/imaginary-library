@@ -52,3 +52,13 @@
 - 書頁上緣內距與頁眉高度各增加少量空間；分頁仍從實際 .page-content 尺寸測量。
 - 建置採相對路徑與靜態 HTML＋查詢參數，可直接重新整理 reader.html；本機預覽子路徑為 /imaginary-library/。
 - 已補上 README 上稿步驟、正式流程與兩組瀏覽器尺寸測試。動畫原型仍保留作回歸測試，正式入口不依賴它。
+
+## 2026-10-26：首作正式上線準備（正文缺件，未發布）
+
+- 本輪開始時 Git main HEAD 926647b，另有使用者未追蹤的 `封面.png`；保留該檔不動。origin 指向新 Repository，遠端 `ls-remote` 無分支；公開 API 可見 Repository 存在但 Pages 尚未啟用。
+- 使用者提供的 WebP 封面在 Downloads 找到，核對尺寸 1086×1448；原樣複製到 `web/assets/covers/zhen_du_chuanyue_cover.webp`，複本與原件 SHA-256 相同。
+- 首作 metadata 更新卷名、分類、連載狀態、首頁短簡介與詳情完整簡介。建置只複製 metadata 指定的封面；圖片使用相對路徑與 `object-fit: contain`，沒有重新生成或裁切。
+- 調整首頁簡介排版與詳情頁封面對齊。靜態 CSS／入口腳本加內容版本查詢字串，索引與章節請求繞過瀏覽器快取。
+- 依 GitHub 官方 Pages 工作流規格建立本機 Actions workflow（尚未推送）；新增 release gate，須有封面、兩章且開頭吻合並具足量正文，才能進入部署。
+- 在本專案、Downloads、Desktop 與 Documents 的適用文字檔中未找到兩章完整原稿；可讀到先前對話中的第二章討論稿片段，但不能確認為完整定稿，第一章全文亦未找到。已向作者請求兩份完整原稿，未自行生成或發布。
+- 本機 `npm run check` 與 390／1440px MVP 瀏覽器測試通過；release gate 因章節尚未登錄而如預期失敗。無 Push、部署或原專案修改。

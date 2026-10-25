@@ -51,3 +51,12 @@ Node.js 24、Windows 本機 Microsoft Edge（Playwright headless）。沒有實�
 - 原有 `node tests/browser.mjs`：15 組尺寸／主題及逐頁腳註排版回歸通過；`node tests/page-turn.mjs`：6 組動畫／主題／尺寸回歸通過。
 - 截圖位於 `.local/mvp/`，只供本機驗收，不進 Git；閱讀器截圖中的文字是明確標記的測試佔位內容。
 - 尚未驗證真實作者正文、長篇正式章節、iPhone Safari 實機與 GitHub Pages 線上環境。尚未 Push 或部署。
+
+## 2026-10-26：首作封面與發布阻擋驗證
+
+- 封面來源為使用者指定 WebP，實測 1086×1448；複製後 SHA-256 與來源一致。
+- `npm run check` 通過；正式產物有新封面與作者提供的完整簡介，仍只有 0 篇章節。
+- `node tests/mvp.mjs` 於 390×844／1440×1000 Edge headless 通過；首頁與詳情頁的封面 `naturalWidth/naturalHeight` 均為 1086×1448，圖片請求無 404。隔離測試章節的跨章及進度回歸通過。
+- `node scripts/check-release.mjs` 因缺少兩章原稿按設計失敗。此為部署前必要阻擋，不能當正式內容驗收通過。
+- 本輪最終回歸：`node tests/workflow.mjs`、原 15 組 `node tests/browser.mjs` 與 6 組 `node tests/page-turn.mjs` 均通過；Pages YAML 可解析為 build／deploy 兩個 job。首次 MVP 回歸因作品頁非同步載入的測試等待不足而失敗，補上明確載入等待後重跑通過，產品程式無此錯誤。
+- GitHub Pages 與真實兩章閱讀流程尚未驗證；不 Push、不部署。

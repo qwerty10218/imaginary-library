@@ -13,9 +13,10 @@ try {
     const meta=document.createElement('div');meta.className='work-card-copy';
     const eyebrow=document.createElement('p');eyebrow.className='eyebrow';eyebrow.textContent=`${statusText[work.status]} · ${work.genres.join(' / ')}`;
     const title=document.createElement('h3');title.textContent=work.title;
-    const volume=document.createElement('p');volume.className='work-volume';volume.textContent=work.volume ? `第一卷 · ${work.volume}` : work.author;
+    const volume=document.createElement('p');volume.className='work-volume';volume.textContent=work.volume || work.author;
+    const teaser=document.createElement('p');teaser.className='work-teaser';teaser.textContent=work.shortDescription || work.description;
     const hint=document.createElement('span');hint.className='work-card-cta';hint.textContent=work.chapters.length?'進入作品 ↗':'查看作品 · 待上稿 ↗';
-    meta.append(eyebrow,title,volume,hint);link.append(cover,meta);card.append(link);$('work-list').append(card);
+    meta.append(eyebrow,title,volume,teaser,hint);link.append(cover,meta);card.append(link);$('work-list').append(card);
     const position=validProgress(store,work);
     if(position){const chapter=work.chapters.find(c=>c.id===position.chapterId);const a=document.createElement('a');a.className='continue-item';a.href=chapterUrl(work,chapter);a.textContent=`${work.title}　／　${chapter.title}　→`;$('continue-list').append(a);$('continue-section').hidden=false;}
   }

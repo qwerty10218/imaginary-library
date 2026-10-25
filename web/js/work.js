@@ -5,7 +5,7 @@ try {
   if(!work) throw new Error('找不到這部作品。');
   document.title=`${work.title} · 臆想書房`;
   $('work-kicker').textContent=`${statusText[work.status]} / ${work.genres.join(' / ')}`;
-  $('work-title').textContent=work.title;$('work-volume').textContent=work.volume?`第一卷　${work.volume}`:'';
+  $('work-title').textContent=work.title;$('work-volume').textContent=work.volume || '';
   $('work-byline').textContent=`${work.author}　·　最近更新 ${work.updatedAt}`;
   $('work-description').textContent=work.description;
   if(coverUrl(work)){const img=document.createElement('img');img.src=coverUrl(work);img.alt=`《${work.title}》封面`;$('work-cover').append(img);}else{$('work-cover').classList.add('cover-placeholder');$('work-cover').textContent='臆';}

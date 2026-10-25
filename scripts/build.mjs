@@ -16,7 +16,7 @@ for (const entry of await fs.readdir(source, {withFileTypes:true})) {
   if (work.id !== entry.name || !work.title || !work.author || !work.description || !Array.isArray(work.chapters)) fail(`${entry.name}/metadata.json 缺少必要欄位`);
   if (!['upcoming','serializing','complete'].includes(work.status)) fail(`${work.id} 狀態無效`);
   if (!Array.isArray(work.genres) || !Array.isArray(work.tags)) fail(`${work.id} 類型或標籤無效`);
-  if (work.cover && !/^cover\.(?:webp|png|jpe?g)$/.test(work.cover)) fail(`${work.id} 封面路徑無效`);
+  if (work.cover && !/^assets\/covers\/[a-z0-9_-]+\.(?:webp|png|jpe?g)$/.test(work.cover)) fail(`${work.id} 封面路徑無效`);
   const ids = new Set();
   work.chapters = await Promise.all(work.chapters.map(async chapter => {
     if (!slug.test(chapter.id) || ids.has(chapter.id) || !chapter.title || chapter.published !== true) fail(`${work.id} 章節 ID、標題或發布狀態無效`);
@@ -26,7 +26,7 @@ for (const entry of await fs.readdir(source, {withFileTypes:true})) {
     if (!markdown.trim()) fail(`${work.id}/${filename} 是空檔案`);
     return {id:chapter.id,title:chapter.title,volume:chapter.volume || '',file:`content/${work.id}/${filename}`,version:createHash('sha256').update(markdown).digest('hex').slice(0,16)};
   }));
-  if (work.cover) await fs.access(path.join(dir, work.cover));
+  if (work.cover) await fs.access(path.join('web', work.cover));
   works.push(work);
 }
 works.sort((a,b)=>a.id.localeCompare(b.id));
@@ -35,13 +35,25 @@ await fs.mkdir(root, {recursive:true});
 for (const name of ['index.html','work.html','reader.html','prototype.html','css','js']) {
   await fs.cp(path.join('web',name), path.join(root,name), {recursive:true});
 }
+const assetHash=createHash('sha256');
+for (const file of ['web/css/reader.css',...(await fs.readdir('web/js',{recursive:true})).filter(name=>name.endsWith('.js')).sort().map(name=>path.join('web/js',name))]) assetHash.update(await fs.readFile(file));
+const assetVersion=assetHash.digest('hex').slice(0,12);
+for (const name of ['index.html','work.html','reader.html','prototype.html']) {
+  const file=path.join(root,name);
+  const html=await fs.readFile(file,'utf8');
+  await fs.writeFile(file,html.replace(/(href|src)="((?:css|js)\/[^"?]+)"/g,`$1="$2?v=${assetVersion}"`));
+}
 await fs.mkdir(path.join(root,'data'), {recursive:true});
 await fs.writeFile(path.join(root,'data/works.json'),JSON.stringify({schemaVersion:1,works},null,2)+'\n');
 for (const work of works) {
   const dest = path.join(root,'content',work.id);
   await fs.mkdir(dest,{recursive:true});
   const dir = path.join(source,work.id);
-  if (work.cover) await fs.copyFile(path.join(dir,work.cover),path.join(dest,work.cover));
+  if (work.cover) {
+    const target=path.join(root,work.cover);
+    await fs.mkdir(path.dirname(target),{recursive:true});
+    await fs.copyFile(path.join('web',work.cover),target);
+  }
   for (const chapter of work.chapters) await fs.copyFile(path.join(dir,'chapters',`${chapter.id}.md`),path.join(dest,`${chapter.id}.md`));
 }
 await fs.mkdir(path.join(root,'js/vendor'), {recursive:true});

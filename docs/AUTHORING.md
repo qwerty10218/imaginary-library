@@ -1,9 +1,7 @@
-# 創作與上稿接續規格
+# Markdown 創作與上稿
 
-沿用 Markdown 編寫、校驗、預覽、人工確認、Commit、授權後發布的流程。移除單一小說 Canon 與自動音訊生成要求。
+作品資料放在 `content/works/<work-id>/metadata.json`，正文放在同一資料夾的 `chapters/<chapter-id>.md`。參照 [README](../README.md) 與 [章節範本](../content/CHAPTER_TEMPLATE.md)。
 
-目標：content/works/<work-id>/metadata.json、chapters/*.md、可選封面與 assets。作品及章節需穩定 ID、發布狀態、順序與更新日期。建置自動產生作品索引及章節 manifest，不修改閱讀器核心。
+只有 metadata 的 `chapters` 陣列中明確標記 `published: true` 且檔案存在的章節會進入 `dist/`。按照目錄順序登錄即可，不需修改閱讀器核心。私人草稿應留在忽略的 `drafts/`，不要放入公開產物。
 
-目前尚未實作內容索引生成器；本輪是使用者指定的視覺原型驗收點。不得宣稱新增作品 Workflow 已完成。
-
-私人草稿放在忽略的 drafts/，發布內容才移入公開來源。作品封面缺省使用排版封面，參照但不存在的檔案應使校驗失敗。原型測試文字不是正式書庫內容。
+封面放在 `web/assets/covers/`；metadata 的 `cover` 使用 `assets/covers/<檔名>.webp` 等相對路徑。建置只複製 metadata 已登錄的封面。原稿與圖片上架後，執行 `npm run check`、`npm run build`，再以本機預覽確認手機、桌面、章節目錄和下一章導航。

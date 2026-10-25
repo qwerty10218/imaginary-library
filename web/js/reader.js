@@ -125,7 +125,7 @@ try {
  work=findWork(await loadCatalog(),workId);chapterIndex=work?.chapters.findIndex(item=>item.id===chapterId)??-1;
  if(!work||chapterIndex<0)throw new Error('找不到這個章節。請從作品目錄重新進入。');
  chapter=work.chapters[chapterIndex];revision=chapter.version;
- const response=await fetch(new URL('../'+chapter.file,import.meta.url));if(!response.ok)throw new Error('章節正文暫時無法載入。');
+ const response=await fetch(new URL('../'+chapter.file,import.meta.url),{cache:'no-store'});if(!response.ok)throw new Error('章節正文暫時無法載入。');
  const markdown=await response.text();model=core.parse(markdown);
  const saved=store.load(workId);anchor=saved?.chapterId===chapterId?{...saved,contentVersion:revision}:startAnchor(chapterId);
  document.title=`${chapter.title} · ${work.title} · 臆想書房`;

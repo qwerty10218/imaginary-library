@@ -17,10 +17,12 @@ try {
     page.on('response',r=>{if(r.status()>=400)badResponses.push(`${r.status()} ${r.url()}`);});
     await page.goto(base);await page.locator('.work-card').waitFor();
     assert.equal(await page.locator('.work-card').count(),1);
+    assert.deepEqual(await page.locator('.work-cover img').first().evaluate(img=>[img.naturalWidth,img.naturalHeight]),[1086,1448]);
     assert.equal(await page.locator('.continue-section').isVisible(),false);
     await page.screenshot({path:`.local/mvp/home-${width}.png`,fullPage:true});
-    await page.locator('.work-card a').click();
+    await page.locator('.work-card a').click();await page.waitForFunction(()=>Boolean(document.getElementById('work-title').textContent));
     assert.match(await page.locator('#work-title').innerText(),/朕都穿越了/);
+    assert.deepEqual(await page.locator('#work-cover img').evaluate(img=>[img.naturalWidth,img.naturalHeight]),[1086,1448]);
     assert.match(await page.locator('#chapter-list').innerText(),/尚未上架/);
     assert.equal(await page.locator('#chapter-list a').count(),0);
     await page.screenshot({path:`.local/mvp/work-${width}.png`,fullPage:true});
