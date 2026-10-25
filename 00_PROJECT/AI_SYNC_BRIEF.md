@@ -15,6 +15,7 @@
 - 舊內容與舊 web/.git 已可還原地搬入忽略區，非永久刪除；自動審核阻擋了原永久刪除操作。
 - 新倉庫根目錄 main；origin 為 https://github.com/qwerty10218/imaginary-library.git 。遠端仍空。
 - 本機 Commit 可做；Push、Pages、正式部署與正式 Supabase 均未授權，未執行。
+- 已建立獨立 root commit 3fcfb28；以後續文件提交保存本次收斂紀錄。未連接舊歷史。
 
 ## 功能界線
 
@@ -26,3 +27,5 @@
 ## 下一步
 
 先取得使用者對原型的視覺回饋；再按 CURRENT_STATUS.md 繼續階段 2–5。詳細已驗證項目與限制見 QA_REPORT.md。原型不具正式發布條件。
+
+工程驗證已通過：npm run check、npm audit、15 組尺寸／主題、短手機大字級、富文字／註碼完整性及 HTML 淨化。實機 Safari、完整上稿與多作品 UI 尚未完成。測試截圖與結果僅留 .local，不提交。
