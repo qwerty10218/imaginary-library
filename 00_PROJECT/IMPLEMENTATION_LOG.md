@@ -70,3 +70,4 @@
 - 發布檢查改驗封面與前三章；測試結果見 QA_REPORT。原專案與翻頁動畫未修改。
 - 本機 commit `6e8f8be` 已正常 Push 至指定新 Repository 的 main。首次工作流因 Pages 站點未建立而在 configure-pages 失敗；依 GitHub 正式設定建立 workflow 來源的 Pages 站點，重新觸發 run `40236235609`，build／deploy 均成功。
 - 正式網址、封面、三章、索引與 OpenCC HTTP 200；390／1440px Edge headless 線上從首頁逐章讀到第三章，無失敗資源或 JS 錯誤。iPhone Safari 實機尚未驗證。
+- 讀者指出書內章節標題偏小；僅調整 `.book` 的章節大標題與頁頂小章名，並讓分頁測量容器使用相同標題尺寸。書頁上方的獨立標題維持原尺寸，正文、動畫與進度邏輯不變。

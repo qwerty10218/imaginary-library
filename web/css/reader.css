@@ -58,3 +58,8 @@ dialog{color:var(--ink);background:var(--page);border:1px solid var(--line);padd
 @media(max-width:599px){.header-actions{gap:7px}.language-toggle{min-width:52px;padding:7px;font-size:11px}.site-header .text-link{font-size:9px;letter-spacing:0}}
 .work-overview{align-items:start}
 @media(max-width:599px){.sheet{padding-top:21px}.page-running{height:31px}.header-right{display:none}.library-shell,.work-shell{padding-left:22px;padding-right:22px}.library-hero{padding:83px 0 68px}.library-hero h1{font-size:52px}.library-hero h1 span{font-size:19px}.library-collection{padding:53px 0 80px}.work-grid{grid-template-columns:1fr}.work-card-link{grid-template-columns:39% 1fr;gap:18px}.work-card-copy h3{font-size:19px}.work-card-cta{margin-top:18px}.work-shell{padding-top:44px}.work-overview{grid-template-columns:1fr;gap:30px;padding-bottom:65px}.work-cover-large{width:min(65%,280px);justify-self:center}.work-overview-copy h1{font-size:33px}.work-description{font-size:16px;margin-top:30px}.chapter-section{padding-top:58px}.chapter-row strong{font-size:16px}}
+
+/* Titles printed inside the book; measurement uses the same heading size. */
+.book .prose h1,.reader-measure-rig .prose h1{font-size:1.95em;line-height:1.45;letter-spacing:.1em}
+.book .page-running{font-size:11px}
+@media(max-width:599px){.book .prose h1,.reader-measure-rig .prose h1{font-size:1.5em;letter-spacing:.08em}.book .page-running{font-size:9px}}

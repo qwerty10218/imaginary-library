@@ -11,6 +11,7 @@
 - `node tests/browser.mjs` 原型 15 組尺寸／主題回歸通過；`node tests/page-turn.mjs` 6 組翻頁／主題／尺寸回歸通過。
 - 本機預覽 `/imaginary-library/` 無 404。iPhone Safari 實機及正式 GitHub Pages 網址仍待線上驗證。
 - GitHub Actions run `40236235609` 的 build／deploy 均成功。正式 `https://qwerty10218.github.io/imaginary-library/`、封面、資料索引、三章 Markdown 及 OpenCC 資源均 HTTP 200；390／1440px Edge headless 線上實測從首頁進入詳情並依序打開前三章，簡體切換正常，沒有 JS 錯誤或失敗資源請求。線上截圖位於 `.local/release/live-*.png`。iPhone Safari 實機仍未測。
+- 書內標題字級調整後重新執行 `npm run check` 與 `node tests/release.mjs`，均通過；390／1440px 正式章節逐頁沒有空白或正文溢出，桌面預覽圖見 `.local/release/title-after-1440.png`。
 
 ## 執行環境
 

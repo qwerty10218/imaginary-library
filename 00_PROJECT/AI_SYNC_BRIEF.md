@@ -8,6 +8,8 @@ MVP 0.1 書庫、作品詳情、Markdown 閱讀器與首作前三章已正式上
 
 全站簡繁切換復用原閱讀器 OpenCC 1.0.5 `tw→cn`，本機精簡模組位於 `web/js/vendor/opencc.js`。偏好存於 `imaginary-library:v1:language`；繁體 Markdown 為唯一來源。Page／Scroll、手機單頁、桌面雙頁、三主題、腳註、翻頁動畫與作品獨立本機進度均保留。無 IP 定位、外部定位 API、帳號或雲端同步。
 
+讀者提出書內章節標題偏小後，書內大標題與頁頂小章名已適度放大；書頁上方的獨立標題維持原樣，分頁測量同步套用標題尺寸。390／1440px 本機正式章節逐頁測試通過，尚待本輪部署後的線上驗證。
+
 ## 驗證與限制
 
 `npm run check`、發布檢查、新作品上稿測試、390／1440px 正式內容及 MVP 瀏覽器測試、原型 15 組測試、翻頁 6 組測試均通過。線上首頁、封面、索引、三章及 OpenCC 均 HTTP 200；390／1440px Edge headless 從線上首頁依序讀到第三章、切至簡體，無 JS 錯誤或失敗資源請求。截圖在忽略區 `.local/release/live-*.png`。iPhone Safari 實機尚未驗證。
