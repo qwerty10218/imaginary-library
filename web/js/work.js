@@ -1,13 +1,17 @@
 import {loadCatalog,findWork,coverUrl,chapterUrl,progressStore,validProgress,statusText} from './catalog.js';
+import {wireLanguage,translatePage,convertText} from './language.js';
 const $=id=>document.getElementById(id);
+let title='作品 · 臆想書房';
+wireLanguage(()=>{translatePage();document.title=convertText(title);});
 try {
   const work=findWork(await loadCatalog(),new URLSearchParams(location.search).get('id'));
   if(!work) throw new Error('找不到這部作品。');
-  document.title=`${work.title} · 臆想書房`;
+  title=`${work.title} · 臆想書房`;document.title=convertText(title);
   $('work-kicker').textContent=`${statusText[work.status]} / ${work.genres.join(' / ')}`;
   $('work-title').textContent=work.title;$('work-volume').textContent=work.volume || '';
   $('work-byline').textContent=`${work.author}　·　最近更新 ${work.updatedAt}`;
   $('work-description').textContent=work.description;
+  $('work-disclaimer').textContent=work.disclaimer || '';
   if(coverUrl(work)){const img=document.createElement('img');img.src=coverUrl(work);img.alt=`《${work.title}》封面`;$('work-cover').append(img);}else{$('work-cover').classList.add('cover-placeholder');$('work-cover').textContent='臆';}
   for(const tag of [...work.genres,...work.tags]){const span=document.createElement('span');span.textContent=tag;$('work-tags').append(span);}
   if(!work.chapters.length){$('chapter-list').innerHTML='<p class="no-chapters">正式章節尚未上架。作者提供正文後，這裡會出現章節目錄。</p>';}
@@ -17,3 +21,4 @@ try {
     work.chapters.forEach((chapter,index)=>{const a=document.createElement('a');a.className='chapter-row';a.href=chapterUrl(work,chapter);const number=document.createElement('span');number.textContent=String(index+1).padStart(2,'0');const title=document.createElement('strong');title.textContent=chapter.title;const arrow=document.createElement('span');arrow.textContent='↗';a.append(number,title,arrow);$('chapter-list').append(a);});
   }
 } catch(error){$('work-status').textContent=error.message;}
+translatePage();document.title=convertText(title);

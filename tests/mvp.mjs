@@ -6,7 +6,7 @@ const base='http://127.0.0.1:4173/imaginary-library/';
 const browser=await chromium.launch({headless:true,channel:process.env.BROWSER_CHANNEL||'msedge'});
 const results=[];
 await fs.mkdir('.local/mvp',{recursive:true});
-const chapterText=title=>`# ${title}\n\n`+Array.from({length:9},(_,i)=>`第 ${i+1} 段排版測試文字。這段文字只驗證換行、分頁、閱讀進度與章節跳轉，不包含小說劇情。`.repeat(3)+(i===2?' <sup class="fn-ref">〔1〕</sup>':'')).join('\n\n')+'\n\n<section class="footnotes"><p>〔1〕這是測試用註釋，不是正式小說內容。</p></section>';
+const chapterText=title=>`# ${title}\n\n`+Array.from({length:9},(_,i)=>`第 ${i+1} 段排版測試文字。這段文字只驗證換行、分頁、閱讀進度與章節跳轉，不包含小說劇情。`.repeat(3)+(i===2?' **閱讀排版**與*註腳文字* <sup class="fn-ref">〔1〕</sup>':'')).join('\n\n')+'\n\n<section class="footnotes"><p>〔1〕這是測試用註釋，不是正式小說內容。</p></section>';
 const mockWorks=['test-one','test-two'].map((id,index)=>({id,title:`測試作品 ${index+1}`,author:'Gary Lee',description:'只用於瀏覽器驗證的佔位內容。',volume:'排版驗證',genres:['測試'],tags:[],status:'serializing',updatedAt:'2026-10-26',chapters:[{id:'chapter-one',title:'排版測試一',file:`content/${id}/chapter-one.md`},{id:'chapter-two',title:'排版測試二',file:`content/${id}/chapter-two.md`}]}));
 try {
   for(const width of [390,1440]){
@@ -17,14 +17,14 @@ try {
     page.on('response',r=>{if(r.status()>=400)badResponses.push(`${r.status()} ${r.url()}`);});
     await page.goto(base);await page.locator('.work-card').waitFor();
     assert.equal(await page.locator('.work-card').count(),1);
-    assert.deepEqual(await page.locator('.work-cover img').first().evaluate(img=>[img.naturalWidth,img.naturalHeight]),[1086,1448]);
+    assert.deepEqual(await page.locator('.work-cover img').first().evaluate(async img=>{await img.decode();return [img.naturalWidth,img.naturalHeight];}),[1086,1448]);
     assert.equal(await page.locator('.continue-section').isVisible(),false);
     await page.screenshot({path:`.local/mvp/home-${width}.png`,fullPage:true});
     await page.locator('.work-card a').click();await page.waitForFunction(()=>Boolean(document.getElementById('work-title').textContent));
     assert.match(await page.locator('#work-title').innerText(),/朕都穿越了/);
     assert.deepEqual(await page.locator('#work-cover img').evaluate(img=>[img.naturalWidth,img.naturalHeight]),[1086,1448]);
-    assert.match(await page.locator('#chapter-list').innerText(),/尚未上架/);
-    assert.equal(await page.locator('#chapter-list a').count(),0);
+    assert.equal(await page.locator('#chapter-list a').count(),3);
+    assert.match(await page.locator('#chapter-list').innerText(),/暢音閣點戲/);
     await page.screenshot({path:`.local/mvp/work-${width}.png`,fullPage:true});
 
     await page.route('**/data/works.json',route=>route.fulfill({json:{schemaVersion:1,works:mockWorks}}));
@@ -66,6 +66,13 @@ try {
     await page.locator('[aria-label="關閉目錄"]').click();
     await page.locator('#settings-button').click();await page.locator('button[data-mode=scroll]').click();await page.locator('[aria-label="關閉閱讀設定"]').click();
     await page.locator('.fn-ref').first().click();assert.equal(await page.locator('#note').evaluate(d=>d.open),true);await page.keyboard.press('Escape');
+    await page.locator('[data-language-toggle]').click();
+    await page.locator('.fn-ref').first().click();
+    assert.match(await page.locator('#note-text').innerText(),/测试用注释/);
+    await page.keyboard.press('Escape');
+    assert.equal(await page.locator('#scroll-content strong').count()>0,true);
+    assert.equal(await page.locator('#scroll-content em').count()>0,true);
+    await page.locator('[data-language-toggle]').click();
     await page.goto(`${base}reader.html?work=test-two&chapter=chapter-one`);await page.locator('body[data-ready=true]').waitFor();
     await page.locator('#settings-button').click();await page.locator('button[data-mode=page]').click();await page.locator('[aria-label="關閉閱讀設定"]').click();
     await page.locator('#next').click();await page.waitForFunction(()=>!document.querySelector('.turn-overlay'));await page.waitForTimeout(550);

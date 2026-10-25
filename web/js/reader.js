@@ -1,6 +1,7 @@
 import {createReaderCore} from './reader/core.js';
 import {createPageTurn} from './page-turn.js';
 import {loadCatalog,findWork,chapterUrl,progressStore} from './catalog.js';
+import {wireLanguage,translatePage,convertText,convertHtml} from './language.js';
 
 const $=id=>document.getElementById(id);
 const escapeHtml=value=>String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
@@ -12,11 +13,17 @@ let settings={...defaults,...store.read('reader:settings')};
 for(const [key,options] of Object.entries({theme:['dark','light','warm'],font:['serif','sans'],motion:['fold','fade','none'],mode:['page','scroll']})) if(!options.includes(settings[key])) settings[key]=defaults[key];
 if(![18,20,22,24].includes(settings.size)) settings.size=20;
 if(![1.7,1.9,2.1].includes(settings.line)) settings.line=1.9;
-let work,chapter,chapterIndex,chapterId,workId,revision,model,pages=[],current=0,anchor;
+let work,chapter,chapterIndex,chapterId,workId,revision,model,markdown,pages=[],current=0,anchor;
 let busy=false,pending=0,saveTimer,resizeTimer,renderVersion=0,turnVersion=0,skipPagehideCapture=false;
 const step=()=>narrow()?1:2;
 const startAnchor=id=>({chapterId:id,block:0,offset:0,percentage:0,contentVersion:revision});
 function cancelTurn(){turnVersion++;pending=0;busy=false;pageTurn.cancel();}
+function localizedModel(){
+ const parsed=core.parse(markdown);
+ parsed.bodyHtml=convertHtml(parsed.bodyHtml);
+ for(const note of parsed.footnotes){note.text=convertText(note.text);note.html=escapeHtml(note.text);}
+ return parsed;
+}
 function apply(){
  document.body.dataset.theme=settings.theme;document.body.dataset.mode=settings.mode;
  document.documentElement.style.setProperty('--reader-font-size',settings.size+'px');
@@ -28,7 +35,7 @@ function apply(){
 }
 function sheet(index){
  const page=pages[index];
- return `<section class="sheet" ${page?'':'aria-hidden="true"'}><div class="page-running"><span>${escapeHtml(chapter.title)}</span><span>臆想書房</span></div><div class="page-content"><div class="book-page-body prose">${page?.bodyHtml||''}</div>${page?core.pageNotes(page):''}</div><div class="page-number">${page?String(index+1).padStart(2,'0'):''}</div></section>`;
+ return `<section class="sheet" ${page?'':'aria-hidden="true"'}><div class="page-running"><span>${escapeHtml(convertText(chapter.title))}</span><span>${escapeHtml(convertText('臆想書房'))}</span></div><div class="page-content"><div class="book-page-body prose">${page?.bodyHtml||''}</div>${page?core.pageNotes(page):''}</div><div class="page-number">${page?String(index+1).padStart(2,'0'):''}</div></section>`;
 }
 function paint(){
  $('book').innerHTML=`<div class="spread">${sheet(current)}${narrow()?'':sheet(current+1)}</div>`;
@@ -79,6 +86,7 @@ async function render(){
   $('position').textContent='向下閱讀';$('progress').style.width=`${(anchor.percentage||0)*100}%`;$('prev').disabled=true;$('next').disabled=true;
  }
  document.body.dataset.ready='true';
+ translatePage();
 }
 function goChapter(index){
  if(index<0||index>=work.chapters.length)return;
@@ -105,6 +113,7 @@ function wire(){
  for(const [button,id] of [['settings-button','settings'],['contents-button','contents']]) $(button).onclick=()=>{cancelTurn();$(id).showModal();};
  document.querySelectorAll('dialog').forEach(dialog=>dialog.addEventListener('click',event=>{if(event.target===dialog){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)dialog.close();}}));
  document.addEventListener('click',event=>{const ref=event.target.closest('.fn-ref');if(ref){cancelTurn();const note=model.footnotesById.get(ref.dataset.fnId);if(note){$('note-text').textContent=note.marker+' '+note.text;$('note').showModal();}}});
+ wireLanguage(async()=>{capture();flush();model=localizedModel();await render();document.title=convertText(`${chapter.title} · ${work.title} · 臆想書房`);});
  async function change(key,value){capture();flush();settings[key]=value;store.write('reader:settings',settings);await render();}
  document.querySelectorAll('button[data-mode]').forEach(button=>button.onclick=()=>change('mode',button.dataset.mode));
  document.querySelectorAll('button[data-theme]').forEach(button=>button.onclick=()=>change('theme',button.dataset.theme));
@@ -126,9 +135,9 @@ try {
  if(!work||chapterIndex<0)throw new Error('找不到這個章節。請從作品目錄重新進入。');
  chapter=work.chapters[chapterIndex];revision=chapter.version;
  const response=await fetch(new URL('../'+chapter.file,import.meta.url),{cache:'no-store'});if(!response.ok)throw new Error('章節正文暫時無法載入。');
- const markdown=await response.text();model=core.parse(markdown);
+ markdown=await response.text();model=localizedModel();
  const saved=store.load(workId);anchor=saved?.chapterId===chapterId?{...saved,contentVersion:revision}:startAnchor(chapterId);
- document.title=`${chapter.title} · ${work.title} · 臆想書房`;
+ document.title=convertText(`${chapter.title} · ${work.title} · 臆想書房`);
  $('reader-title').textContent=chapter.title;$('reader-byline').textContent=`${work.title}　／　${work.author}`;
  $('back-to-work').href=`work.html?id=${encodeURIComponent(workId)}`;
  work.chapters.forEach((item,index)=>{const link=document.createElement('a');link.className='chapter-link';link.href=chapterUrl(work,item);link.textContent=`${String(index+1).padStart(2,'0')}　${item.title}　→`;link.onclick=()=>{capture();flush();anchor=startAnchor(item.id);flush();skipPagehideCapture=true;};$('contents-chapters').append(link);});

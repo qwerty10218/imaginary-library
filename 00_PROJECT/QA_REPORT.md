@@ -1,5 +1,16 @@
 # 原型驗證紀錄
 
+## 2026-10-26：前三章正式上架驗證
+
+- `npm run check` 通過：語法、4 項進度／隔離單元測試、1 部作品與 3 篇正式章節建置、公開產物舊資料與機密掃描。
+- `node scripts/check-release.mjs` 通過：正式封面與三章存在，開頭及足量正文符合發布檢查。封面原件與專案 WebP SHA-256 相同，尺寸 1086×1448。
+- 作者附件與入庫 Markdown 比對：前兩章逐字一致；第三章僅有兩個 `***` 視角分隔及作者允許的結尾替換。
+- `node tests/workflow.mjs` 通過：新作品 metadata／已登錄 Markdown 會建置，未登錄草稿不進入 dist。
+- `node tests/mvp.mjs` 通過：390／1440px 書庫封面、正式三章目錄，隔離測試資料之 Page／Scroll、三主題、腳註、粗斜體、簡繁切換、跨章與雙作品獨立進度。
+- `node tests/release.mjs` 通過：390／1440px 正式首頁、詳情及前三章；桌面雙頁、手機單頁逐頁檢查無空白或正文溢出；簡繁偏好在書庫／詳情／章節及重新整理後保持，語言切換後仍可導航、進度章節 ID 未失效。截圖在忽略區 `.local/release/`。
+- `node tests/browser.mjs` 原型 15 組尺寸／主題回歸通過；`node tests/page-turn.mjs` 6 組翻頁／主題／尺寸回歸通過。
+- 本機預覽 `/imaginary-library/` 無 404。iPhone Safari 實機及正式 GitHub Pages 網址仍待線上驗證。
+
 ## 執行環境
 
 Node.js 24、Windows 本機 Microsoft Edge（Playwright headless）。沒有實機 iPhone／Safari 驗證。

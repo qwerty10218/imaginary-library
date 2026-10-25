@@ -62,3 +62,9 @@
 - 依 GitHub 官方 Pages 工作流規格建立本機 Actions workflow（尚未推送）；新增 release gate，須有封面、兩章且開頭吻合並具足量正文，才能進入部署。
 - 在本專案、Downloads、Desktop 與 Documents 的適用文字檔中未找到兩章完整原稿；可讀到先前對話中的第二章討論稿片段，但不能確認為完整定稿，第一章全文亦未找到。已向作者請求兩份完整原稿，未自行生成或發布。
 - 本機 `npm run check` 與 390／1440px MVP 瀏覽器測試通過；release gate 因章節尚未登錄而如預期失敗。無 Push、部署或原專案修改。
+- 2026-10-26 首作前三章：起始 Git main／7e72264，origin 指向新 Repository，遠端無分支；使用者未追蹤的 `封面.png` 保留、不提交。
+- 從使用者附件擷取正式原稿，發布為 `content/works/zhen-du-chuanyue/chapters/001.md` 至 `003.md`。本機逐字比對第一、二章一致；第三章僅加入兩處 POV 分隔及作者允許的短結尾，沒有創作第四章。
+- 首作 metadata 更新 slug、前三章目錄及架空歷史說明；沿用原始 WebP 封面，SHA-256 與來源一致。
+- 只讀核對原作 `web/index.html`、`web/js/script.js` 的 OpenCC 1.0.5 `tw→cn` 實作；移入相同版本精簡模組與 MIT 授權。沒有移入原作專用詞庫，也沒有外部 CDN。`language.js` 保存新專案語言偏好；閱讀器重新建立顯示模型後分頁，核心演算法及進度資料結構不變。
+- GitHub Pages 靜態頁面無訪客 IP 資訊；不引入第三方定位 API。預設繁體，讀者可切換並保存偏好。
+- 發布檢查改驗封面與前三章；測試結果見 QA_REPORT。原專案與翻頁動畫未修改。

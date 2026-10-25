@@ -1,6 +1,8 @@
 import {loadCatalog,coverUrl,chapterUrl,progressStore,validProgress,statusText} from './catalog.js';
+import {wireLanguage,translatePage,convertText} from './language.js';
 const $=id=>document.getElementById(id);
 const store=progressStore();
+wireLanguage(()=>{translatePage();document.title=convertText('臆想書房 · Gary\'s Imaginary Library');});
 try {
   const works=await loadCatalog();
   $('work-count').textContent=String(works.length).padStart(2,'0');
@@ -21,3 +23,4 @@ try {
     if(position){const chapter=work.chapters.find(c=>c.id===position.chapterId);const a=document.createElement('a');a.className='continue-item';a.href=chapterUrl(work,chapter);a.textContent=`${work.title}　／　${chapter.title}　→`;$('continue-list').append(a);$('continue-section').hidden=false;}
   }
 } catch(error){$('library-status').textContent=error.message;}
+translatePage();document.title=convertText('臆想書房 · Gary\'s Imaginary Library');
