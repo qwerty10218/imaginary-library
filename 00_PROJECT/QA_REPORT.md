@@ -74,3 +74,10 @@ Node.js 24、Windows 本機 Microsoft Edge（Playwright headless）。沒有實�
 - `node scripts/check-release.mjs` 因缺少兩章原稿按設計失敗。此為部署前必要阻擋，不能當正式內容驗收通過。
 - 本輪最終回歸：`node tests/workflow.mjs`、原 15 組 `node tests/browser.mjs` 與 6 組 `node tests/page-turn.mjs` 均通過；Pages YAML 可解析為 build／deploy 兩個 job。首次 MVP 回歸因作品頁非同步載入的測試等待不足而失敗，補上明確載入等待後重跑通過，產品程式無此錯誤。
 - GitHub Pages 與真實兩章閱讀流程尚未驗證；不 Push、不部署。
+
+## 2026-10-26：簡體字型及「抬」字回歸
+
+- 本機重現 OpenCC 將「抬起頭來」輸出為「擡起头来」，修正後簡體閱讀顯示「抬起头来」，不含「擡」；繁體原稿未修改。
+- `npm run check` 通過：語法、四項進度測試、正式建置與公開內容掃描。
+- `node tests/release.mjs` 通過：390×844／1440×1000 Edge headless，正式第二章簡體 Scroll 字形、SC 字型宣告、Page 往返、各章完整分頁、無資源錯誤。
+- 目前瀏覽器測試只確認 CSS 字型宣告與 Windows 字型安裝情況；iPhone Safari 的實際字型與畫面尚未實機驗證。

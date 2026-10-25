@@ -1,5 +1,6 @@
 *{box-sizing:border-box}
 :root{--font-serif:"Songti TC","Noto Serif TC","PMingLiU",serif;--font-sans:system-ui,-apple-system,"Segoe UI",sans-serif;--reader-font:var(--font-serif);--reader-font-size:20px;--reader-line-height:1.9;--page-pad:52px;--book-height:min(640px,calc(100dvh - 284px))}
+:root[lang="zh-CN"]{--font-serif:"Songti SC","Noto Serif CJK SC","Noto Serif SC","Source Han Serif SC","SimSun",serif;--font-sans:"PingFang SC","Noto Sans CJK SC","Noto Sans SC","Microsoft YaHei",sans-serif}
 body{--bg:#151a19;--page:#202624;--ink:#dddcd3;--muted:#a0aaa2;--line:#39413c;--accent:#c2cdb7;--surface:#272e2a;--shade:rgba(0,0,0,.28);margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-sans);font-size:14px}
 body[data-theme=light]{--bg:#eeefec;--page:#fcfcf8;--ink:#292f2c;--muted:#656e67;--line:#d9ddd5;--accent:#465f4f;--surface:#e4e9e1;--shade:rgba(37,46,38,.13)}
 body[data-theme=warm]{--bg:#e9e5dc;--page:#f6f1e6;--ink:#35362e;--muted:#706e60;--line:#d8d1c0;--accent:#626e50;--surface:#e9e4d6;--shade:rgba(64,49,25,.14)}

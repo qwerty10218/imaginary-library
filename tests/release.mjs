@@ -55,7 +55,16 @@ try{
   assert.equal(after.chapterId,before?.chapterId||'001');
   await page.locator('#next-chapter').click();await page.locator('body[data-ready=true]').waitFor();
   assert.match(await page.locator('#reader-title').innerText(),/御花園遇和珅/);
+  await page.locator('[data-language-toggle]').click();
+  await page.locator('#settings-button').click();await page.locator('button[data-mode=scroll]').click();await page.locator('#settings .panel-head button').click();
+  const simplified=await page.locator('#scroll-content').innerText();
+  assert.match(simplified,/抬起头来/);
+  assert.doesNotMatch(simplified,/擡/);
+  assert.match(await page.locator('#scroll-content').evaluate(el=>getComputedStyle(el).fontFamily),/Songti SC.*SimSun/);
+  await page.locator('#settings-button').click();await page.locator('button[data-mode=page]').click();await page.locator('#settings .panel-head button').click();
+  await page.screenshot({path:`.local/release/reader-simplified-${width}.png`,fullPage:true});
   await scanPages(page);
+  await page.locator('[data-language-toggle]').click();
   await page.locator('#next-chapter').click();await page.locator('body[data-ready=true]').waitFor();
   assert.match(await page.locator('#reader-title').innerText(),/暢音閣點戲/);
   await scanPages(page);

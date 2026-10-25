@@ -9,7 +9,8 @@ let language='tw';
 try { if(localStorage.getItem(key)==='cn') language='cn'; } catch {}
 
 export const getLanguage=()=>language;
-export const convertText=text=>language==='cn'?convert(String(text)):String(text);
+// OpenCC's tw→cn table maps 抬 to the variant 擡; standardize the displayed Simplified glyph.
+export const convertText=text=>language==='cn'?convert(String(text)).replace(/擡/g,'抬'):String(text);
 export function setLanguage(next) {
   language=next==='cn'?'cn':'tw';
   try { localStorage.setItem(key,language); } catch {}
