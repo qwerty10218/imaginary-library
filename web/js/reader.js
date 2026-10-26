@@ -8,11 +8,12 @@ const $=id=>document.getElementById(id);
 const escapeHtml=value=>String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 const store=progressStore(), core=createReaderCore(), pageTurn=createPageTurn();
 const narrow=()=>innerWidth<960;
+const phonePage=()=>matchMedia('(max-width:599px), (max-width:959px) and (pointer:coarse) and (orientation:landscape)').matches;
 const params=new URLSearchParams(location.search);
-const defaults={theme:'dark',size:20,line:1.9,font:'serif',motion:'fold',floating:'always',mode:narrow()?'scroll':'page'};
+const defaults={theme:'dark',size:phonePage()?18:20,line:1.9,font:'serif',motion:'fold',floating:'always',mode:narrow()?'scroll':'page'};
 let settings={...defaults,...store.read('reader:settings')};
 for(const [key,options] of Object.entries({theme:['dark','light','warm'],font:['serif','sans'],motion:['fold','fade','none'],floating:['always','auto','hidden'],mode:['page','scroll']})) if(!options.includes(settings[key])) settings[key]=defaults[key];
-if(![18,20,22,24].includes(settings.size)) settings.size=20;
+if(![18,20,22,24].includes(settings.size)) settings.size=defaults.size;
 if(![1.7,1.9,2.1].includes(settings.line)) settings.line=1.9;
 let work,chapter,chapterIndex,chapterId,workId,revision,model,markdown,pages=[],current=0,anchor,musicPlayer;
 let busy=false,pending=0,saveTimer,resizeTimer,renderVersion=0,turnVersion=0,chapterRequestVersion=0,skipPagehideCapture=false;
@@ -43,7 +44,8 @@ function chapterEnd(){
 function sheet(index){
  const page=pages[index];
  const ending=!page&&index>=0&&pages.length>0;
- return `<section class="sheet" ${page||ending?'':'aria-hidden="true"'}><div class="page-running"><span>${escapeHtml(convertText(chapter.title))}</span><span>${escapeHtml(convertText('臆想書房'))}</span></div><div class="page-content"><div class="book-page-body prose">${page?.bodyHtml||(ending?`<div class="chapter-complete">${chapterEnd()}</div>`:'')}</div>${page?core.pageNotes(page):''}</div><div class="page-number">${page?`${String(index+1).padStart(2,'0')}${index===pages.length-1&&(narrow()||pages.length%2===0)?`<span class="chapter-complete-inline">${chapterEnd()}</span>`:''}`:''}</div></section>`;
+ const pageNumber=phonePage()?`${index+1} / ${pages.length}`:String(index+1).padStart(2,'0');
+ return `<section class="sheet" ${page||ending?'':'aria-hidden="true"'}><div class="page-running"><span>${escapeHtml(convertText(chapter.title))}</span><span>${escapeHtml(convertText('臆想書房'))}</span></div><div class="page-content"><div class="book-page-body prose">${page?.bodyHtml||(ending?`<div class="chapter-complete">${chapterEnd()}</div>`:'')}</div>${page?core.pageNotes(page):''}</div><div class="page-number">${page?`${pageNumber}${index===pages.length-1&&(narrow()||pages.length%2===0)?`<span class="chapter-complete-inline">${chapterEnd()}</span>`:''}`:''}</div></section>`;
 }
 function paint(){
  $('book').innerHTML=`<div class="spread">${sheet(current)}${narrow()?'':sheet(current+1)}</div>`;
@@ -152,16 +154,23 @@ function syncFloating(){
  $('floating-settings').hidden=settings.floating==='hidden'||(settings.floating==='auto'&&settings.mode==='scroll'&&autoCollapsed);
 }
 function wire(){
+ const resizeReader=()=>{cancelTurn();clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{capture();render();},160);};
  $('prev').onclick=()=>turn(-1,{explicit:true});$('next').onclick=()=>turn(1,{explicit:true});
  for(const [button,id] of [['settings-button','settings'],['floating-settings','settings'],['contents-button','contents']]) $(button).onclick=()=>{cancelTurn();$(id).showModal();};
  // Reserve the actual shared dock height in both visible and measured page layouts.
  let dockHeight=0,dockFrame;
+ // Resolve mobile geometry before restoring a saved text anchor on the first page.
+ if(phonePage()){
+   dockHeight=Math.ceil($('reader-dock').getBoundingClientRect().height);
+   document.body.style.setProperty('--reader-dock-height',dockHeight+'px');
+ }
  const observer=new ResizeObserver(()=>{
    const height=Math.ceil($('reader-dock').getBoundingClientRect().height);
    if(height===dockHeight)return;
    dockHeight=height;document.body.style.setProperty('--reader-dock-height',height+'px');
    if(settings.mode==='page'&&document.body.dataset.ready==='true'){
-     cancelAnimationFrame(dockFrame);dockFrame=requestAnimationFrame(()=>{capture();render();});
+     if(phonePage())resizeReader();
+     else{cancelAnimationFrame(dockFrame);dockFrame=requestAnimationFrame(()=>{capture();render();});}
    }
  });
  observer.observe($('reader-dock'));
@@ -182,7 +191,8 @@ function wire(){
    if(Math.abs(scrollY-lastScroll)>8){autoCollapsed=scrollY>150&&scrollY>lastScroll;lastScroll=scrollY;syncFloating();}
    capture();save();$('progress').style.width=`${anchor.percentage*100}%`;
  }},{passive:true});
- addEventListener('resize',()=>{cancelTurn();clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{capture();render();},160);});
+ addEventListener('resize',resizeReader);
+ window.visualViewport?.addEventListener('resize',()=>{if(phonePage()&&settings.mode==='page')resizeReader();});
  addEventListener('pagehide',()=>{cancelTurn();if(!skipPagehideCapture)capture();flush();});
  document.addEventListener('visibilitychange',()=>{if(document.hidden){cancelTurn();if(!skipPagehideCapture)capture();flush();}});
  const preference=matchMedia('(prefers-reduced-motion: reduce)');if(preference.addEventListener)preference.addEventListener('change',cancelTurn);else preference.addListener?.(cancelTurn);

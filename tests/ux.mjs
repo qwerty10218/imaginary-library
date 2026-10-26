@@ -72,10 +72,14 @@ try{
   for(const chapter of ['ep01','ep02','ep03']){
    await page.goto(base+`reader.html?work=tainan-youth-wind&chapter=${chapter}`);await ready(page);await page.waitForTimeout(200);
    await page.locator('#settings-button').click();await page.locator('#motion').selectOption('none');await closeSettings(page);
-   let seenHr=0;
-   for(let n=0;n<120;n++){
+   let seenHr=0,previousPage=0;
+   const maximumTurns=Number((await page.locator('#position').innerText()).match(/\d+/g).at(-1))+1;
+   for(let n=0;n<maximumTurns;n++){
     const scan=await page.evaluate(()=>{const sheets=[...document.querySelectorAll('#book > .spread .sheet:not([aria-hidden="true"])')];const nums=document.querySelector('#position').textContent.match(/\d+/g).map(Number);return {overflow:sheets.some(s=>{const c=s.querySelector('.page-content'),end=s.querySelector('.page-footnotes')?.getBoundingClientRect().top??c.getBoundingClientRect().bottom;return [...s.querySelector('.book-page-body').children].some(e=>e.getBoundingClientRect().bottom>end+2);}),hr:document.querySelectorAll('#book > .spread hr').length,last:nums.at(-2)>=nums.at(-1)};});
-    assert.equal(scan.overflow,false,`${width} ${chapter} overflow`);seenHr+=scan.hr;if(scan.last)break;assert.ok(n<119);await page.locator('#next').click();
+    assert.equal(scan.overflow,false,`${width} ${chapter} overflow`);seenHr+=scan.hr;if(scan.last)break;
+    const currentPage=Number((await page.locator('#position').innerText()).match(/\d+/)[0]);
+    assert.ok(currentPage>previousPage,`${width} ${chapter} pagination must advance`);previousPage=currentPage;
+    assert.ok(n<maximumTurns-1,`${width} ${chapter} did not reach its final page`);await page.locator('#next').click();
    }
    assert.ok(seenHr>0,'scene breaks must survive pagination');
   }

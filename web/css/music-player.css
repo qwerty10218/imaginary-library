@@ -38,3 +38,6 @@
 .music-extra input[type=file]{position:absolute;width:1px;height:1px;clip-path:inset(50%);overflow:hidden}
 .music-extra:has(input[type=file]:focus-visible) .music-file-label{outline:2px solid #d7bd94;outline-offset:2px}
 @media(prefers-reduced-motion:reduce){.music-vinyl{animation:none}.music-needle{transition:none}}
+@media(max-width:599px){
+ .reader-page .music-panel[open] summary{border-bottom:0}
+}

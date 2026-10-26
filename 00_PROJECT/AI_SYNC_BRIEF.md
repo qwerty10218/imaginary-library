@@ -128,3 +128,30 @@ Gary 已確認目前播放器並明確指示「OK PUSH」。本次發布包含�
 作者已驗收並指示 OK PUSH。播放器程式與回歸提交 3980c85 已 Push 至 main，GitHub Pages Actions 40341375076 的 build／deploy 均成功。工作區及精確待提交樹的 check、6 項單元測試、release gate 通過；vinyl 320／375／390／430／1440、tainan 390／1440、ux 375／390／430／1440 回歸通過。獨立驗證副本初次因 Windows archive CRLF 及缺少 node_modules 失敗，改用 core.autocrlf=false 匯出並連結既有依賴後完整通過，未修改小說或略過檢查。
 
 正式站 reader.html、reader.css、music-player.css、music-player.js 與 EP.03 顯示產物 SHA-256 均和提交樹建置一致；390／1440px Edge headless 驗證 12px 選曲小標、無重複資訊、MP3 播放／暫停與旋轉，無腳本錯誤。截圖 .local/vinyl/live-{390,1440}.png。Safari 真機未驗。EP.03 本機校訂、.gitignore、其他既有接續差異與未追蹤來源包仍未提交，未混入發布。此前「待驗收／未發布」段落為歷史紀錄，以本段為準。
+
+## 2026-10-26 手機閱讀器寬度／線條／底部工具布局（本機待驗收）
+
+僅改 web/css/reader.css 與 music-player.css 的 <=599px 響應式規則，沿用原 DOM、分頁／量測與 dock ResizeObserver。正文 Page／Scroll 卡片收至 88vw，兩側6vw（包含安全區下限）；Page 內距28px，Scroll內距22px，保留使用者字級與行距。375／390／430px 卡片約330／343／378px，播放器 width:min(72vw,280px)，約270／280／280px。Aa為獨立44px圓形按鈕，位於播放器上方右側、間距8px；去除共同大外框，保留原 always／auto／hidden 偏好。Page繼續依實際兩列dock高度預留書高，Scroll保留既有底部進度與安全預留機制。
+
+手機隱藏書頁兩層裝飾外框、頁碼區進度細線、頁首底線及翻頁按鈕圓框；播放器展開摘要底線移除；單層書頁／播放器邊框及必要註解線降低對比，分場虛線仍保留並淡化。翻頁觸控區44×78px，位於左右邊緣且不壓文字。未更動小說、章節／音檔／播放邏輯、註解、進度資料格式、TTS或桌面樣式。
+
+新增 tests/mobile-layout.mjs：375×667、390／430／1440×900測試 Page／Scroll 寬度、頁碼、翻頁區與正文不相交、Aa不重疊／開設定、Page展開工具不遮書頁、水平溢出、音訊播放／暫停與註解。tests/ux.mjs 原固定120頁上限因375×667展開工具後產生更多頁而失敗，改讀實際總頁數＋每次必須前進＋必須抵達章末斷言，完整重跑通過，沒有關閉或跳過檢查。
+
+最終 npm run check（語法／4進度測試／build／公開產物稽核）、npm test（6項）、release gate、mobile-layout、ux（375／390／430／1440）、tainan（390／1440三首歌／跨章／26註／逐頁）、vinyl（320／375／390／430／1440轉動／暫停／續播／幾何）均通過。1440px收合與展開前後PNG的SHA-256分別一致，桌面畫面未變。所有為Edge headless；Safari真機／實際安全區與工具列未驗，現有專案無TTS實作。
+
+前後截圖在 .local/mobile-reader/before-page-{375,390,430,1440}.png、before-expanded-*.png、after-page-*.png、after-expanded-*.png，另有 after-scroll-*.png 與 results.json。保留開始前的所有其他工作樹修改；未 Commit、Push、部署。待 Gary 視覺確認手機正文留白、線條及 Aa 上下排列。
+## 2026-10-26 手機分頁有效容量與重排（本機待驗收）
+
+本輪僅改 web/css/reader.css 的手機Page規則及 web/js/reader.js 的手機分支；沿用599px手機與959px單頁斷點（959px內僅觸控橫向視窗套用），桌面原排版不動。保留88vw卡片與既有工具布局，Page左右內距28→24px、上下21/12→12/6px、頁眉31→20px、頁內頁碼20px；原頁外29px頁碼改由頁內顯示「目前頁／總頁」，原aria-live節點以視覺隱藏保留且不占布局。減少章標及段間留白，段距.65em、行距偏好不變；移除裝飾層但保留單頁緣／紙張色差與輕陰影。手機書高依真實dock／Safe Area計算回收多餘預留，100dvh具100vh後備。
+
+實測原未設定字級為20px，依作者需求改為手機新使用者18px，桌面仍20px；有效18／20／22／24px既有偏好不改，不新增16px。手機visualViewport與window resize／dock高度變化共用160ms節流重新分頁。新測試重現重載進度可能回前一頁：首次分頁時dock高度尚未確定、第二次分頁capture覆蓋原anchor；改為手機首次render前先讀真實dock高度，並合併手機重排排程。未改分頁核心、儲存格式、小說、音樂、繁簡與註解資料；未改桌面既有重排路徑。
+
+同EP.01、18px、1.9行距、明體、播放器收合／Aa常駐，實際DOM量測：375×667正文272×338→280×421px、70→49頁、全章平均53.9→77.0正文顯示字元／頁，第一頁79→92字元；390×844為285.2×515→293.2×598px、45→34頁、83.9→111.0字元／頁，首頁112→128；430×932為320.4×603→328.4×686px、35→28頁、107.9→134.8字元／頁，首159（原128）。深／淺主題數據一致。分頁仍從內容容器扣原8px安全餘量；字元含正文標點／章標／註碼、排除空白／頁眉／頁碼／註釋正文；全章3775字元前後完全一致，平均分母包含完整分頁。六組逐頁按data-idx／data-start重組來源全文、逐頁邊界、11註與分場數量均通過，無漏字重複或裁切。
+
+新增 tests/mobile-capacity.mjs（CAPACITY_PHASE=before記錄基準，預設after）、tests/mobile-reflow.mjs（手機預設與既有24px保存、18／22／24px、1.7／1.9／2.1行距、進度恢復、視窗縮短120px、667×375／844×390／932×430橫向與返回直向、visualViewport事件、工具展開、手勢、480ms摺頁）。測試初版兩項工具錯誤為範圍包含量測rig造成多元素選擇及Touch事件缺identifier，均修正後重跑；進度失敗另如上修正真實初始化競態。最終capacity六組、reflow三組、mobile-layout四尺寸、UX四尺寸、tainan三篇／26註／三首歌、vinyl五尺寸、npm run check、6項單元測試、release gate全部通過。
+
+1440×900桌面深／淺主題前後PNG位元完全相同；保留原字級、頁框、寬度、控制與翻頁模組。完整數據定義與比較報告 .local/mobile-capacity/REPORT.md；before.json／after.json 與 before/after-{375,390,430}-{dark,light}-{first,body,notes,scene}.png。Safari真機／實際工具列與Home Indicator未驗，本機WebKit執行檔不存在；僅以Edge headless模擬viewport變化，不能宣稱Safari通過。現有專案無TTS實作。保留先前所有本機差異；本輪未Commit、Push、部署。
+
+## 2026-10-26 手機閱讀器驗收與發布授權
+
+Gary 已指示「push一下」，授權本輪手機閱讀寬度、底部工具布局與分頁容量修改發布。提交範圍僅閱讀器 CSS／手機分支、相關測試與本輪紀錄；EP.03 校訂、.gitignore、來源包及其他既有差異仍排除。正式部署與線上驗證結果另續記。

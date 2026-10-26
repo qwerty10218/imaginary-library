@@ -196,3 +196,48 @@ details[open]>summary .when-closed{display:none}
  .reader-page[data-mode=page]{--book-height:calc(100dvh - 143px - max(56px,var(--reader-dock-height)) - env(safe-area-inset-top) - env(safe-area-inset-bottom))}
  .scroll-content.prose hr,.book-page-body.prose hr{width:80%;margin-inline:auto}
 }
+
+/* Mobile reading keeps one quiet page edge and independently framed tools.
+   The existing dock observer reserves the height of both tool rows. */
+@media(max-width:599px){
+ .reader-page{--page-pad:28px}
+ .reader-page .reading-room{padding-inline:max(6vw,env(safe-area-inset-left)) max(6vw,env(safe-area-inset-right))}
+ .reader-page .site-header{border-bottom:0}
+ .reader-page .book:before,.reader-page .book:after{display:none}
+ .reader-page .spread,.reader-page .scroll-content{border-color:color-mix(in srgb,var(--line) 50%,transparent)}
+ .reader-page .scroll-content{padding-inline:22px}
+ .reader-page .reading-navigation{border:0}
+ .reader-page .reading-navigation .progress-track{display:none}
+ .reader-page .page-turn-control{width:44px;height:78px;opacity:.6}
+ .reader-page .page-turn-prev{left:calc(-6vw)}
+ .reader-page .page-turn-next{right:calc(-6vw)}
+ .reader-page .page-turn-control:before{border:0;box-shadow:none;background:none}
+ .reader-page .page-footnotes,.reader-page .chapter-endnotes{border-top-color:color-mix(in srgb,var(--line) 55%,transparent)}
+ .reader-page .scroll-content.prose hr,.reader-page .book-page-body.prose hr{opacity:.4}
+ .reader-page .reader-dock{inset-inline:auto max(6vw,env(safe-area-inset-right));width:min(72vw,280px);max-width:88vw;display:flex;flex-direction:column;align-items:flex-end;gap:8px;padding:0;border:0;border-radius:0;background:none;box-shadow:none}
+ .reader-page .reader-dock .music-panel{order:1;flex:none;width:100%;max-width:none;border-color:color-mix(in srgb,#7a7468 50%,transparent)}
+ .reader-page .floating-settings{order:0;border-radius:50%;box-shadow:0 2px 8px var(--shade)}
+}
+
+/* Reclaim mobile page space without changing font or line-height preferences.
+   Touch landscape uses the existing 959px single-page breakpoint. */
+@media(max-width:599px), (max-width:959px) and (pointer:coarse) and (orientation:landscape){
+ .reader-page[data-mode=page]{--phone-viewport:100vh;--page-pad:24px;--book-height:calc(var(--phone-viewport) - 88px - max(44px,var(--reader-dock-height)) - env(safe-area-inset-top) - env(safe-area-inset-bottom))}
+ .reader-page[data-mode=page] .reading-room{padding-top:8px}
+ .reader-page[data-mode=page] .site-header{height:calc(56px + env(safe-area-inset-top));padding-top:env(safe-area-inset-top)}
+ .reader-page[data-mode=page] .book{min-height:0;box-shadow:0 6px 14px var(--shade)}
+ .reader-page[data-mode=page] .book:before,.reader-page[data-mode=page] .book:after{display:none}
+ .reader-page[data-mode=page] .book .sheet{padding:12px var(--page-pad) 6px}
+ .reader-page[data-mode=page] .book .page-running{height:20px}
+ .reader-page[data-mode=page] .book .page-number{height:20px;font-size:10px}
+ .reader-page[data-mode=page] .reading-navigation{position:absolute;width:1px;height:1px;min-height:0;padding:0;overflow:hidden;clip-path:inset(50%)}
+ .reader-page[data-mode=page] .book-page-body.prose h1{margin:6px 0 12px;line-height:1.35}
+ .reader-page[data-mode=page] .book-page-body.prose p{margin-bottom:.65em}
+ .reader-page[data-mode=page] .page-footnotes{margin-top:10px;padding-top:6px}
+ @supports(height:100dvh){.reader-page[data-mode=page]{--phone-viewport:100dvh}}
+}
+@media(min-width:600px) and (max-width:959px) and (pointer:coarse) and (orientation:landscape){
+ .reader-page[data-mode=page] .page-turn-control{width:44px}
+ .reader-page[data-mode=page] .page-turn-prev{left:-48px}
+ .reader-page[data-mode=page] .page-turn-next{right:-48px}
+}
