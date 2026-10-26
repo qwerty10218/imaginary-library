@@ -36,3 +36,20 @@
 ### 《叫我沈總》發布驗收結果
 
 內容 commit `4de5de1` 已 Push，Pages Actions run `40306251293` build／deploy 成功。正式首頁、詳情、閱讀頁、索引、第一章、封面皆 HTTP 200，正文與封面 SHA-256 和本機一致。正式站 390／1440px Edge headless 書庫→作品→閱讀→繁簡→翻頁／滾動→進度恢復→返回目錄→舊書回歸通過，無腳本或失敗資源；本機 release 390／1440／1720px、台南 26 註與音樂、6 組動畫回歸均通過，精確提交樹的 check 與發布 gate 亦通過。iPhone Safari 實機未驗；現有站無 TTS 介面及 OG 分享圖系統，未新增或宣稱驗收。正式章節：https://qwerty10218.github.io/imaginary-library/reader.html?work=jiao-wo-shen-zong&chapter=001 。
+
+
+## 2026-10-26 首頁與閱讀器 UX 本機驗收
+
+首頁與閱讀器 UX 本機修改完成，等待作者視覺驗收；沒有 Commit、Push、Pages 發布或雲端變更。原工作區 .gitignore、台南 EP.03 校訂及既有接續文件差異均保留。
+
+1440px 無進度時書庫標題由約 506px 提前至 350px，主標由 115.2px 降為 64.8px；390px 標題由約 403px 提前至 293px，主標 52px → 39px。新增分類／簡介摺疊、最近一本繼續閱讀、共用播放器／Aa 工具區、原設定面板入口及正文低對比分場虛線。本機書庫 http://127.0.0.1:4173/imaginary-library/；前後對照 http://127.0.0.1:4174/ （伺服器存續期間可用），靜態對照檔與截圖在 .local/ux/。
+
+check／build、6 項單元測試、release gate、UX 375／390／430／1440px、release、shen、tainan、immersive、page-turn 均通過。現行公開書目無《彼岸仍是人間》，本輪只讀回退 CSS；現行閱讀器無 TTS 實作，無法驗該功能。iPhone Safari 真機／實際 Home Indicator 與瀏覽器工具列仍待人工確認。
+
+
+- 2026-10-26 預覽連線排查：4173 未監聽，已重新啟動既有 scripts/preview.mjs；4174 對照服務仍在。Codex 內建瀏覽器已實際重載對照頁並開啟本機書庫，皆正常。此輪沒有程式修改、Commit／Push／部署；預覽服務停止或電腦重啟後須重新啟動。
+
+
+### 2026-10-26 作者驗收與正式發布授權
+
+作者已確認 UX 畫面 OK，明確授權測試後 Push 為正式版本。本次只提交首頁／閱讀器 UX、相關測試與本輪文件；既有 EP.03 正文校訂、.gitignore 及其他無關變更排除。npm run check、npm test（6 項）與發布 gate 已通過；正式部署結果將另行續記。

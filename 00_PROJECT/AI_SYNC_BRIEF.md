@@ -64,3 +64,22 @@ MVP 0.1 書庫、作品詳情、Markdown 閱讀器與首作前三章已正式上
 ### 《叫我沈總》發布驗收結果
 
 內容 commit `4de5de1` 已 Push，Pages Actions run `40306251293` build／deploy 成功。正式首頁、詳情、閱讀頁、索引、第一章、封面皆 HTTP 200，正文與封面 SHA-256 和本機一致。正式站 390／1440px Edge headless 書庫→作品→閱讀→繁簡→翻頁／滾動→進度恢復→返回目錄→舊書回歸通過，無腳本或失敗資源；本機 release 390／1440／1720px、台南 26 註與音樂、6 組動畫回歸均通過，精確提交樹的 check 與發布 gate 亦通過。iPhone Safari 實機未驗；現有站無 TTS 介面及 OG 分享圖系統，未新增或宣稱驗收。正式章節：https://qwerty10218.github.io/imaginary-library/reader.html?work=jiao-wo-shen-zong&chapter=001 。
+
+
+## 2026-10-26 首頁與閱讀器 UX 本機驗收
+
+最新優先：首頁／閱讀器 UX 已完成本機驗證，等待 Gary 視覺驗收，禁止自行 Commit／Push／部署。現有文學書房風格保留，局部縮 Hero／間距、分類篩選（由 genres 推導、多重歸類）、書卡原生 details 摺疊簡介、依 updatedAt 顯示最近一本繼續閱讀（其他紀錄可展開，不刪除）。
+
+新 Aa 仍開原 settings dialog，floating 偏好沿原 reader:settings 保存，always／auto／hidden；頂部 Aa 保留。音樂 details 與 Aa 在同一 reader-dock，安全區域與底部預留空間，ResizeObserver 調整 Page 書高，收合列顯示實際播放曲目，跨章原曲不中斷。正文 hr 直接參考本機遷移 snapshot/style.css 205／538 行的細虛線，scope 僅正文並包含測量 rig；未改 Markdown／OpenCC／分頁核心／音訊。
+
+新檔 web/js/library-model.js、tests/library-model.test.mjs、tests/ux.mjs；改 web/index.html、reader.html、css/reader.css、js/library.js、reader.js、music-player.js，及 tests/tainan.mjs 動態頁數上限＋逐次前進斷言。npm run check、npm test(6)、release gate、UX 375／390／430／1440px、release／shen／tainan／immersive／page-turn 通過。16 份內容及 MP3 檔與本輪開始 SHA-256 相同。
+
+對照 .local/ux/review.html、before/after PNG、baseline/results JSON；本機對照伺服器 http://127.0.0.1:4174/，網站仍用 4173。待確認視覺、分類命名與觸控；Safari 真機未驗。當前書目沒有《彼岸仍是人間》，且沒有 TTS 實作，不能聲稱已回歸。工作開始前已有 .gitignore、台南 EP.03 與六份文件變更，均保留，勿將其誤認本輪改稿或擅自發布。
+
+
+- 2026-10-26 預覽連線排查：4173 未監聽，已重新啟動既有 scripts/preview.mjs；4174 對照服務仍在。Codex 內建瀏覽器已實際重載對照頁並開啟本機書庫，皆正常。此輪沒有程式修改、Commit／Push／部署；預覽服務停止或電腦重啟後須重新啟動。
+
+
+### 2026-10-26 作者驗收與正式發布授權
+
+作者已確認 UX 畫面 OK，明確授權測試後 Push 為正式版本。本次只提交首頁／閱讀器 UX、相關測試與本輪文件；既有 EP.03 正文校訂、.gitignore 及其他無關變更排除。npm run check、npm test（6 項）與發布 gate 已通過；正式部署結果將另行續記。

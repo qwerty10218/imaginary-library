@@ -87,16 +87,20 @@ try {
    assert.equal(await page.locator('#scroll-content .fn-ref').count(),count);
    await page.locator('#scroll-content .fn-ref').first().click();assert.ok((await page.locator('#note-text').innerText()).length>10);await page.locator('#note .panel-head button').click();
    await page.locator('#settings-button').click();await page.locator('button[data-mode=page]').click();await page.locator('#settings .panel-head button').click();
-   for(let turn=0;turn<100;turn++){
+   // An expanded dock leaves less page height; derive the bound from pagination.
+   const maximumTurns=Number((await page.locator('#position').innerText()).match(/\d+/g).at(-1))+1;
+   let previousPage=0;
+   for(let turn=0;turn<maximumTurns;turn++){
     const spread=await page.evaluate(()=>{
      const sheets=[...document.querySelectorAll('.sheet:not([aria-hidden="true"])')];
      const overflow=sheets.some(sheet=>{const body=sheet.querySelector('.book-page-body'),notes=sheet.querySelector('.page-footnotes'),content=sheet.querySelector('.page-content');return [...body.children].some(child=>child.getBoundingClientRect().bottom>(notes?.getBoundingClientRect().top??content.getBoundingClientRect().bottom)+2);});
      const match=document.querySelector('#position').textContent.match(/^(\d+)(?: — (\d+))? \/ (\d+)$/);
-     return {empty:sheets.some(sheet=>!sheet.querySelector('.book-page-body').textContent.trim()),overflow,last:match&&Number(match[2]||match[1])>=Number(match[3])};
+     return {empty:sheets.some(sheet=>!sheet.querySelector('.book-page-body').textContent.trim()),overflow,current:match&&Number(match[1]),last:match&&Number(match[2]||match[1])>=Number(match[3])};
     });
     assert.equal(spread.empty,false,`${id} has an empty page`);assert.equal(spread.overflow,false,`${id} overflows a page`);
     if(spread.last)break;
-    assert.ok(turn<99,`${id} has too many pages`);await page.locator('#next').click();
+    assert.ok(spread.current>previousPage,`${id} pagination must advance`);previousPage=spread.current;
+    assert.ok(turn<maximumTurns-1,`${id} did not reach its final page`);await page.locator('#next').click();
    }
   }
   await page.goto(base+'reader.html?work=zhen-du-chuanyue&chapter=001');await page.locator('body[data-ready=true]').waitFor();

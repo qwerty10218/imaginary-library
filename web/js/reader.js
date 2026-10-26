@@ -9,9 +9,9 @@ const escapeHtml=value=>String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<'
 const store=progressStore(), core=createReaderCore(), pageTurn=createPageTurn();
 const narrow=()=>innerWidth<960;
 const params=new URLSearchParams(location.search);
-const defaults={theme:'dark',size:20,line:1.9,font:'serif',motion:'fold',mode:narrow()?'scroll':'page'};
+const defaults={theme:'dark',size:20,line:1.9,font:'serif',motion:'fold',floating:'always',mode:narrow()?'scroll':'page'};
 let settings={...defaults,...store.read('reader:settings')};
-for(const [key,options] of Object.entries({theme:['dark','light','warm'],font:['serif','sans'],motion:['fold','fade','none'],mode:['page','scroll']})) if(!options.includes(settings[key])) settings[key]=defaults[key];
+for(const [key,options] of Object.entries({theme:['dark','light','warm'],font:['serif','sans'],motion:['fold','fade','none'],floating:['always','auto','hidden'],mode:['page','scroll']})) if(!options.includes(settings[key])) settings[key]=defaults[key];
 if(![18,20,22,24].includes(settings.size)) settings.size=20;
 if(![1.7,1.9,2.1].includes(settings.line)) settings.line=1.9;
 let work,chapter,chapterIndex,chapterId,workId,revision,model,markdown,pages=[],current=0,anchor,musicPlayer;
@@ -30,7 +30,8 @@ function apply(){
  document.documentElement.style.setProperty('--reader-font-size',settings.size+'px');
  document.documentElement.style.setProperty('--reader-line-height',settings.line);
  document.documentElement.style.setProperty('--reader-font',`var(--font-${settings.font})`);
- for(const [id,key] of [['font-size','size'],['line-height','line'],['font-family','font'],['motion','motion']]) $(id).value=settings[key];
+ for(const [id,key] of [['font-size','size'],['line-height','line'],['font-family','font'],['motion','motion'],['floating-controls','floating']]) $(id).value=settings[key];
+ syncFloating();
  document.querySelectorAll('button[data-mode]').forEach(el=>el.setAttribute('aria-pressed',el.dataset.mode===settings.mode));
  document.querySelectorAll('button[data-theme]').forEach(el=>el.setAttribute('aria-pressed',el.dataset.theme===settings.theme));
 }
@@ -146,23 +147,41 @@ async function turn(direction,{explicit=false}={}){
  if(version!==turnVersion)return;
  busy=false;if(pending){const queued=pending;pending=0;turn(queued);}
 }
+let lastScroll=scrollY,autoCollapsed=false;
+function syncFloating(){
+ $('floating-settings').hidden=settings.floating==='hidden'||(settings.floating==='auto'&&settings.mode==='scroll'&&autoCollapsed);
+}
 function wire(){
  $('prev').onclick=()=>turn(-1,{explicit:true});$('next').onclick=()=>turn(1,{explicit:true});
- for(const [button,id] of [['settings-button','settings'],['contents-button','contents']]) $(button).onclick=()=>{cancelTurn();$(id).showModal();};
+ for(const [button,id] of [['settings-button','settings'],['floating-settings','settings'],['contents-button','contents']]) $(button).onclick=()=>{cancelTurn();$(id).showModal();};
+ // Reserve the actual shared dock height in both visible and measured page layouts.
+ let dockHeight=0,dockFrame;
+ const observer=new ResizeObserver(()=>{
+   const height=Math.ceil($('reader-dock').getBoundingClientRect().height);
+   if(height===dockHeight)return;
+   dockHeight=height;document.body.style.setProperty('--reader-dock-height',height+'px');
+   if(settings.mode==='page'&&document.body.dataset.ready==='true'){
+     cancelAnimationFrame(dockFrame);dockFrame=requestAnimationFrame(()=>{capture();render();});
+   }
+ });
+ observer.observe($('reader-dock'));
  document.querySelectorAll('dialog').forEach(dialog=>dialog.addEventListener('click',event=>{if(event.target===dialog){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)dialog.close();}}));
  document.addEventListener('click',event=>{const ref=event.target.closest('.fn-ref');if(ref){cancelTurn();const note=model.footnotesById.get(ref.dataset.fnId);if(note){$('note-text').textContent=note.marker+' '+note.text;$('note').showModal();}}});
  wireLanguage(async()=>{capture();flush();model=localizedModel();await render();document.title=convertText(`${chapter.title} · ${work.title} · 臆想書房`);});
  async function change(key,value){capture();flush();settings[key]=value;store.write('reader:settings',settings);await render();}
  document.querySelectorAll('button[data-mode]').forEach(button=>button.onclick=()=>change('mode',button.dataset.mode));
  document.querySelectorAll('button[data-theme]').forEach(button=>button.onclick=()=>change('theme',button.dataset.theme));
- for(const [id,key] of [['font-size','size'],['line-height','line'],['font-family','font'],['motion','motion']]) $(id).onchange=event=>change(key,['size','line'].includes(key)?Number(event.target.value):event.target.value);
+ for(const [id,key] of [['font-size','size'],['line-height','line'],['font-family','font'],['motion','motion'],['floating-controls','floating']]) $(id).onchange=event=>change(key,['size','line'].includes(key)?Number(event.target.value):event.target.value);
  document.addEventListener('keydown',event=>{if(event.shiftKey||event.ctrlKey||event.altKey||event.metaKey)return;const control=event.target.closest('button,a,input,select,textarea,[contenteditable]');if(document.querySelector('dialog[open]')||(control&&!control.classList.contains('page-turn-control')))return;if(settings.mode==='page'&&['ArrowRight','PageDown','ArrowLeft','PageUp'].includes(event.key)){event.preventDefault();turn(['ArrowRight','PageDown'].includes(event.key)?1:-1,{explicit:true});}});
  let touch;
  $('book').addEventListener('pointerdown',()=>{if(busy)cancelTurn();},{capture:true});
  $('book').addEventListener('touchstart',event=>{if(event.target.closest('button,a')||event.touches.length!==1){touch=null;return;}touch={x:event.touches[0].clientX,y:event.touches[0].clientY,t:Date.now()};},{passive:true});
  $('book').addEventListener('touchcancel',()=>{touch=null;},{passive:true});
  $('book').addEventListener('touchend',event=>{if(!touch)return;const dx=event.changedTouches[0].clientX-touch.x,dy=event.changedTouches[0].clientY-touch.y;if(Math.abs(dx)>55&&Math.abs(dx)>Math.abs(dy)*1.5&&Date.now()-touch.t<600&&!getSelection()?.toString())turn(dx<0?1:-1);touch=null;},{passive:true});
- addEventListener('scroll',()=>{if(settings.mode==='scroll'){capture();save();$('progress').style.width=`${anchor.percentage*100}%`;}},{passive:true});
+ addEventListener('scroll',()=>{if(settings.mode==='scroll'){
+   if(Math.abs(scrollY-lastScroll)>8){autoCollapsed=scrollY>150&&scrollY>lastScroll;lastScroll=scrollY;syncFloating();}
+   capture();save();$('progress').style.width=`${anchor.percentage*100}%`;
+ }},{passive:true});
  addEventListener('resize',()=>{cancelTurn();clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{capture();render();},160);});
  addEventListener('pagehide',()=>{cancelTurn();if(!skipPagehideCapture)capture();flush();});
  document.addEventListener('visibilitychange',()=>{if(document.hidden){cancelTurn();if(!skipPagehideCapture)capture();flush();}});

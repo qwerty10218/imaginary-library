@@ -121,3 +121,29 @@ Node.js 24、Windows 本機 Microsoft Edge（Playwright headless）。沒有實�
 - 正式前三章及封面未修改；不包含測試截圖、私人備份、原小說或任何新章。iPhone Safari 真機未測，不能以此模擬驗收代替。
 
 - 線上驗證：`f5071e3` 的 Actions run `40288298449` completed／success。1720×864、390×844 Edge headless 實測首頁一部正式作品、封面正常、CTA 在簡介之前、前三章有正文、殘留選取後箭頭可翻頁且有 480ms overlay、簡體重載保持。無 pageerror／HTTP 400+；畫面在 `.local/final-qa/live/`。
+
+
+## 2026-10-26 首頁與閱讀器 UX 本機驗收
+
+驗證環境：Windows／Node 24／Playwright Edge headless；375×667、390×900、430×900、1440×900。比較基準、截圖與結果：.local/ux/baseline.json、results.json、review.html 與 before-*／after-* PNG。
+
+已執行且通過：
+- npm run check：JS 語法、4 項進度測試、build、公開產物稽核（3 部作品、7 章）。
+- npm test：6 項單元測試（包含分類多重歸類、最近閱讀排序／完讀隱藏／不寫入舊紀錄）。
+- node scripts/check-release.mjs：既有正式內容 gate。
+- node tests/ux.mjs：四尺寸首頁首屏入口、分類、簡介收合、閱讀紀錄收合且不刪除；Aa 三模式、偏好還原、中段調字不回頂；三主題 hr；註解開關、跨章原曲繼續；台南三篇逐頁溢出／分場保留；播放器展開後 Page 書頁與工具區無交疊；其他兩書可讀，無 JS／HTTP 失敗與橫向溢出。
+- node tests/release.mjs：390／1440／1720px 三章、繁簡、封面、翻頁。
+- node tests/shen.mjs：390／1440px 新書功能、選字、進度還原、舊書入口。
+- node tests/tainan.mjs：390／1440px 三章、26 註、三首 MP3、跨章播放、音量／進度、本機選檔、缺檔提示、逐頁檢查。
+- node tests/immersive.mjs：1440／1720／390px、主題首幀、鍵盤、模式與進度；書高分別 736／700／645px。
+- node tests/page-turn.mjs：6 組動畫／主題／尺寸、連續翻頁、模式中斷、降級、選字與進度。
+- 內容保全：16 份 content 及 MP3 檔 SHA-256 和任務開始一致；git diff --check 通過。
+
+失敗與修正：初次工具高度變數寫在 root、被 body 預設覆蓋，已改寫 body 後重跑四尺寸通過。台南測試原固定 100 頁在播放器展開的 EP.02 136 頁失敗，查明確實逐頁前進，改為真實頁數上限並新增前進斷言，完整測試通過。新測試初次點到書卡連結而非摺疊控制、以及讀取收合 details 的 innerText，已修正測試操作與讀值。
+
+人工待驗：首頁視覺與分類命名、手機觸控手感、iPhone Safari 真機安全區域／工具列。CSS 已處理 env(safe-area-inset-*) 與 dvh，但不能以 Edge 模擬代替真機。現行書目只有三部作品，沒有《彼岸仍是人間》可回歸；本輪只讀其遷移快照 CSS，不碰原專案。現行閱讀器不存在 TTS 控制或 speechSynthesis 實作，TTS 未驗收，未另加一套。所有變更留本機，未 Commit／Push／部署。
+
+
+### 2026-10-26 作者驗收與正式發布授權
+
+作者已確認 UX 畫面 OK，明確授權測試後 Push 為正式版本。本次只提交首頁／閱讀器 UX、相關測試與本輪文件；既有 EP.03 正文校訂、.gitignore 及其他無關變更排除。npm run check、npm test（6 項）與發布 gate 已通過；正式部署結果將另行續記。

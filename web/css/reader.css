@@ -116,3 +116,90 @@ dialog{color:var(--ink);background:var(--page);border:1px solid var(--line);padd
 .chapter-complete-inline a{display:inline-flex;align-items:center;min-height:28px}
 .work-overview{align-items:start}.work-action{margin:22px 0}.eyebrow{font-size:11px}.byline{font-size:12px}.position{font-size:12px}
 @media(max-width:599px){.book .prose h1,.reader-measure-rig .prose h1{font-size:1.5em;letter-spacing:.03em}.work-cover-large{width:min(42%,180px)}.work-overview{gap:18px}.work-shell{padding-top:24px}.work-overview-copy h1{font-size:28px}.page-running{letter-spacing:.06em}}
+
+/* Compact library: keep the existing typography, covers and work routes. */
+.library-hero{padding:28px 0 22px}
+.library-hero h1{font-size:clamp(56px,4.5vw,68px);margin:10px 0 14px;color:var(--accent)}
+.library-hero h1 span{font-size:20px;margin-top:14px}
+.library-hero>p:last-child{margin:12px 0 0}
+.library-collection{padding:24px 0 48px}
+.collection-head h2,.continue-section h2{font-size:26px;margin:6px 0 16px}
+.continue-section{padding:20px 0 16px}
+.continue-section .eyebrow{display:none}
+.continue-item{padding:10px 0;font-size:15px;overflow-wrap:anywhere}
+.continue-more summary{min-height:44px;display:flex;align-items:center;cursor:pointer;color:var(--muted);font-size:12px;list-style:none}
+.when-open{display:none}
+details[open]>summary .when-open{display:inline}
+details[open]>summary .when-closed{display:none}
+.category-filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.category-filters button{min-height:44px;padding:8px 14px;border:1px solid var(--line);border-radius:3px;background:transparent;color:var(--muted);font-size:12px}
+.category-filters button[aria-pressed=true]{background:var(--surface);border-color:var(--accent);color:var(--accent)}
+.work-grid{gap:24px}
+.work-card{padding-top:18px;min-width:0}
+.work-details>summary{list-style:none;cursor:pointer}
+.work-details>summary::-webkit-details-marker,.continue-more summary::-webkit-details-marker{display:none}
+.work-card-link{grid-template-columns:minmax(100px,30%) minmax(0,1fr);gap:20px}
+.work-card-copy{min-width:0}
+.work-card-copy h3{font-size:clamp(20px,1.65vw,25px);margin:8px 0;overflow-wrap:anywhere}
+.work-card-copy .eyebrow{font-size:10px;line-height:1.7;letter-spacing:.08em}
+.work-card-copy .work-volume{margin:6px 0}
+.work-card-cta{margin-top:10px;min-height:30px;line-height:23px}
+.work-details-toggle{display:flex;min-height:44px;align-items:center;justify-content:flex-end;color:var(--muted);font-size:12px}
+.work-details-toggle:hover{color:var(--accent)}
+.work-details>.work-teaser{margin:0 0 8px;line-height:1.85}
+
+/* Original reader reference: snapshot/web/css/style.css #reader-content hr
+   and .book-page-content hr. Share the same dashed rule with the measuring rig. */
+.scroll-content.prose hr,.book-page-body.prose hr{border:0;border-top:1px dashed var(--line);margin:1.5em 0;opacity:.75;height:0}
+.scroll-content.prose hr{margin-block:2em}
+
+/* One dock owns the music details and Aa, including safe-area clearance. */
+.reader-dock{position:fixed;inset-inline-end:max(16px,env(safe-area-inset-right));bottom:calc(10px + env(safe-area-inset-bottom));z-index:20;display:flex;align-items:flex-end;gap:10px;max-width:calc(100vw - 32px);padding:5px;background:var(--bg);border:1px solid var(--line);border-radius:12px;box-shadow:0 5px 18px var(--shade)}
+.reader-dock:not(:has(> :not([hidden]))){display:none}
+.reader-dock .music-panel{position:static;width:min(290px,calc(100vw - 106px));max-height:min(320px,38dvh);margin:0;box-shadow:none;border-radius:7px;flex:1;min-width:0}
+.reader-dock .music-panel summary{min-height:44px;padding:12px 10px;font-size:11px}
+.reader-dock .music-panel:not([open]){opacity:1}
+.reader-dock .music-controls button{min-height:44px}
+.floating-settings{flex:none;width:44px;height:44px;background:var(--surface);border:1px solid var(--line);border-radius:7px;color:var(--accent);font:18px var(--font-serif)}
+.floating-settings:hover{border-color:var(--accent)}
+.reader-page:has(dialog[open]) .reader-dock{visibility:hidden;pointer-events:none}
+.reader-page{--reader-dock-height:56px;padding-bottom:calc(max(56px,var(--reader-dock-height)) + 24px + env(safe-area-inset-bottom));scroll-padding-bottom:calc(max(56px,var(--reader-dock-height)) + 24px)}
+.reader-page .scroll-content>*{scroll-margin-bottom:calc(max(56px,var(--reader-dock-height)) + 24px + env(safe-area-inset-bottom))}
+.reader-page[data-mode=page]{--book-height:clamp(280px,calc(100dvh - 108px - max(56px,var(--reader-dock-height)) - env(safe-area-inset-bottom)),900px)}
+.reader-page .panel,.reader-page .note-dialog{overflow-y:auto;overscroll-behavior:contain;max-height:calc(90dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom))}
+.reader-page .panel-head{position:sticky;top:0;z-index:1;background:var(--page);padding:12px 20px}
+.reader-page .panel-head button{min-height:44px;min-width:44px}
+.reader-page .panel-body{padding:18px 20px}
+.reader-page .panel fieldset{margin-bottom:18px}
+.reader-page .note-dialog>p{overflow-wrap:anywhere}
+.reader-page .chapter-link{line-height:1.8;overflow-wrap:anywhere}
+.reader-page #back-to-work{display:inline-flex;min-height:44px;align-items:center}
+@media(max-width:959px){.reader-page[data-mode=page]{--book-height:calc(100dvh - 130px - max(56px,var(--reader-dock-height)) - env(safe-area-inset-top) - env(safe-area-inset-bottom))}}
+@media(max-width:599px){
+ .library-hero{padding:22px 0 18px}
+ .library-hero h1{font-size:clamp(36px,10vw,44px);letter-spacing:.09em;margin:8px 0 12px}
+ .library-hero h1 span{font-size:17px;letter-spacing:.12em;margin-top:12px}
+ .library-hero>p:last-child{font-size:14px;line-height:1.85;letter-spacing:.04em}
+ .library-hero .eyebrow{font-size:9px;letter-spacing:.14em}
+ .library-collection{padding-top:20px}
+ .collection-head h2,.continue-section h2{font-size:23px;margin-bottom:14px}
+ .category-filters{gap:6px;margin-bottom:14px}
+ .category-filters button{padding:8px 10px;font-size:11px}
+ .work-card{padding-top:14px}
+ .work-card-link{grid-template-columns:90px minmax(0,1fr);gap:16px}
+ .work-card-copy h3{font-size:19px;line-height:1.5}
+ .work-card-copy .eyebrow{font-size:10px;letter-spacing:.025em}
+ .work-card-copy .work-volume{font-size:12px}
+ .work-card .work-cover{max-height:135px;aspect-ratio:2/3}
+ .work-grid{gap:16px}
+ .reader-page .site-header{padding-inline:max(12px,env(safe-area-inset-left));gap:8px}
+ .reader-page .reader-brand{font-size:14px;letter-spacing:.04em}
+ .reader-page .header-actions .language-toggle{min-width:44px;padding-inline:5px}
+ .reader-page .header-actions .text-link{font-size:10px;margin-right:4px}
+ .reader-page .panel{max-width:100%;padding-bottom:env(safe-area-inset-bottom)}
+ .reader-page .note-dialog>p{font-size:16px;padding:20px}
+ .reader-dock{inset-inline: max(12px,env(safe-area-inset-left)) max(12px,env(safe-area-inset-right));width:fit-content;margin-inline-start:auto;max-width:calc(100vw - 24px);gap:8px}
+ .reader-dock .music-panel{width:calc(100vw - 98px);max-width:290px;max-height:35dvh}
+ .reader-page[data-mode=page]{--book-height:calc(100dvh - 143px - max(56px,var(--reader-dock-height)) - env(safe-area-inset-top) - env(safe-area-inset-bottom))}
+ .scroll-content.prose hr,.book-page-body.prose hr{width:80%;margin-inline:auto}
+}

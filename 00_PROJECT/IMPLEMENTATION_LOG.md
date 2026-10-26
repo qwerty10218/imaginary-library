@@ -133,3 +133,22 @@
 ### 《叫我沈總》發布驗收結果
 
 內容 commit `4de5de1` 已 Push，Pages Actions run `40306251293` build／deploy 成功。正式首頁、詳情、閱讀頁、索引、第一章、封面皆 HTTP 200，正文與封面 SHA-256 和本機一致。正式站 390／1440px Edge headless 書庫→作品→閱讀→繁簡→翻頁／滾動→進度恢復→返回目錄→舊書回歸通過，無腳本或失敗資源；本機 release 390／1440／1720px、台南 26 註與音樂、6 組動畫回歸均通過，精確提交樹的 check 與發布 gate 亦通過。iPhone Safari 實機未驗；現有站無 TTS 介面及 OG 分享圖系統，未新增或宣稱驗收。正式章節：https://qwerty10218.github.io/imaginary-library/reader.html?work=jiao-wo-shen-zong&chapter=001 。
+
+
+## 2026-10-26 首頁與閱讀器 UX 本機驗收
+
+本輪只做本機 UX 局部修改，未 Commit／Push／部署。首頁 Hero 主標改為桌面 clamp(56px,4.5vw,68px)、手機 clamp(36px,10vw,44px)，縮小區塊間距；分類由 genres 推導，支援多重歸類，原作品資料與路由不變。書卡沿用封面、標題與入口，新增原生 details 收合簡介（手機預設收合，桌面展開）；繼續閱讀依 updatedAt 只先列最近一本，其他未讀完紀錄可展開，沒有刪除紀錄。
+
+閱讀器沿用原設定面板與 imaginary-library:v1:reader:settings，新增 floating 常駐／自動收合／隱藏偏好。既有音樂 details 與 Aa 共用 reader-dock，處理安全區域、彈窗互斥、章末預留空間；ResizeObserver 將實際工具高度傳入既有分頁尺寸，避免展開播放器遮到 Page 書頁。Scroll 保留底部空間與 scroll-margin。既有播放、三首曲目、跨章播放及音訊檔未變；收合列顯示正在播放的實際曲目與狀態。
+
+實查 EP.01 指定段落的 --- 被 marked 轉為 hr，原先是瀏覽器 1px inset。只讀參考 .migration-backup/2026-10-25/snapshot/web/css/style.css 的 #reader-content hr（205 行）、.book-page-content hr（538 行）：沿用 border:0／border-top:1px dashed 與分場留白，改接現有 --line，限 .scroll-content.prose hr、.book-page-body.prose hr（涵蓋測量 rig），手機縮為 80%。未改 Markdown、OpenCC、分頁核心或新造閱讀系統。
+
+新增 library-model 模組、分類／最近閱讀單元測試與 tests/ux.mjs 四尺寸互動回歸。播放器展開使台南 EP.02 在 390px 真實重排為 136 頁；tests/tainan.mjs 原固定 100 頁上限改依實際總頁數決定，額外要求每次前進，逐頁非空與溢出檢查保留。16 份內容／Metadata／伏筆／MP3 和任務開始的 SHA-256 完全一致。
+
+
+- 2026-10-26 預覽連線排查：4173 未監聽，已重新啟動既有 scripts/preview.mjs；4174 對照服務仍在。Codex 內建瀏覽器已實際重載對照頁並開啟本機書庫，皆正常。此輪沒有程式修改、Commit／Push／部署；預覽服務停止或電腦重啟後須重新啟動。
+
+
+### 2026-10-26 作者驗收與正式發布授權
+
+作者已確認 UX 畫面 OK，明確授權測試後 Push 為正式版本。本次只提交首頁／閱讀器 UX、相關測試與本輪文件；既有 EP.03 正文校訂、.gitignore 及其他無關變更排除。npm run check、npm test（6 項）與發布 gate 已通過；正式部署結果將另行續記。
