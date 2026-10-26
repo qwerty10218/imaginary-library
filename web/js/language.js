@@ -7,6 +7,8 @@ const attributes=new WeakMap();
 const convert=Converter({from:'tw',to:'cn'});
 let language='tw';
 try { if(localStorage.getItem(key)==='cn') language='cn'; } catch {}
+// Apply the saved language before the reader waits for fonts and measures pages.
+document.documentElement.lang=language==='cn'?'zh-CN':'zh-TW';
 
 export const getLanguage=()=>language;
 // OpenCC's tw→cn table maps 抬 to the variant 擡; standardize the displayed Simplified glyph.
@@ -19,7 +21,7 @@ export function setLanguage(next) {
 export function convertHtml(html) {
   if(language!=='cn')return html;
   const root=document.createElement('div');root.innerHTML=html;
-  const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+  const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:node=>node.parentElement?.closest('script,style,code,pre')?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT});
   while(walker.nextNode())walker.currentNode.nodeValue=convertText(walker.currentNode.nodeValue);
   for(const element of root.querySelectorAll('[aria-label], [alt], [title]'))
     for(const name of ['aria-label','alt','title'])if(element.hasAttribute(name))element.setAttribute(name,convertText(element.getAttribute(name)));
@@ -27,14 +29,14 @@ export function convertHtml(html) {
 }
 export function translatePage(root=document.body) {
   document.documentElement.lang=language==='cn'?'zh-CN':'zh-TW';
-  const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:node=>node.parentElement?.closest('[data-localized-content]')?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT});
+  const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:node=>node.parentElement?.closest('[data-localized-content],script,style,code,pre')?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT});
   while(walker.nextNode()) {
     const node=walker.currentNode;
     if(!originals.has(node))originals.set(node,node.nodeValue);
     node.nodeValue=convertText(originals.get(node));
   }
   for(const element of root.querySelectorAll('[aria-label], [alt], [placeholder], [title]')) {
-    if(element.closest('[data-localized-content]'))continue;
+    if(element.closest('[data-localized-content],script,style,code,pre'))continue;
     if(!attributes.has(element))attributes.set(element,{});
     const saved=attributes.get(element);
     for(const name of ['aria-label','alt','placeholder','title'])if(element.hasAttribute(name)){

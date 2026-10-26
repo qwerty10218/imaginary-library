@@ -8,7 +8,7 @@ if (!work.cover || work.chapters.length!==3 || work.status!=='serializing') thro
 for(let index=0;index<3;index++){
   const chapter=work.chapters[index];
   if(!chapter?.published)throw new Error(`第 ${index+1} 章尚未標記發布。`);
-  const text=(await fs.readFile(path.join('content/works',id,'chapters',`${chapter.id}.md`),'utf8')).trim().replace(/^# .+\r?\n+/,'');
+  const text=(await fs.readFile(path.join('content/works',id,'chapters',`${chapter.id}.md`),'utf8')).trim().replace(/^# .+(?:\r?\n)+/,'');
   if(!text.startsWith(required[index]) || text.length<500)throw new Error(`第 ${index+1} 章全文或開頭未通過發布檢查。`);
 }
 await fs.access(path.join('dist',work.cover));

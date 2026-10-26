@@ -90,3 +90,16 @@ Node.js 24、Windows 本機 Microsoft Edge（Playwright headless）。沒有實�
 - `node tests/release.mjs` 通過：三尺寸正式前三章逐頁掃描，無空白、正文／腳註溢出，章末右側翻頁進入下一章。`node tests/mvp.mjs` 通過：兩尺寸測試作品、獨立進度及腳註。`node tests/page-turn.mjs` 通過 6 組動畫回歸，`node tests/browser.mjs` 通過 15 組原型排版回歸。
 - 暖紙模式連續翻頁未重現持續切換主題；已確認舊 HTML 跨章載入時先顯示預設 Dark Mode，改為解析 body 時立即還原偏好。實機 iPhone Safari 尚未驗證。
 - GitHub Actions run `40238610296` build／deploy 成功；正式站 1720×864／390×844 Edge headless 書本高度 754／701px、側邊翻頁鍵可見、暖紙首幀穩定、無水平溢出或 JS 錯誤。線上截圖在 `.local/immersive/live-after-*.png`。
+
+
+## 2026-10-26：MVP 最終整合驗收
+
+驗收產物來自 HEAD 444b221 加本輪修正的獨立目錄 `.local/release-tree`（4174），不含平行的新作品／音樂功能。`npm run check` 通過語法、4 組進度測試、1 作品／3 章建置及公開內容掃描；`scripts/check-release.mjs` 通過。既有 `release.mjs`、`mvp.mjs`、`browser.mjs`（15 組）、`page-turn.mjs`（6 組）、`immersive.mjs` 均通過。原型測試驗證共用動畫；新增 final-qa 驗證正式頁。
+
+- Edge/Chromium headless：1920×1080、1720×864、1440×900、390×844、375×667。首頁封面與詳情 CTA 首屏可見，三章逐頁無正文溢出，末章返回目錄、不指向第四章；手機 Page／Scroll、章末、繁簡與儲存偏好通過。
+- 拖曳選字、實際 Ctrl+C／剪貼簿讀回、Shift 選取不翻頁、帶選取的箭頭按鈕／快捷鍵翻頁、選取時觸控滑動不翻頁通過。手機實體長按系統選單未實機驗證。
+- 正式頁手動暫停 WAAPI 擷取 0／120／240／360／約 480ms（479.9ms）的畫面，測試暫時延長 watchdog 以容納截圖，正常時序測試不改 watchdog。圖檔：`.local/final-qa/fold-{width}-{time}.png`。五尺寸皆確認 480ms、旋轉矩陣與單一 overlay；快速連點、反向、resize 後清理通過。三主題中斷、跨章中斷另經本機測試通過。
+- 中間幀人工檢視可看見不透明紙張正反面旋轉與落頁，未見透明文字交疊。原本錄影未提供，不能聲稱確認該錄影的瞬切／重影真正根因；目前可確認修復的是容器裁切與選取鎖定。
+- 透過 CDP `CSS.getPlatformFontsForNode`，繁體明體實際 Noto Serif TC、簡體明體 SimSun、簡體黑體 Microsoft YaHei。原專案 CSS 的預設黑體以隔離探針測得 Microsoft JhengHei UI，未啟動原網站及其外部服務；此為同機 CSS 探針，不是原站完整執行狀態。結果在 `.local/final-qa/results.json` 與 `original-font-probe.json`。
+- 乾隆維持乾隆；URL／ID／程式碼不轉換。繁簡與 Page／Scroll 往返、語言保存與段落定位通過；375／1720px 額外確認重新整理時在建立測量 rig 前已是 zh-CN，逐頁無溢出。
+- 正式前三章及封面未修改；不包含測試截圖、私人備份、原小說或任何新章。iPhone Safari 真機未測，不能以此模擬驗收代替。

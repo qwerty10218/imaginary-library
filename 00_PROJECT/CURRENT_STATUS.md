@@ -9,3 +9,8 @@
 本機 `npm run check`、發布檢查、新作品上稿測試、390／1440px 正式內容瀏覽器測試及 MVP 測試已通過。原型回歸通過；正式 GitHub Pages 線上首頁、封面與前三章於 390／1440px Edge headless 實測通過，詳見 `QA_REPORT.md`。iPhone Safari 實機未驗證。雲端同步、登入、TTS 均未啟用。
 
 已 Push 並部署至 `https://qwerty10218.github.io/imaginary-library/`；首次 Pages 設定缺失已修正，GitHub Actions run `40236235609` 的 build／deploy 成功。Commit 與後續接續狀態以最新 `AI_SYNC_BRIEF.md` 為準。使用者未追蹤的 `封面.png` 保留在本機，不納入提交。
+
+
+## 2026-10-26 集中修正補充
+
+本輪修正選字鎖定、翻頁輪廓裁切、章末導覽、標題孤行風險、簡體初始測量順序與閱讀入口位置。維持現有 OpenCC、480ms fold、沉浸式書頁、前三章正式內容與個人字型選擇。五種指定尺寸的 Edge headless 驗收通過；iPhone Safari 實機與原讀者錄影情境未驗證。新作品／音樂播放器等平行未提交工作保留於工作區，不屬於本輪發布範圍。

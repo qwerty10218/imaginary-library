@@ -23,3 +23,10 @@ MVP 0.1 書庫、作品詳情、Markdown 閱讀器與首作前三章已正式上
 ## Git 與部署
 
 獨立新 Git `main` 的 origin 為 `https://github.com/qwerty10218/imaginary-library.git`。程式及正文 commit `6e8f8be` 已 Push；GitHub Pages 來源設為 workflow，Actions run `40236235609` build／deploy 成功。首次推送因 Pages 站點未建立而失敗，已修正設定並重新觸發成功。此快照及驗證文件的後續 commit 以 `git log -1` 為準。使用者未追蹤的 `封面.png` 留在本機，不納入提交；忽略區 `.migration-backup`、`.local`、`dist` 均未提交。原《彼岸仍是人間》專案未修改。
+
+
+## 2026-10-26 MVP 集中修正接續
+
+本輪沿用現有 OpenCC，沒有建立新語言系統。修復明確翻頁被 Selection 阻擋、旋轉輪廓裁切及簡體偏好在分頁之後才套用；新增章末低調導覽、同步測量的標題換行樣式、首頁留白與詳情 CTA 調整。正式三章與封面不變。`tests/final-qa.mjs` 為正式頁五尺寸回歸；完整結果、字型實測與限制見 QA_REPORT。動畫原錄影未取得，瞬切／重影未重現，不能編造根因。Safari 真機未驗證。
+
+工作區另有進行中的新作品／音樂播放器與相關修改；本輪以 `.local/release-tree` 的乾淨基準加修正驗收，只提交本輪部分，保留工作區其他修改。回退快照在 `.local/mvp-baseline-*`，原專案只讀。發布狀態以下續記為準。
