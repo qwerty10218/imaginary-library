@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 
 const phase=process.env.CAPACITY_PHASE||'after';
+const fontSize=Number(process.env.CAPACITY_FONT||18);
 const out='.local/mobile-capacity';await fs.mkdir(out,{recursive:true});
 const browser=await chromium.launch({headless:true,channel:'msedge'});
 const base='http://127.0.0.1:4173/imaginary-library/';
@@ -12,7 +13,7 @@ const numbers=async page=>(await page.locator('#position').innerText()).match(/\
 try{
  for(const [width,height] of [[375,667],[390,844],[430,932]])for(const theme of ['dark','light']){
   const page=await browser.newPage({viewport:{width,height},hasTouch:true});
-  await page.addInitScript(theme=>localStorage.setItem('imaginary-library:v1:reader:settings',JSON.stringify({mode:'page',size:18,line:1.9,theme,motion:'none',font:'serif',floating:'always'})),theme);
+  await page.addInitScript(({theme,fontSize})=>localStorage.setItem('imaginary-library:v1:reader:settings',JSON.stringify({mode:'page',size:fontSize,line:1.9,theme,motion:'none',font:'serif',floating:'always'})),{theme,fontSize});
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto(base+'reader.html?work=tainan-youth-wind&chapter=ep01');await settle(page);
   const expected=await page.evaluate(async()=>{
@@ -25,7 +26,7 @@ try{
    const rect=s=>{const e=document.querySelector(s),r=e.getBoundingClientRect();return {width:r.width,height:r.height,top:r.top,bottom:r.bottom};};
    return {viewport:{width:innerWidth,height:innerHeight,visualHeight:visualViewport?.height},book:rect('#book'),body:rect('.page-content'),running:rect('.page-running'),footer:rect('.page-number'),nav:rect('.reading-navigation'),dock:rect('#reader-dock'),font:getComputedStyle(document.querySelector('.book-page-body')).fontSize,line:getComputedStyle(document.querySelector('.book-page-body')).lineHeight};
   });
-  assert.equal(initial.font,'18px');assert.equal(initial.line,'34.2px');
+  assert.equal(initial.font,`${fontSize}px`);assert.ok(Math.abs(parseFloat(initial.line)-fontSize*1.9)<.01);
   const total=(await numbers(page)).at(-1),texts=new Map(),counts=[],samples={};let hrs=0;const notes=new Set();
   for(let index=1;index<=total;index++){
    assert.equal((await numbers(page))[0],index,'page must advance exactly once');
@@ -49,7 +50,7 @@ try{
   for(const block of expected.blocks)assert.equal(texts.get(block.id),block.text,`lost or repeated text ${block.id}`);
   assert.equal(texts.size,expected.blocks.length);assert.equal(hrs,expected.hrs);assert.equal(notes.size,expected.notes);
   assert.deepEqual(errors,[]);
-  results.push({width,height,theme,font:18,line:1.9,total,initial,totalCharacters:counts.reduce((a,b)=>a+b,0),meanCharacters:counts.reduce((a,b)=>a+b,0)/total,samples,footnotes:notes.size,sceneBreaks:hrs,allTextVerified:true});
+  results.push({width,height,theme,font:fontSize,line:1.9,total,initial,totalCharacters:counts.reduce((a,b)=>a+b,0),meanCharacters:counts.reduce((a,b)=>a+b,0)/total,samples,footnotes:notes.size,sceneBreaks:hrs,allTextVerified:true});
   await page.close();console.log('PASS capacity',phase,width,theme,total);
  }
  for(const theme of ['dark','light']){

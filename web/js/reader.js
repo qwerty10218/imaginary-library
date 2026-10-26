@@ -13,7 +13,8 @@ const params=new URLSearchParams(location.search);
 const defaults={theme:'dark',size:phonePage()?18:20,line:1.9,font:'serif',motion:'fold',floating:'always',mode:narrow()?'scroll':'page'};
 let settings={...defaults,...store.read('reader:settings')};
 for(const [key,options] of Object.entries({theme:['dark','light','warm'],font:['serif','sans'],motion:['fold','fade','none'],floating:['always','auto','hidden'],mode:['page','scroll']})) if(!options.includes(settings[key])) settings[key]=defaults[key];
-if(![18,20,22,24].includes(settings.size)) settings.size=defaults.size;
+if(![14,16,18,20,22,24].includes(settings.size)) settings.size=defaults.size;
+const readerSize=()=>!phonePage()&&settings.size<18?20:settings.size;
 if(![1.7,1.9,2.1].includes(settings.line)) settings.line=1.9;
 let work,chapter,chapterIndex,chapterId,workId,revision,model,markdown,pages=[],current=0,anchor,musicPlayer;
 let busy=false,pending=0,saveTimer,resizeTimer,renderVersion=0,turnVersion=0,chapterRequestVersion=0,skipPagehideCapture=false;
@@ -27,11 +28,18 @@ function localizedModel(){
  return parsed;
 }
 function apply(){
+ const fontSelect=$('font-size');
+ for(const size of [16,14]){
+  const option=fontSelect.querySelector(`option[value="${size}"]`);
+  if(phonePage()&&!option)fontSelect.prepend(new Option(String(size),String(size)));
+  else if(!phonePage())option?.remove();
+ }
  document.body.dataset.theme=settings.theme;document.body.dataset.mode=settings.mode;
- document.documentElement.style.setProperty('--reader-font-size',settings.size+'px');
+ document.documentElement.style.setProperty('--reader-font-size',readerSize()+'px');
  document.documentElement.style.setProperty('--reader-line-height',settings.line);
  document.documentElement.style.setProperty('--reader-font',`var(--font-${settings.font})`);
  for(const [id,key] of [['font-size','size'],['line-height','line'],['font-family','font'],['motion','motion'],['floating-controls','floating']]) $(id).value=settings[key];
+ fontSelect.value=String(readerSize());
  syncFloating();
  document.querySelectorAll('button[data-mode]').forEach(el=>el.setAttribute('aria-pressed',el.dataset.mode===settings.mode));
  document.querySelectorAll('button[data-theme]').forEach(el=>el.setAttribute('aria-pressed',el.dataset.theme===settings.theme));
@@ -86,7 +94,7 @@ async function render(){
   $('scroll-content').replaceChildren();
   $('book').innerHTML='<div class="spread">'+sheet(-1)+(narrow()?'':sheet(-1))+'</div>';
   const box=$('book').querySelector('.page-content').getBoundingClientRect();
-  try{pages=core.paginate(model,{availableH:box.height-8,availableW:box.width,fontVal:settings.size,fsVal:settings.size+'px',isMobile:narrow()});}
+  try{pages=core.paginate(model,{availableH:box.height-8,availableW:box.width,fontVal:readerSize(),fsVal:readerSize()+'px',isMobile:narrow()});}
   catch{settings.mode='scroll';await render();$('storage-status').textContent='目前頁面無法容納此排版，已切換滾動閱讀。';return;}
   current=pageForAnchor();paint();scrollTo(0,0);
  }else{

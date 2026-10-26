@@ -21,6 +21,12 @@ try{
   await page.goto(base);await settle(page);
   assert.equal(await page.locator('#font-size').inputValue(),'18','new mobile default must be 18px');
   await page.locator('#settings-button').click();await page.locator('button[data-mode=page]').click();await page.locator('#motion').selectOption('none');await page.locator('#settings .panel-head button').click();await settle(page);
+  assert.deepEqual(await page.locator('#font-size option').evaluateAll(els=>els.map(e=>e.value)),['14','16','18','20','22','24']);
+  for(const size of ['16','14']){
+   const before=await anchor(page);await setting(page,'font-size',size);await contains(page,before);await fits(page);
+   await page.reload();await settle(page);assert.equal(await page.locator('#font-size').inputValue(),size);await fits(page);
+  }
+  await setting(page,'font-size','18');
   for(let i=0;i<5;i++)await page.locator('#next').click();
   let current=await anchor(page);
   await setting(page,'font-size','22');await contains(page,current);await fits(page);
@@ -50,6 +56,11 @@ try{
   await page.waitForFunction(()=>!document.querySelector('.turn-overlay'));await fits(page);
   await setting(page,'font-size','24');await page.reload();await settle(page);
   assert.equal(await page.locator('#font-size').inputValue(),'24','saved font must not be forced down to 18px');await fits(page);
+  await setting(page,'font-size','14');await page.setViewportSize({width:1440,height:900});await settle(page);
+  assert.deepEqual(await page.locator('#font-size option').evaluateAll(els=>els.map(e=>e.value)),['18','20','22','24']);
+  assert.equal(await page.locator('#font-size').inputValue(),'20');
+  assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('imaginary-library:v1:reader:settings')).size),14);
+  await page.setViewportSize({width,height});await settle(page);assert.equal(await page.locator('#font-size').inputValue(),'14');await fits(page);
   assert.deepEqual(errors,[]);await page.close();console.log('PASS mobile reflow',width);
  }
  const desktop=await browser.newPage({viewport:{width:1440,height:900}});await desktop.goto(base);await settle(desktop);
