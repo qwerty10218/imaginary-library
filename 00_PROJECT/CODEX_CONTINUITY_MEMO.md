@@ -1,5 +1,7 @@
 # 接續要點
 
+- 台南系列已以 commit `0e7767f` Push 並經 Actions run `40290782382` 成功部署。正式站 390／1440px Edge headless 已驗封面、三章入口與線上 MP3 試播；兩來源包仍忽略，舊包因自動審查拒絕而留在本機。iPhone Safari 實機未驗。
+
 - 2026-10-26 新增《台南少年追風記》三篇於 `content/works/tainan-youth-wind/`。26 則腳註來源為 `notes.json`，由 `scripts/build.mjs` 轉接既有閱讀器。使用者已確認三首歌曲的公開使用授權，三首指定 MP3 位於 `web/assets/music/`，以 metadata 指定路徑建置。來源包整體仍忽略，第四首無關歌曲不進 Git 或 Pages。
 - 新作品播放器位於 `web/js/music-player.js`，同頁切章由 `web/js/reader.js` 保留音訊元素。測試 `node tests/tainan.mjs`，先 `npm run check` 再啟動 `npm run dev`。作者署名 Gary Lee 及兩首無 ID3 演唱者標籤的版本已由使用者確認。
 - 作者後續以 `台南少年追風記_MP3唱盤整合版新版/` 為準：原稿與註解和舊包相同，四個 MP3 已雜湊核對複製到新版包；預覽伺服器路徑已更新。播放器已整合新版木質唱盤、唱針動作與本機 MP3 選檔。舊包刪除被自動核准審查拒絕，目前兩包都保留並被忽略；只有三首授權歌曲另存至正式靜態資源。

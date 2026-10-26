@@ -7,6 +7,7 @@
 - 本機伺服器 MP3 Range 請求為 HTTP 206；三首 MP3 均以使用者確認的對應曲目播放。來源 ID3 標籤均空白，演唱版本由使用者確認。
 - 作者已確認三首 MP3 可公開使用；目前 `dist/` 預期只包含這三首，第四首無關歌曲及兩個來源包由 `.gitignore` 排除。iPhone Safari 實機未驗。
 - 作者指定封面 SHA-256 與網站副本一致；首頁與作品詳情頁圖片載入且 `object-fit: contain`。正式簡介依作者原文分段顯示。靜態 MP3 以 `/imaginary-library/assets/music/` 相對路徑供應。
+- 本次最終 `npm run check`、`npm test`、`node tests/tainan.mjs`、MVP／發布／沉浸式／上稿回歸、`node scripts/check-release.mjs` 通過。GitHub Actions run `40290782382` 成功；正式站三篇 Markdown、封面與三首 MP3 全部 HTTP 200。390／1440px Edge headless 線上實測從書庫進入作品與 EP.01、播放 MP3、唱盤旋轉，無腳本錯誤。線上截圖在忽略區 `.local/tainan/live-*.png`；iPhone Safari 實機未驗。
 - 新版包三篇原稿與註解 JSON 和舊包雜湊相同；四個 MP3 複製到新版包後逐檔 SHA-256 相同。本機伺服器改讀新版包，播放器的木質底座、唱針播放狀態、本機檔案 blob 播放與缺檔友善提示於 390／1440px Edge headless 通過。新版展開面板在手機不遮住翻頁鍵；舊包仍保留且忽略。
 
 ## 2026-10-26：前三章正式上架驗證

@@ -5,6 +5,7 @@
 - 採用作者指定的新版包封面，原樣複製至 `web/assets/covers/tainan_youth_wind_cover.png`；作品 metadata 加入作者提供的完整簡介及首頁摘要。
 - 作者明確確認伍佰〈夏夜晚風〉、五月天〈擁抱〉、海豚刑警〈安平之光〉三份 MP3 已取得公開使用授權。只將這三份音檔複製至 `web/assets/music/`，雜湊與新版包來源相同；第四份無關音檔未納入。建置依 metadata 複製歌曲，播放器優先讀取相對靜態路徑。
 - 既有 MVP／發布測試改依作品 ID 找首作封面，避免新作品排序影響測試；本機預覽補上 MP3 MIME type。舊來源包因遞迴刪除遭自動審查拒絕而留在忽略區。
+- 程式與內容 commit `0e7767f` 已正常 Push 至指定 origin/main；GitHub Actions run `40290782382` build／deploy 成功。正式站索引、封面、三篇 Markdown 與三首 MP3 均 HTTP 200；390／1440px Edge headless 線上從首頁進入作品並播放音樂成功。
 
 ## 2026-10-25：保全、隔離與閱讀頁視覺原型
 

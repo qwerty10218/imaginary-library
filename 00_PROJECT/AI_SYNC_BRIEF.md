@@ -6,6 +6,8 @@
 
 使用者指定新版包的 `台南少年追風記封面.png`，副本已原樣放入 `web/assets/covers/tainan_youth_wind_cover.png`；metadata 已加入作者提供的完整簡介與首頁摘要。使用者明確確認伍佰〈夏夜晚風〉、五月天〈擁抱〉、海豚刑警〈安平之光〉三份 MP3 均取得公開使用授權。網站正式靜態資源 `web/assets/music/` 只收這三首，與新版包來源 SHA-256 相同；第四首無關音檔及兩個來源包仍排除於 Git／建置之外。`dist/` 現有兩作品、六章、三首 MP3。以下較早「待授權／公開版無 MP3／未發布」紀錄屬歷史狀態，以本段及實際 Git／Pages 狀態為準。原作專案未修改，使用者未追蹤的根目錄 `封面.png` 未碰觸。
 
+內容 commit `0e7767f` 已 Push，GitHub Actions run `40290782382` build／deploy 成功。正式站首頁、作品頁、三篇 Markdown、封面與三首 MP3 均 HTTP 200；390／1440px Edge headless 線上從書庫進入 EP.01 並試播 MP3 成功，唱盤旋轉，無腳本錯誤。線上截圖在忽略區 `.local/tainan/live-*.png`；iPhone Safari 實機未驗。此段發布後狀態優先於下方歷史紀錄。
+
 ## 本機待發布：《台南少年追風記》
 
 已在本機把 EP.01〈夏夜晚風〉、EP.02〈擁抱〉、EP.03〈安平之光〉接入新作品 `tainan-youth-wind`。三篇 `content/works/tainan-youth-wind/chapters/` 與首發包 Markdown SHA-256 相同；26 則文化註解在獨立 `notes.json`，建置時轉為原閱讀器的可點腳註。作者 Gary Lee 與〈夏夜晚風〉伍佰、〈安平之光〉海豚刑警版本由使用者確認；〈擁抱〉檔名標示五月天，四個 MP3 都沒有 ID3 標籤，其中一首溫室雜草歌曲未使用。
