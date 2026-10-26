@@ -128,3 +128,8 @@
 ## 2026-10-26 《叫我沈總》正式上架
 
 新增《叫我沈總》jiao-wo-shen-zong：作者第一章逐段保留，插入 740 個中文字（合計 2,429，含章名、僅計漢字），刪除末尾完章標記；正式圖原檔、完整／短簡介與同人聲明接入現有資料結構。F01／F04／F05／F06 已埋，獨立 plot-notes 不進公開建置；僅一章。新增 tests/shen.mjs，既有兩處書目數斷言由 2 更新為 3。未修改閱讀器或其他作品正文。
+
+
+### 《叫我沈總》發布驗收結果
+
+內容 commit `4de5de1` 已 Push，Pages Actions run `40306251293` build／deploy 成功。正式首頁、詳情、閱讀頁、索引、第一章、封面皆 HTTP 200，正文與封面 SHA-256 和本機一致。正式站 390／1440px Edge headless 書庫→作品→閱讀→繁簡→翻頁／滾動→進度恢復→返回目錄→舊書回歸通過，無腳本或失敗資源；本機 release 390／1440／1720px、台南 26 註與音樂、6 組動畫回歸均通過，精確提交樹的 check 與發布 gate 亦通過。iPhone Safari 實機未驗；現有站無 TTS 介面及 OG 分享圖系統，未新增或宣稱驗收。正式章節：https://qwerty10218.github.io/imaginary-library/reader.html?work=jiao-wo-shen-zong&chapter=001 。

@@ -60,3 +60,8 @@
 ## 2026-10-26 《叫我沈總》正式上架
 
 新增《叫我沈總》正式書籍資料、封面與第一章，完整同人 AU 聲明、獨立作者伏筆追蹤；沿用現有閱讀器與 OpenCC。
+
+
+### 《叫我沈總》發布驗收結果
+
+內容 commit `4de5de1` 已 Push，Pages Actions run `40306251293` build／deploy 成功。正式首頁、詳情、閱讀頁、索引、第一章、封面皆 HTTP 200，正文與封面 SHA-256 和本機一致。正式站 390／1440px Edge headless 書庫→作品→閱讀→繁簡→翻頁／滾動→進度恢復→返回目錄→舊書回歸通過，無腳本或失敗資源；本機 release 390／1440／1720px、台南 26 註與音樂、6 組動畫回歸均通過，精確提交樹的 check 與發布 gate 亦通過。iPhone Safari 實機未驗；現有站無 TTS 介面及 OG 分享圖系統，未新增或宣稱驗收。正式章節：https://qwerty10218.github.io/imaginary-library/reader.html?work=jiao-wo-shen-zong&chapter=001 。
