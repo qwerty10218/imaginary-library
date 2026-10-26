@@ -9,6 +9,13 @@ try {
  const works=JSON.parse(await fs.readFile('dist/data/works.json','utf8')).works;
  assert.equal(works.length,2);
  assert.deepEqual(works.find(work=>work.id==='tainan-youth-wind').chapters.map(chapter=>chapter.songId),['summer-night-wind','embrace','anping-light']);
+ for(const [id,title] of [['ep01','夏夜晚風'],['ep02','擁抱'],['ep03','安平之光']]){
+  const markdown=await fs.readFile(`dist/content/tainan-youth-wind/${id}.md`,'utf8');
+  assert.ok(markdown.startsWith(`# ${id.replace('ep','EP.')}｜${title}\n\n`));
+  assert.doesNotMatch(markdown,/> 延伸聆聽：/);
+  assert.ok(markdown.lastIndexOf('## 延伸聆聽')>markdown.indexOf('<sup class="fn-ref">'));
+  assert.ok(markdown.lastIndexOf('## 延伸聆聽')<markdown.indexOf('<section class="footnotes">'));
+ }
  const files=await fs.readdir('dist',{recursive:true});
  assert.deepEqual(files.filter(file=>/\.mp3$/i.test(file)).map(file=>file.split(/[\\/]/).at(-1)).sort(),['anping-light.mp3','embrace.mp3','summer-night-wind.mp3']);
  for(const [width,height] of [[1440,900],[390,844]]){
@@ -72,6 +79,11 @@ try {
     await page.locator('#music-panel:not([open])').waitFor();
    }
    await page.locator('#settings-button').click();await page.locator('button[data-mode=scroll]').click();await page.locator('#settings .panel-head button').click();
+   assert.equal(await page.locator('#scroll-content h1').innerText(),`${id.replace('ep','EP.')}｜${title}`);
+   assert.equal(await page.locator('#scroll-content blockquote').count(),0);
+   assert.equal(await page.locator('#scroll-content > h2').last().innerText(),'延伸聆聽');
+   assert.match(await page.locator('#scroll-content > h2').last().locator('xpath=following-sibling::p[1]').innerText(),new RegExp(`${artist}.*${title}`));
+   assert.equal(await page.locator('#scroll-content > h2').last().evaluate(el=>el.previousElementSibling?.classList.contains('chapter-endnotes')),true);
    assert.equal(await page.locator('#scroll-content .fn-ref').count(),count);
    await page.locator('#scroll-content .fn-ref').first().click();assert.ok((await page.locator('#note-text').innerText()).length>10);await page.locator('#note .panel-head button').click();
    await page.locator('#settings-button').click();await page.locator('button[data-mode=page]').click();await page.locator('#settings .panel-head button').click();

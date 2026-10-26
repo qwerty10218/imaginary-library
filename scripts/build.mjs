@@ -7,7 +7,7 @@ const source = path.resolve('content/works');
 const slug = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const fail = message => { throw new Error(`作品資料錯誤：${message}`); };
 const escapeHtml = value => String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
-function withCulturalNotes(markdown, notes, label) {
+function withCulturalNotes(markdown, notes, label, chapter) {
   const appendix = markdown.match(/\n---\s*\n\s*## 文化註解\s*\n([\s\S]*?)\n## 延伸聆聽\s*\n[\s\S]*$/);
   if (!appendix) fail(`${label} 缺少文化註解與延伸聆聽段落`);
   const listed = [...appendix[1].matchAll(/^- \*\*註(\d+)｜([^*]+)\*\*：(.+)$/gm)];
@@ -18,9 +18,12 @@ function withCulturalNotes(markdown, notes, label) {
   }
   const refs = [...markdown.slice(0,appendix.index).matchAll(/\[註(\d+)\]/g)].map(match=>match[1]);
   if (refs.length !== ids.length || ids.some(id=>refs.filter(ref=>ref===id).length!==1)) fail(`${label} 正文註碼與資料檔不一致`);
-  const body = markdown.slice(0,appendix.index).replace(/\[註(\d+)\]/g,(_,id)=>`<sup class="fn-ref">〔${id}〕</sup>`);
+  const originalBody = markdown.slice(0,appendix.index);
+  const opening = originalBody.match(/^# ([^\n]+)\n\n> ([^\n]+)\n>\n> 延伸聆聽：([^\n]+)\n\n/);
+  if (!opening || !chapter.title.endsWith(`｜${opening[1]}`)) fail(`${label} 章節標題或開篇資訊不符`);
+  const body = (`# ${chapter.title}\n\n` + originalBody.slice(opening[0].length)).replace(/\[註(\d+)\]/g,(_,id)=>`<sup class="fn-ref">〔${id}〕</sup>`);
   const footnotes = ids.map(id=>`<p>〔${id}〕${escapeHtml(notes[id].term)}：${escapeHtml(notes[id].explanation)}</p>`).join('\n');
-  return `${body.trimEnd()}\n\n<section class="footnotes">\n${footnotes}\n</section>\n`;
+  return `${body.trimEnd()}\n\n## 延伸聆聽\n\n${opening[3]}\n\n<section class="footnotes">\n${footnotes}\n</section>\n`;
 }
 if (path.dirname(root) !== process.cwd()) throw new Error('Invalid build directory');
 
@@ -47,7 +50,7 @@ for (const entry of await fs.readdir(source, {withFileTypes:true})) {
     ids.add(chapter.id);
     const filename = `${chapter.id}.md`;
     const original = await fs.readFile(path.join(dir, 'chapters', filename), 'utf8');
-    const markdown = notes ? withCulturalNotes(original, notes[chapter.id], `${work.id}/${filename}`) : original;
+    const markdown = notes ? withCulturalNotes(original, notes[chapter.id], `${work.id}/${filename}`, chapter) : original;
     if (!markdown.trim()) fail(`${work.id}/${filename} 是空檔案`);
     return {id:chapter.id,title:chapter.title,volume:chapter.volume || '',songId:chapter.songId || null,file:`content/${work.id}/${filename}`,version:createHash('sha256').update(markdown).digest('hex').slice(0,16)};
   }));
@@ -87,7 +90,7 @@ for (const work of works) {
   const notes = work.culturalNotes ? JSON.parse(await fs.readFile(path.join(dir, work.culturalNotes), 'utf8')) : null;
   for (const chapter of work.chapters) {
     const original=await fs.readFile(path.join(dir,'chapters',`${chapter.id}.md`),'utf8');
-    await fs.writeFile(path.join(dest,`${chapter.id}.md`),notes?withCulturalNotes(original,notes[chapter.id],`${work.id}/${chapter.id}.md`):original);
+    await fs.writeFile(path.join(dest,`${chapter.id}.md`),notes?withCulturalNotes(original,notes[chapter.id],`${work.id}/${chapter.id}.md`,chapter):original);
   }
 }
 await fs.mkdir(path.join(root,'js/vendor'), {recursive:true});

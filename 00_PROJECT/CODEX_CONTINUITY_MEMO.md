@@ -1,5 +1,7 @@
 # 接續要點
 
+- 台南篇章顯示轉換已統一書內標題為 `EP.XX｜篇名`，延伸聆聽在正文後；Scroll 模式置於章末註釋之後。原始三篇 Markdown 未改，測試見 `QA_REPORT.md`。
+
 - 台南系列已以 commit `0e7767f` Push 並經 Actions run `40290782382` 成功部署。正式站 390／1440px Edge headless 已驗封面、三章入口與線上 MP3 試播；兩來源包仍忽略，舊包因自動審查拒絕而留在本機。iPhone Safari 實機未驗。
 
 - 2026-10-26 新增《台南少年追風記》三篇於 `content/works/tainan-youth-wind/`。26 則腳註來源為 `notes.json`，由 `scripts/build.mjs` 轉接既有閱讀器。使用者已確認三首歌曲的公開使用授權，三首指定 MP3 位於 `web/assets/music/`，以 metadata 指定路徑建置。來源包整體仍忽略，第四首無關歌曲不進 Git 或 Pages。

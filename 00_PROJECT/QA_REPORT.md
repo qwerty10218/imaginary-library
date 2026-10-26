@@ -1,5 +1,10 @@
 # 原型驗證紀錄
 
+## 2026-10-26：台南篇章標題與聆聽位置
+
+- `npm run check`、`node tests/tainan.mjs`、`node tests/release.mjs` 通過。三篇建置產物以 `EP.XX｜篇名` 開頭，開篇無重複引言；Page／Scroll 與 26 則腳註、音樂播放在 390／1440px Edge headless 回歸通過，正式首作及 1720px 發布回歸亦通過。
+- Scroll 模式「延伸聆聽」排在章末註釋之後；Page 模式排在故事正文最後。三篇來源 Markdown 未改。樣式截圖在忽略區 `.local/tainan/title-after-1440.png`、`.local/tainan/listening-end-1440.png`。
+
 ## 2026-10-26：《台南少年追風記》本機驗證
 
 - 三篇入庫 Markdown 與首發包逐檔 SHA-256 相同；建置驗證 11＋10＋5 則註碼、篇末註解及獨立 `notes.json` 一致。
