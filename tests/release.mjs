@@ -28,7 +28,7 @@ try{
   page.on('pageerror',error=>errors.push(error.message));
   page.on('response',response=>{if(response.status()>=400)failed.push(response.url());});
   await page.goto(base);await page.locator('.work-card').first().waitFor();
-  assert.equal(await page.locator('.work-card').count(),2);
+  assert.equal(await page.locator('.work-card').count(),3);
   const firstCover=page.locator('.work-card').filter({has:page.locator('a[href="work.html?id=zhen-du-chuanyue"]')}).locator('.work-cover img');
   await firstCover.evaluate(img=>img.decode());
   assert.equal(await firstCover.evaluate(img=>img.naturalWidth===1086),true);

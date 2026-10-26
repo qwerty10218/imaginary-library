@@ -7,7 +7,7 @@ const browser=await chromium.launch({headless:true,channel:process.env.BROWSER_C
 await fs.mkdir('.local/tainan',{recursive:true});
 try {
  const works=JSON.parse(await fs.readFile('dist/data/works.json','utf8')).works;
- assert.equal(works.length,2);
+ assert.equal(works.length,3);
  assert.deepEqual(works.find(work=>work.id==='tainan-youth-wind').chapters.map(chapter=>chapter.songId),['summer-night-wind','embrace','anping-light']);
  for(const [id,title] of [['ep01','夏夜晚風'],['ep02','擁抱'],['ep03','安平之光']]){
   const markdown=await fs.readFile(`dist/content/tainan-youth-wind/${id}.md`,'utf8');
