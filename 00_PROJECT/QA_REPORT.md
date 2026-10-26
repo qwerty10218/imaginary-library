@@ -103,3 +103,5 @@ Node.js 24、Windows 本機 Microsoft Edge（Playwright headless）。沒有實�
 - 透過 CDP `CSS.getPlatformFontsForNode`，繁體明體實際 Noto Serif TC、簡體明體 SimSun、簡體黑體 Microsoft YaHei。原專案 CSS 的預設黑體以隔離探針測得 Microsoft JhengHei UI，未啟動原網站及其外部服務；此為同機 CSS 探針，不是原站完整執行狀態。結果在 `.local/final-qa/results.json` 與 `original-font-probe.json`。
 - 乾隆維持乾隆；URL／ID／程式碼不轉換。繁簡與 Page／Scroll 往返、語言保存與段落定位通過；375／1720px 額外確認重新整理時在建立測量 rig 前已是 zh-CN，逐頁無溢出。
 - 正式前三章及封面未修改；不包含測試截圖、私人備份、原小說或任何新章。iPhone Safari 真機未測，不能以此模擬驗收代替。
+
+- 線上驗證：`f5071e3` 的 Actions run `40288298449` completed／success。1720×864、390×844 Edge headless 實測首頁一部正式作品、封面正常、CTA 在簡介之前、前三章有正文、殘留選取後箭頭可翻頁且有 480ms overlay、簡體重載保持。無 pageerror／HTTP 400+；畫面在 `.local/final-qa/live/`。
