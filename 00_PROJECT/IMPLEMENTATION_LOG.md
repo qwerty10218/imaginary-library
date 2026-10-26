@@ -4,6 +4,7 @@
 
 - 調整 `scripts/build.mjs` 的顯示產物轉換：三篇原始 Markdown 保持不變；書內標題改用目錄的 `EP.XX｜篇名`，移除開篇重複的系列／歌曲引言，將原引言的曲目與場景放在故事結尾的「延伸聆聽」。文化註碼仍轉為獨立腳註。Scroll 模式將「延伸聆聽」放在章末註釋之後。
 - `tests/tainan.mjs` 加入產物與 Scroll 模式的標題／聆聽位置檢查，保留 Page／Scroll、音樂與註解回歸。
+- 修正 commit `22e5639` 已 Push；GitHub Actions run `40294081883` build／deploy 成功。正式 EP.02 Markdown 以 `# EP.02｜擁抱` 開頭，開篇無重複引言，篇末有「延伸聆聽」；線上 `reader.js` 含 Scroll 章末註釋排序。
 
 ## 2026-10-26：《台南少年追風記》封面與公開音源
 

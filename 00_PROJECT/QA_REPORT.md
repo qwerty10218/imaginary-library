@@ -4,6 +4,7 @@
 
 - `npm run check`、`node tests/tainan.mjs`、`node tests/release.mjs` 通過。三篇建置產物以 `EP.XX｜篇名` 開頭，開篇無重複引言；Page／Scroll 與 26 則腳註、音樂播放在 390／1440px Edge headless 回歸通過，正式首作及 1720px 發布回歸亦通過。
 - Scroll 模式「延伸聆聽」排在章末註釋之後；Page 模式排在故事正文最後。三篇來源 Markdown 未改。樣式截圖在忽略區 `.local/tainan/title-after-1440.png`、`.local/tainan/listening-end-1440.png`。
+- commit `22e5639` 的 Actions run `40294081883` 成功；正式 EP.02 Markdown 的首行、篇末聆聽段及線上 `reader.js` 已核對，開篇舊聆聽引言不存在。
 
 ## 2026-10-26：《台南少年追風記》本機驗證
 
