@@ -44,6 +44,8 @@ try {
   assert.match(await page.locator('#music-chapter-song').innerText(),/伍佰.*夏夜晚風/);
   await page.locator('#music-play').click();
   await page.waitForFunction(()=>!document.querySelector('#music-audio').paused);
+  await page.locator('#music-panel[open]').waitFor();
+  await page.locator('#music-panel summary').click();
   await page.locator('#music-panel:not([open])').waitFor();
   await page.locator('#music-panel summary').click();
   assert.equal(await page.locator('#music-vinyl').evaluate(el=>el.classList.contains('is-playing')),true);
@@ -54,11 +56,13 @@ try {
   await page.locator('#contents-button').click();await page.locator('#contents-chapters a').nth(1).click();
   await page.waitForURL(/chapter=ep02/);
   assert.match(await page.locator('#music-chapter-song').innerText(),/五月天.*擁抱/);
-  assert.match(await page.locator('#music-now-playing').innerText(),/伍佰.*夏夜晚風/);
+  assert.match(await page.locator('#music-summary').innerText(),/伍佰.*夏夜晚風/);
   assert.equal(await page.locator('#music-audio').evaluate(el=>el.paused),false);
   assert.ok(await page.locator('#music-audio').evaluate(el=>el.currentTime)>=before);
   await page.locator('#music-switch').click();await page.locator('#music-play').click();
   await page.waitForFunction(()=>!document.querySelector('#music-audio').paused);
+  await page.locator('#music-panel[open]').waitFor();
+  await page.locator('#music-panel summary').click();
   await page.locator('#music-panel:not([open])').waitFor();
   await page.locator('#music-panel summary').click();
   await page.waitForFunction(()=>document.querySelector('#music-audio').duration>0);
@@ -76,7 +80,9 @@ try {
     await page.locator('#music-switch').click();await page.locator('#music-play').click();
     await page.waitForFunction(()=>!document.querySelector('#music-audio').paused);
     assert.match(await page.locator('#music-audio').getAttribute('src'),/anping-light\.mp3$/);
-    await page.locator('#music-panel:not([open])').waitFor();
+    await page.locator('#music-panel[open]').waitFor();
+  await page.locator('#music-panel summary').click();
+  await page.locator('#music-panel:not([open])').waitFor();
    }
    await page.locator('#settings-button').click();await page.locator('button[data-mode=scroll]').click();await page.locator('#settings .panel-head button').click();
    assert.equal(await page.locator('#scroll-content h1').innerText(),`${id.replace('ep','EP.')}｜${title}`);

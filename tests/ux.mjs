@@ -63,6 +63,8 @@ try{
   await page.locator('#music-panel summary').click();await page.locator('#music-play').click();await page.waitForFunction(()=>!document.querySelector('#music-audio').paused);
   await page.waitForFunction(()=>/播放中.*夏夜晚風/.test(document.querySelector('#music-summary').textContent));
   assert.match(await page.locator('#music-summary').innerText(),/播放中.*夏夜晚風/);
+  await page.locator('#music-panel[open]').waitFor();
+  await page.locator('#music-panel summary').click();
   await page.locator('#music-panel:not([open])').waitFor();
   await page.locator('#contents-button').click();await page.locator('#contents-chapters a').nth(1).click();await page.waitForURL(/chapter=ep02/);assert.match(await page.locator('#music-chapter-song').textContent(),/五月天.*擁抱/);assert.match(await page.locator('#music-summary').innerText(),/夏夜晚風/);assert.equal(await page.locator('#music-audio').evaluate(a=>a.paused),false);
   await page.locator('#music-panel summary').click();await page.locator('#music-play').click();
