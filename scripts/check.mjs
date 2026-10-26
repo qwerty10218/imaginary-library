@@ -15,7 +15,7 @@ async function audit(dir) {
   for (const entry of await fs.readdir(dir,{withFileTypes:true})) {
     const file=`${dir}/${entry.name}`;
     if(entry.isDirectory()) await audit(file);
-    else if(forbidden.test(await fs.readFile(file,'utf8'))) throw new Error(`Old content or service reference: ${file}`);
+    else if(!/\.mp3$/i.test(file) && forbidden.test(await fs.readFile(file,'utf8'))) throw new Error(`Old content or service reference: ${file}`);
   }
 }
 await audit('dist');

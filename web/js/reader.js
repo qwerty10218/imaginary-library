@@ -2,6 +2,7 @@ import {createReaderCore} from './reader/core.js';
 import {createPageTurn} from './page-turn.js';
 import {loadCatalog,findWork,chapterUrl,progressStore} from './catalog.js';
 import {wireLanguage,translatePage,convertText,convertHtml} from './language.js';
+import {createMusicPlayer} from './music-player.js';
 
 const $=id=>document.getElementById(id);
 const escapeHtml=value=>String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
@@ -13,8 +14,8 @@ let settings={...defaults,...store.read('reader:settings')};
 for(const [key,options] of Object.entries({theme:['dark','light','warm'],font:['serif','sans'],motion:['fold','fade','none'],mode:['page','scroll']})) if(!options.includes(settings[key])) settings[key]=defaults[key];
 if(![18,20,22,24].includes(settings.size)) settings.size=20;
 if(![1.7,1.9,2.1].includes(settings.line)) settings.line=1.9;
-let work,chapter,chapterIndex,chapterId,workId,revision,model,markdown,pages=[],current=0,anchor;
-let busy=false,pending=0,saveTimer,resizeTimer,renderVersion=0,turnVersion=0,skipPagehideCapture=false;
+let work,chapter,chapterIndex,chapterId,workId,revision,model,markdown,pages=[],current=0,anchor,musicPlayer;
+let busy=false,pending=0,saveTimer,resizeTimer,renderVersion=0,turnVersion=0,chapterRequestVersion=0,skipPagehideCapture=false;
 const step=()=>narrow()?1:2;
 const startAnchor=id=>({chapterId:id,block:0,offset:0,percentage:0,contentVersion:revision});
 function cancelTurn(){turnVersion++;pending=0;busy=false;pageTurn.cancel();}
@@ -94,11 +95,31 @@ async function render(){
  document.body.dataset.ready='true';
  translatePage();
 }
-function goChapter(index){
+function syncChapterUi(){
+ document.title=convertText(`${chapter.title} · ${work.title} · 臆想書房`);
+ $('reader-title').textContent=convertText(chapter.title);
+ $('reader-byline').textContent=convertText(`${work.title}　／　${work.author}`);
+ for(const [id,index,label] of [['previous-chapter',chapterIndex-1,'← 上一章'],['next-chapter',chapterIndex+1,'下一章 →']]){
+  const link=$(id);link.hidden=index<0||index>=work.chapters.length;
+  if(!link.hidden){link.href=chapterUrl(work,work.chapters[index]);link.textContent=convertText(`${label} · ${work.chapters[index].title}`);}
+ }
+ $('contents-chapters').querySelectorAll('a').forEach((link,index)=>link.setAttribute('aria-current',index===chapterIndex?'page':'false'));
+ musicPlayer?.chapter(chapter.songId);
+}
+async function goChapter(index,{history='push'}={}){
  if(index<0||index>=work.chapters.length)return;
  capture();flush();
- const target=work.chapters[index];anchor=startAnchor(target.id);flush();skipPagehideCapture=true;
- location.href=chapterUrl(work,target);
+ const target=work.chapters[index];
+ if(!musicPlayer){anchor=startAnchor(target.id);flush();skipPagehideCapture=true;location.href=chapterUrl(work,target);return;}
+ const version=++chapterRequestVersion;
+ let nextMarkdown;
+ try{const response=await fetch(new URL('../'+target.file,import.meta.url),{cache:'no-store'});if(!response.ok)throw new Error();nextMarkdown=await response.text();}
+ catch{$('reader-error').textContent='章節正文暫時無法載入。';return;}
+ if(version!==chapterRequestVersion)return;
+ cancelTurn();chapterIndex=index;chapter=target;chapterId=target.id;revision=target.version;markdown=nextMarkdown;model=localizedModel();
+ const saved=store.load(workId);anchor=saved?.chapterId===chapterId?{...saved,contentVersion:revision}:startAnchor(chapterId);
+ syncChapterUi();if(history==='push')window.history.pushState({chapterId},'',chapterUrl(work,target));
+ $('reader-error').textContent='';await render();
 }
 async function turn(direction,{explicit=false}={}){
  if(settings.mode!=='page'||document.querySelector('dialog[open]'))return;
@@ -149,8 +170,10 @@ try {
  document.title=convertText(`${chapter.title} · ${work.title} · 臆想書房`);
  $('reader-title').textContent=chapter.title;$('reader-byline').textContent=`${work.title}　／　${work.author}`;
  $('back-to-work').href=`work.html?id=${encodeURIComponent(workId)}`;
- work.chapters.forEach((item,index)=>{const link=document.createElement('a');link.className='chapter-link';link.href=chapterUrl(work,item);link.textContent=`${String(index+1).padStart(2,'0')}　${item.title}　→`;link.onclick=()=>{capture();flush();anchor=startAnchor(item.id);flush();skipPagehideCapture=true;};$('contents-chapters').append(link);});
+ work.chapters.forEach((item,index)=>{const link=document.createElement('a');link.className='chapter-link';link.href=chapterUrl(work,item);link.textContent=`${String(index+1).padStart(2,'0')}　${item.title}　→`;link.onclick=event=>{if(musicPlayer){event.preventDefault();$('contents').close();goChapter(index);}else{capture();flush();anchor=startAnchor(item.id);flush();skipPagehideCapture=true;}};$('contents-chapters').append(link);});
  $('contents-work').textContent=work.title;
- for(const [id,index,label] of [['previous-chapter',chapterIndex-1,'← 上一章'],['next-chapter',chapterIndex+1,'下一章 →']])if(index>=0&&index<work.chapters.length){const link=$(id);link.hidden=false;link.href=chapterUrl(work,work.chapters[index]);link.textContent=`${label} · ${work.chapters[index].title}`;link.onclick=()=>{capture();flush();anchor=startAnchor(work.chapters[index].id);flush();skipPagehideCapture=true;};}
+ for(const [id,delta] of [['previous-chapter',-1],['next-chapter',1]])$(id).onclick=event=>{if(musicPlayer){event.preventDefault();goChapter(chapterIndex+delta);}else{capture();flush();anchor=startAnchor(work.chapters[chapterIndex+delta].id);flush();skipPagehideCapture=true;}};
+ if(Array.isArray(work.songs)){musicPlayer=createMusicPlayer(work);addEventListener('popstate',()=>{const id=new URLSearchParams(location.search).get('chapter');const index=work.chapters.findIndex(item=>item.id===id);if(index>=0&&index!==chapterIndex)goChapter(index,{history:'none'});});}
+ syncChapterUi();
  wire();await render();
 } catch(error){$('reader-error').textContent=error.message;$('book').hidden=true;$('scroll-content').hidden=true;$('prev').disabled=true;$('next').disabled=true;}

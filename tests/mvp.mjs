@@ -15,12 +15,13 @@ try {
     page.on('pageerror',e=>errors.push(e.message));
     page.on('request',r=>{if(!r.url().startsWith('http://127.0.0.1:4173'))external.push(r.url());});
     page.on('response',r=>{if(r.status()>=400)badResponses.push(`${r.status()} ${r.url()}`);});
-    await page.goto(base);await page.locator('.work-card').waitFor();
-    assert.equal(await page.locator('.work-card').count(),1);
-    assert.deepEqual(await page.locator('.work-cover img').first().evaluate(async img=>{await img.decode();return [img.naturalWidth,img.naturalHeight];}),[1086,1448]);
+    await page.goto(base);await page.locator('.work-card').first().waitFor();
+    assert.equal(await page.locator('.work-card').count(),2);
+    const firstCover=page.locator('.work-card').filter({has:page.locator('a[href="work.html?id=zhen-du-chuanyue"]')}).locator('.work-cover img');
+    assert.deepEqual(await firstCover.evaluate(async img=>{await img.decode();return [img.naturalWidth,img.naturalHeight];}),[1086,1448]);
     assert.equal(await page.locator('.continue-section').isVisible(),false);
     await page.screenshot({path:`.local/mvp/home-${width}.png`,fullPage:true});
-    await page.locator('.work-card a').click();await page.waitForFunction(()=>Boolean(document.getElementById('work-title').textContent));
+    await page.locator('a[href="work.html?id=zhen-du-chuanyue"]').first().click();await page.waitForFunction(()=>Boolean(document.getElementById('work-title').textContent));
     assert.match(await page.locator('#work-title').innerText(),/朕都穿越了/);
     assert.deepEqual(await page.locator('#work-cover img').evaluate(img=>[img.naturalWidth,img.naturalHeight]),[1086,1448]);
     assert.equal(await page.locator('#chapter-list a').count(),3);

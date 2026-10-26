@@ -31,8 +31,10 @@ npm run dev
 
 作品資料與正文存在 Git，網站從建置時產生的 `data/works.json` 載入索引。新增作品或章節不需要修改閱讀器程式。本機閱讀進度按作品 ID 分開保存在 `imaginary-library:v1:` 命名空間；繁簡偏好另存於 `imaginary-library:v1:language`。繁體 Markdown 是唯一正式來源，畫面簡體轉換沿用原閱讀器的 OpenCC 1.0.5（同版精簡 `tw→cn` 模組，本機靜態資源），不需要外部定位或字型服務。登入及雲端同步尚未啟用。
 
+《台南少年追風記》的三篇來源 Markdown 位於 `content/works/tainan-youth-wind/chapters/`，與新版 `台南少年追風記_MP3唱盤整合版新版/` 的原稿逐檔一致。26 則文化註解存於同作品的 `notes.json`；建置時驗證正文註碼及註解內容，再轉為既有閱讀器的可點擊腳註格式。封面與簡介記在 `metadata.json`；封面按原比例顯示。每篇對應歌曲 ID、歌名、演唱者及靜態音檔路徑也記在 metadata。經作者確認三首歌曲具公開使用授權後，只將這三首複製至 `web/assets/music/` 並納入建置；第四首無關音檔留在忽略區。播放器沿用新版木質唱盤、唱針動作與本機檔案選取；本機選檔只在當前瀏覽器播放，不會上傳。新增歌曲時須先確認公開使用授權，再於 metadata 指定音檔路徑。
+
 ## 驗證與發布狀態
 
 `npm run check` 執行語法、進度單元測試、建置與公開產物敏感內容掃描。瀏覽器測試需先啟動預覽服務：`node tests/browser.mjs`、`node tests/page-turn.mjs`、`node tests/mvp.mjs`、`node tests/release.mjs`。`node tests/workflow.mjs` 驗證新作品與 Markdown 上稿只複製已登錄章節，測後會重建正式產物。
 
-`node scripts/check-release.mjs` 會確認正式封面與前三章來源，避免不完整作品部署。正式雲端資源仍須另獲授權。靜態 GitHub Pages 不提供訪客 IP 地區資訊；本站不呼叫第三方定位 API，預設繁體並讓讀者手動切換。
+`node scripts/check-release.mjs` 會確認首作正式封面與前三章來源，避免不完整作品部署。靜態 GitHub Pages 不提供訪客 IP 地區資訊；本站不呼叫第三方定位 API，預設繁體並讓讀者手動切換。

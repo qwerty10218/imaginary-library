@@ -1,5 +1,14 @@
 # 原型驗證紀錄
 
+## 2026-10-26：《台南少年追風記》本機驗證
+
+- 三篇入庫 Markdown 與首發包逐檔 SHA-256 相同；建置驗證 11＋10＋5 則註碼、篇末註解及獨立 `notes.json` 一致。
+- `npm run check`、`npm test`、`node tests/tainan.mjs`、`node tests/mvp.mjs`、`node tests/release.mjs`、`node tests/immersive.mjs`、`node tests/workflow.mjs`、`node tests/browser.mjs`、`node tests/page-turn.mjs`、`node scripts/check-release.mjs` 通過。新系列於 390／1440px Edge headless 檢查三篇 Page 逐頁非空且無正文溢出、Scroll 註解可點、音樂播放／暫停／進度／音量、跨章不中斷、原首作可讀；既有沉浸式布局亦於 1720px 回歸通過。
+- 本機伺服器 MP3 Range 請求為 HTTP 206；三首 MP3 均以使用者確認的對應曲目播放。來源 ID3 標籤均空白，演唱版本由使用者確認。
+- 作者已確認三首 MP3 可公開使用；目前 `dist/` 預期只包含這三首，第四首無關歌曲及兩個來源包由 `.gitignore` 排除。iPhone Safari 實機未驗。
+- 作者指定封面 SHA-256 與網站副本一致；首頁與作品詳情頁圖片載入且 `object-fit: contain`。正式簡介依作者原文分段顯示。靜態 MP3 以 `/imaginary-library/assets/music/` 相對路徑供應。
+- 新版包三篇原稿與註解 JSON 和舊包雜湊相同；四個 MP3 複製到新版包後逐檔 SHA-256 相同。本機伺服器改讀新版包，播放器的木質底座、唱針播放狀態、本機檔案 blob 播放與缺檔友善提示於 390／1440px Edge headless 通過。新版展開面板在手機不遮住翻頁鍵；舊包仍保留且忽略。
+
 ## 2026-10-26：前三章正式上架驗證
 
 - `npm run check` 通過：語法、4 項進度／隔離單元測試、1 部作品與 3 篇正式章節建置、公開產物舊資料與機密掃描。

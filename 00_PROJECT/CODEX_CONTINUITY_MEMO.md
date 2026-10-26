@@ -1,5 +1,9 @@
 # 接續要點
 
+- 2026-10-26 新增《台南少年追風記》三篇於 `content/works/tainan-youth-wind/`。26 則腳註來源為 `notes.json`，由 `scripts/build.mjs` 轉接既有閱讀器。使用者已確認三首歌曲的公開使用授權，三首指定 MP3 位於 `web/assets/music/`，以 metadata 指定路徑建置。來源包整體仍忽略，第四首無關歌曲不進 Git 或 Pages。
+- 新作品播放器位於 `web/js/music-player.js`，同頁切章由 `web/js/reader.js` 保留音訊元素。測試 `node tests/tainan.mjs`，先 `npm run check` 再啟動 `npm run dev`。作者署名 Gary Lee 及兩首無 ID3 演唱者標籤的版本已由使用者確認。
+- 作者後續以 `台南少年追風記_MP3唱盤整合版新版/` 為準：原稿與註解和舊包相同，四個 MP3 已雜湊核對複製到新版包；預覽伺服器路徑已更新。播放器已整合新版木質唱盤、唱針動作與本機 MP3 選檔。舊包刪除被自動核准審查拒絕，目前兩包都保留並被忽略；只有三首授權歌曲另存至正式靜態資源。
+
 - 只操作此副本；原始《彼岸仍是人間》專案不得修改。新 Git 位於副本根目錄，`web/` 不再是倉庫。
 - `.migration-backup` 內有舊 Git 與原作品，永久排除於新提交及產物。不可掃描整個根目錄後直接上傳。
 - MVP 0.1 的正式入口是 `web/index.html`；資料從 `content/works/*/metadata.json` 建置到 `dist/data/works.json`。首作 ID `zhen-du-chuanyue`，已接封面、簡介及作者前三章；第四章尚缺。
