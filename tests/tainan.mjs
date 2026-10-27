@@ -2,14 +2,14 @@ import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 
-const base='http://127.0.0.1:4173/imaginary-library/';
+const base=process.env.TEST_BASE||'http://127.0.0.1:4173/imaginary-library/';
 const browser=await chromium.launch({headless:true,channel:process.env.BROWSER_CHANNEL||'msedge'});
 await fs.mkdir('.local/tainan',{recursive:true});
 try {
  const works=JSON.parse(await fs.readFile('dist/data/works.json','utf8')).works;
  assert.equal(works.length,3);
- assert.deepEqual(works.find(work=>work.id==='tainan-youth-wind').chapters.map(chapter=>chapter.songId),['summer-night-wind','embrace','anping-light']);
- for(const [id,title] of [['ep01','夏夜晚風'],['ep02','擁抱'],['ep03','安平之光']]){
+ assert.deepEqual(works.find(work=>work.id==='tainan-youth-wind').chapters.map(chapter=>chapter.songId),['summer-night-wind','embrace','anping-light','thirty-centimeters']);
+ for(const [id,title] of [['ep01','夏夜晚風'],['ep02','擁抱'],['ep03','安平之光'],['ep04','30CM']]){
   const markdown=await fs.readFile(`dist/content/tainan-youth-wind/${id}.md`,'utf8');
   assert.ok(markdown.startsWith(`# ${id.replace('ep','EP.')}｜${title}\n\n`));
   assert.doesNotMatch(markdown,/> 延伸聆聽：/);
@@ -17,7 +17,7 @@ try {
   assert.ok(markdown.lastIndexOf('## 延伸聆聽')<markdown.indexOf('<section class="footnotes">'));
  }
  const files=await fs.readdir('dist',{recursive:true});
- assert.deepEqual(files.filter(file=>/\.mp3$/i.test(file)).map(file=>file.split(/[\\/]/).at(-1)).sort(),['anping-light.mp3','embrace.mp3','summer-night-wind.mp3']);
+ assert.deepEqual(files.filter(file=>/\.mp3$/i.test(file)).map(file=>file.split(/[\\/]/).at(-1)).sort(),['anping-light.mp3','embrace.mp3','summer-night-wind.mp3','thirty-centimeters.mp3']);
  for(const [width,height] of [[1440,900],[390,844]]){
   const context=await browser.newContext({viewport:{width,height}});
   await context.addInitScript(()=>localStorage.setItem('imaginary-library:v1:reader:settings',JSON.stringify({theme:'warm',mode:'page',size:20,line:1.9,font:'serif',motion:'none'})));
@@ -73,20 +73,22 @@ try {
   await page.waitForFunction(()=>!document.querySelector('#music-vinyl').classList.contains('is-playing'));
   assert.equal(await page.locator('#music-needle').evaluate(el=>el.classList.contains('needle-on')),false);
   assert.equal(await page.locator('#music-vinyl').evaluate(el=>el.classList.contains('is-playing')),false);
-  for(const [index,id,artist,title,count] of [[0,'ep01','伍佰','夏夜晚風',11],[1,'ep02','五月天','擁抱',10],[2,'ep03','海豚刑警','安平之光',5]]){
+  for(const [index,id,artist,title,count] of [[0,'ep01','伍佰','夏夜晚風',11],[1,'ep02','五月天','擁抱',10],[2,'ep03','海豚刑警','安平之光',5],[3,'ep04','Young Souljaz、頑童 MJ116','30CM',5]]){
    await page.locator('#contents-button').click();await page.locator('#contents-chapters a').nth(index).click();await page.waitForURL(new RegExp(`chapter=${id}`));
-   assert.match(await page.locator('#music-chapter-song').innerText(),new RegExp(`${artist}.*${title}`));
-   if(id==='ep03'){
+   await page.waitForFunction(title=>document.querySelector('#music-chapter-song').textContent.includes(title),title);
+   assert.match(await page.locator('#music-chapter-song').textContent(),new RegExp(`${artist}.*${title}`));
+   if(id==='ep03'||id==='ep04'){
+    if(!await page.locator('#music-panel').evaluate(e=>e.open))await page.locator('#music-panel summary').click();
     await page.locator('#music-switch').click();await page.locator('#music-play').click();
     await page.waitForFunction(()=>!document.querySelector('#music-audio').paused);
-    assert.match(await page.locator('#music-audio').getAttribute('src'),/anping-light\.mp3$/);
+    assert.match(await page.locator('#music-audio').getAttribute('src'),id==='ep03'?/anping-light\.mp3$/:/thirty-centimeters\.mp3$/);
     await page.locator('#music-panel[open]').waitFor();
   await page.locator('#music-panel summary').click();
   await page.locator('#music-panel:not([open])').waitFor();
    }
    await page.locator('#settings-button').click();await page.locator('button[data-mode=scroll]').click();await page.locator('#settings .panel-head button').click();
    assert.equal(await page.locator('#scroll-content h1').innerText(),`${id.replace('ep','EP.')}｜${title}`);
-   assert.equal(await page.locator('#scroll-content blockquote').count(),0);
+   assert.equal(await page.locator('#scroll-content blockquote').count(),id==='ep04'?1:0);
    assert.equal(await page.locator('#scroll-content > h2').last().innerText(),'延伸聆聽');
    assert.match(await page.locator('#scroll-content > h2').last().locator('xpath=following-sibling::p[1]').innerText(),new RegExp(`${artist}.*${title}`));
    assert.equal(await page.locator('#scroll-content > h2').last().evaluate(el=>el.previousElementSibling?.classList.contains('chapter-endnotes')),true);
@@ -113,7 +115,7 @@ try {
   assert.equal(await page.locator('#music-panel').isVisible(),false);
   await page.goto(base+'reader.html?work=tainan-youth-wind&chapter=ep01');await page.locator('body[data-ready=true]').waitFor();
   await page.locator('#music-panel summary').click();
-  await page.locator('#music-file').setInputFiles('台南少年追風記_MP3唱盤整合版新版/台南少年追風記_首發包/music/夏夜晚風.mp3');
+  await page.locator('#music-file').setInputFiles('web/assets/music/summer-night-wind.mp3');
   await page.locator('#music-play').click();await page.waitForFunction(()=>!document.querySelector('#music-audio').paused);
   assert.match(await page.locator('#music-audio').getAttribute('src'),/^blob:/);
   await page.route('**/assets/music/summer-night-wind.mp3',route=>route.fulfill({status:404,body:'Missing audio'}));
@@ -123,5 +125,5 @@ try {
   assert.deepEqual(errors,[]);
   await context.close();
  }
- console.log('Tainan series, 26 footnotes, local MP3 playback and chapter persistence passed at 390px and 1440px.');
+ console.log('Tainan series, 31 footnotes, local MP3 playback and chapter persistence passed at 390px and 1440px.');
 } finally {await browser.close();}

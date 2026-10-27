@@ -2,7 +2,7 @@
   "id": "tainan-youth-wind",
   "title": "台南少年追風記",
   "author": "Gary Lee",
-  "volume": "三篇短篇小說",
+  "volume": "青春短篇連載",
   "genres": [
     "青春小說",
     "台灣日常"
@@ -13,7 +13,7 @@
     "音樂"
   ],
   "status": "serializing",
-  "updatedAt": "2026-10-26",
+  "updatedAt": "2026-10-27",
   "cover": "assets/covers/tainan_youth_wind_cover.png",
   "shortDescription": "失戀怎麼辦？去漁光島吹風啊！吉他彈不好怎麼辦？去安平喝手搖飲啊！一台老機車，兩個臭男生，還有吹不完的夏夜晚風。",
   "description": "失戀怎麼辦？去漁光島吹風啊！吉他彈不好怎麼辦？去安平喝手搖飲啊！\n\n對柏翰來說，二十歲的煩惱，沒有什麼是一首歌解決不了的。如果有，那就騎著老機車，去台南繞個兩圈。\n\n這是一個關於「明明想追吉他社學姊，卻天天跟男室友黏在一起」的荒唐大學青春故事。\n\n柏翰負責失戀、胡思亂想，以及把五月天的〈擁抱〉彈得七零八落；死黨嘉豪則負責嘴賤、吐槽，還有每次出門都吵著要吃東西。至於自稱戀愛軍師的翔宇，偶爾也會提供一些不知道靠不靠譜的餿主意。\n\n嘎嘎作響的宿舍電風扇、永遠融化太快的手搖飲、深夜的豆漿店，還有那些幼稚到不行，卻又無比珍貴的心事。\n\n有時候只是突然想聽一首歌，有時候只是想找個人陪自己去海邊。沒有什麼遠大的目的，也不一定會發生什麼了不起的事。\n\n反正太陽還沒下山，明天的煩惱就留給明天吧。\n\n一台老機車，兩個臭男生，還有吹不完的夏夜晚風。\n\n青春很短，台南的路很長。\n\n在機車油箱見底、期末考真的被當掉之前，少年們還不想那麼快長大。",
@@ -36,6 +36,12 @@
       "title": "安平之光",
       "artist": "海豚刑警",
       "audio": "assets/music/anping-light.mp3"
+    },
+    {
+      "id": "thirty-centimeters",
+      "title": "30CM",
+      "artist": "Young Souljaz、頑童 MJ116",
+      "audio": "assets/music/thirty-centimeters.mp3"
     }
   ],
   "chapters": [
@@ -59,6 +65,13 @@
       "volume": "台南少年追風記",
       "published": true,
       "songId": "anping-light"
+    },
+    {
+      "id": "ep04",
+      "title": "EP.04｜30CM",
+      "volume": "台南少年追風記",
+      "published": true,
+      "songId": "thirty-centimeters"
     }
   ]
 }
