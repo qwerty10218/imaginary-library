@@ -197,3 +197,11 @@ Gary 已明確指示 push，授權本次手機14／16px選項及相關測試發�
 ## 2026-10-27 手機翻書底部發布授權
 
 Gary 已指示 push，授權本次手機Page隱藏重複Aa、回收正文空間及回調播放器寬度發布。只提交本輪程式、測試與紀錄；EP.03校訂、.gitignore及其他既有差異排除，部署結果另續記。
+
+## 2026-10-27 手機翻書底部正式發布驗證
+
+依Gary「push」授權，程式提交c6bc045已Push至main；Pages Actions 40447064455的build／deploy均成功。精確待提交樹npm run check、6項單元測試與release gate通過，沿用本輪已通過的bottom／capacity／reflow／UX／台南回歸結果。
+
+正式站reader.html、reader.css、reader.js及EP.03顯示產物SHA-256與提交樹建置一致，未混入本機小說校訂。直接在正式站執行bottom測試，375×667、390×844、430×932及1440×900全部通過，涵蓋手機Page Aa隱藏、dock無空列／無歌曲歸零、正文與播放器尺寸、上方Aa、翻頁／繁簡／註解、播放暫停／進度／音量及Scroll浮動Aa恢復，無腳本錯誤。線上截圖與量測在.local/mobile-bottom/live/。Safari真機仍未驗。
+
+.gitignore、EP.03校訂、其他既有接續差異、來源包與根目錄圖片均保留本機，未納入發布。前述未發布段落為歷史紀錄，以本段為準。
