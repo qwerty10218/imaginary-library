@@ -241,3 +241,11 @@ details[open]>summary .when-closed{display:none}
  .reader-page[data-mode=page] .page-turn-prev{left:-48px}
  .reader-page[data-mode=page] .page-turn-next{right:-48px}
 }
+
+/* Page mode uses the top Aa; reserve only the actual player, including zero
+   height for works without music. Scroll and desktop keep their own dock. */
+@media(max-width:599px), (max-width:959px) and (pointer:coarse) and (orientation:landscape){
+ .reader-page[data-mode=page]{--book-height:calc(var(--phone-viewport) - 88px - var(--reader-dock-height) - env(safe-area-inset-top) - env(safe-area-inset-bottom));padding-bottom:calc(var(--reader-dock-height) + 24px + env(safe-area-inset-bottom))}
+ .reader-page[data-mode=page] .reader-dock{inset-inline:50% auto;width:min(82vw,320px);max-width:88vw;margin-inline-start:0;transform:translateX(-50%);gap:0;padding:0;border:0;border-radius:0;background:none;box-shadow:none}
+ .reader-page[data-mode=page] .reader-dock .music-panel{width:100%;max-width:none;flex:none}
+}

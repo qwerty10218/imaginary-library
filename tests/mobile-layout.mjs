@@ -25,9 +25,9 @@ try{
   if(width<600){
    assert.ok(Math.abs(collapsed.book.width/width-.88)<.005);
    assert.ok(collapsed.music.width<=collapsed.book.width);
-   assert.ok(collapsed.music.width<=280&&collapsed.music.width<=width*.72+.5);
-   assert.ok(collapsed.aa.bottom+7<=collapsed.music.top);
-   assert.equal(collapsed.aa.width,44);assert.equal(collapsed.aa.height,44);
+   assert.ok(Math.abs(collapsed.music.width-Math.min(width*.82,320))<.5);
+   assert.equal(await page.locator('#floating-settings').isVisible(),false);
+   assert.equal(collapsed.dock.height,collapsed.music.height);
    assert.equal(await page.locator('.reading-navigation .progress-track').isVisible(),false);
    for(const id of ['prev','next']){
     const bounds=await page.locator('#'+id).boundingBox();assert.equal(bounds.width,44);
@@ -48,10 +48,11 @@ try{
   await page.screenshot({path:`${out}/after-expanded-${width}.png`});
   await page.locator('#music-play').click();await page.waitForFunction(()=>document.querySelector('#music-vinyl').classList.contains('is-playing'));
   await page.locator('#music-play').click();await page.waitForFunction(()=>!document.querySelector('#music-vinyl').classList.contains('is-playing'));
-  await page.locator('#music-panel summary').click();await page.locator('#floating-settings').click();
+  await page.locator('#music-panel summary').click();await page.locator(width<600?'#settings-button':'#floating-settings').click();
   await page.locator('#settings[open]').waitFor();await close(page);
   await mode(page,'scroll');
   const scroll=await geometry(page);if(width<600)assert.ok(Math.abs(scroll.scroll.width/width-.88)<.005);
+  if(width<600){assert.equal(await page.locator('#floating-settings').isVisible(),true);assert.ok(scroll.music.width<=280&&scroll.music.width<=width*.72+.5);}
   await page.locator('#scroll-content .fn-ref').first().click();await page.locator('#note[open]').waitFor();await page.locator('#note .panel-head button').click();
   await page.evaluate(()=>scrollTo(0,0));await page.screenshot({path:`${out}/after-scroll-${width}.png`});
   assert.equal((await geometry(page)).overflow,false);assert.deepEqual(errors,[]);

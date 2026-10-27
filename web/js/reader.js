@@ -88,6 +88,10 @@ function pageForAnchor(){
 }
 async function render(){
  cancelTurn();const version=++renderVersion;apply();
+ if(phonePage()&&settings.mode==='page'){
+  clearTimeout(resizeTimer);
+  document.body.style.setProperty('--reader-dock-height',Math.ceil($('reader-dock').getBoundingClientRect().height)+'px');
+ }
  $('book').hidden=settings.mode!=='page';$('scroll-content').hidden=settings.mode!=='scroll';
  await document.fonts.ready;if(version!==renderVersion)return;
  if(settings.mode==='page'){
@@ -159,7 +163,7 @@ async function turn(direction,{explicit=false}={}){
 }
 let lastScroll=scrollY,autoCollapsed=false;
 function syncFloating(){
- $('floating-settings').hidden=settings.floating==='hidden'||(settings.floating==='auto'&&settings.mode==='scroll'&&autoCollapsed);
+ $('floating-settings').hidden=(phonePage()&&settings.mode==='page')||settings.floating==='hidden'||(settings.floating==='auto'&&settings.mode==='scroll'&&autoCollapsed);
 }
 function wire(){
  const resizeReader=()=>{cancelTurn();clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{capture();render();},160);};
@@ -169,13 +173,16 @@ function wire(){
  let dockHeight=0,dockFrame;
  // Resolve mobile geometry before restoring a saved text anchor on the first page.
  if(phonePage()){
+   document.body.dataset.mode=settings.mode;syncFloating();
    dockHeight=Math.ceil($('reader-dock').getBoundingClientRect().height);
    document.body.style.setProperty('--reader-dock-height',dockHeight+'px');
  }
  const observer=new ResizeObserver(()=>{
    const height=Math.ceil($('reader-dock').getBoundingClientRect().height);
    if(height===dockHeight)return;
+   const alreadyMeasured=phonePage()&&settings.mode==='page'&&document.body.style.getPropertyValue('--reader-dock-height')===height+'px';
    dockHeight=height;document.body.style.setProperty('--reader-dock-height',height+'px');
+   if(alreadyMeasured)return;
    if(settings.mode==='page'&&document.body.dataset.ready==='true'){
      if(phonePage())resizeReader();
      else{cancelAnimationFrame(dockFrame);dockFrame=requestAnimationFrame(()=>{capture();render();});}

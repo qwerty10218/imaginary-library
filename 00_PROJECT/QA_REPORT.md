@@ -178,3 +178,19 @@ Gary 已指示「push一下」，授權本輪手機閱讀寬度、底部工具�
 正式站 reader.html、reader.css、music-player.css、reader.js、music-player.js 及 EP.03 顯示產物 SHA-256 與本次提交樹建置一致，沒有混入本機 EP.03 校訂。Edge headless 正式站375×667、390×844、430×932測得正文區分別280×421、293.21875×598、328.40625×686px，頁數49／34／28；逐頁操作、重載進度、Aa、音樂播放／暫停均通過。1440px桌面預設20px與雙頁通過。線上截圖 .local/mobile-capacity/live-{375,390,430}.png。iPhone Safari真機仍未驗。
 
 原工作區 .gitignore、EP.03校訂、其他既有文件差異、來源包與根目錄圖片保留，沒有納入本輪提交。前述「本機待驗收／未發布」為歷史紀錄，以本段為準。
+
+## 2026-10-27 手機翻書底部空間回收（本機待驗收）
+
+依作者要求僅處理手機Page：web/js/reader.js的syncFloating在phonePage且mode=page時設hidden，不覆寫always／auto／hidden偏好，Scroll維持原規則；首次量測dock前先套模式與隱藏狀態。web/css/reader.css沿599px手機與959px觸控橫向斷點，僅Page播放器回調width:min(82vw,320px)、置中且無共用外框與gap。書高／body底部預留直接使用實際dock高度，移除最低44／56px保留槽；safe area、100dvh與100vh後備沿用。上方工具列、桌面、Scroll、音訊／小說／註解／TTS未改。
+
+實測EP.01、18px／1.9、原浮動Aa常駐：375×667正文421→473px高、播放器270→307.5px寬，兩側33.75px；390×844正文598→650px、播放器280→319.796875px，兩側35.1015625px；430×932正文686→738px、播放器280→320px，兩側55px。播放器收合dock高98→46，Aa與gap的52px全數回收給正文，展開時也回收52px。無歌曲作品dock為0、正文另增加44px。沒有新增播放器高度，保持既有展開高度限制與內部捲動。正文寬度／字級不變。
+
+新tests/mobile-bottom.mjs（BOTTOM_PHASE=before／預設after）量測前後四尺寸，驗證Aa隱藏／上方設定、無空列／無橫向溢出／Page不被播放器遮住、無音樂作品dock歸零、翻頁／繁簡／註解／音訊播放暫停／進度／音量。tests/mobile-layout.mjs更新Page隱藏Aa及新寬度斷言，另保留Scroll浮動Aa／舊寬度斷言。台南逐頁回歸曾兩次在切換模式後發生頁碼未前進，確認為dock高度二次重排競態；改為手機Page分頁前同步量測、取消過期排程，observer跳過已量測變化後，未修改台南測試標準即通過。
+
+最終npm run check、6項單元測試、release gate、bottom四尺寸、capacity深淺六組、mobile-reflow三尺寸、UX四尺寸、台南三篇／26註／三首歌通過。EP.01收合18px頁數49→45、34→31、28→26，逐頁全文重組／註碼／分場及邊界驗證通過。1440px桌面Page收合／展開、所有尺寸Scroll與上方列前後PNG位元完全相同。Safari真機／實際底部工具列及Home Indicator仍未驗，僅Edge headless viewport／橫向重排模擬；現有專案無TTS實作。
+
+報告.local/mobile-bottom/REPORT.md、before.json／after.json；前後截圖before/after-page-{375,390,430,1440}.png、before/after-expanded-*.png、before/after-scroll-*.png與header截圖。保留開始前所有其他工作樹差異；未Commit、Push、部署，待Gary視覺驗收。
+
+## 2026-10-27 手機翻書底部發布授權
+
+Gary 已指示 push，授權本次手機Page隱藏重複Aa、回收正文空間及回調播放器寬度發布。只提交本輪程式、測試與紀錄；EP.03校訂、.gitignore及其他既有差異排除，部署結果另續記。
