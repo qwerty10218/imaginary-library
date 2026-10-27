@@ -63,6 +63,10 @@ await fs.mkdir(root, {recursive:true});
 for (const name of ['index.html','work.html','reader.html','prototype.html','css','js']) {
   await fs.cp(path.join('web',name), path.join(root,name), {recursive:true});
 }
+await fs.cp('web/assets/icons',path.join(root,'assets/icons'),{recursive:true});
+// Only the page logo is public; masters, previews and provenance stay private.
+await fs.mkdir(path.join(root,'assets/branding'),{recursive:true});
+await fs.copyFile('web/assets/branding/brand-logo.png',path.join(root,'assets/branding/brand-logo.png'));
 const assetHash=createHash('sha256');
 for (const file of ['web/css/reader.css',...(await fs.readdir('web/js',{recursive:true})).filter(name=>name.endsWith('.js')).sort().map(name=>path.join('web/js',name))]) assetHash.update(await fs.readFile(file));
 const assetVersion=assetHash.digest('hex').slice(0,12);

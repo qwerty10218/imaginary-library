@@ -1,0 +1,4 @@
+# Keep copied website text identical on Windows and GitHub Actions/Linux.
+web/**/*.js text eol=lf
+web/**/*.css text eol=lf
+web/*.html text eol=lf

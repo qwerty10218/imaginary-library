@@ -1,0 +1,34 @@
+[
+  {
+    "file": "web/assets/icons/favicon-16x16.png",
+    "sha256": "5dbbd0812c26ff40ecea0236fadd4e1c9d1392a313abfae1aaca7b26fdb75c92"
+  },
+  {
+    "file": "web/assets/icons/apple-touch-icon.png",
+    "sha256": "3fa252c51afd53e4ef14b2883cd400aecff4bb80a6fb4ff12ae687739a9e0e87"
+  },
+  {
+    "file": "web/assets/icons/icon-192x192.png",
+    "sha256": "0ac42809bea9b3eda5d8d2c2cd384413436d9af67131c307e4f62595f617d87f"
+  },
+  {
+    "file": "web/assets/icons/favicon-32x32.png",
+    "sha256": "404d9a727376e91ae67c86610df40bff0fc0c1d303cc506ce78721bbf35958f9"
+  },
+  {
+    "file": "web/assets/icons/favicon-48x48.png",
+    "sha256": "965bbc21402c9b12bedad48d47b5f9a9e3f6157836e14d938f78797294799ed6"
+  },
+  {
+    "file": "web/assets/icons/icon-512x512.png",
+    "sha256": "0add1875af12a9db79e3b5b40cc65cb65efe1371e443a8115965d0f680d89409"
+  },
+  {
+    "file": "web/assets/icons/favicon.ico",
+    "sha256": "c1f3c8c94060065a9619ef929369ba4430097fb56ef5bd9083a040b7b6b23a46"
+  },
+  {
+    "file": "web/assets/branding/brand-logo.png",
+    "sha256": "75435872e496e18668f1fed8531d3766695815bb2cb14cb51cddd4af0160b9c5"
+  }
+]

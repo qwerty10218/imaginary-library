@@ -2,6 +2,8 @@
 
 日期：2026-10-26。本文件只描述新專案；原作只讀，不能套用原遠端或作品規範。
 
+最新本機待作者確認：《台南少年追風記》正式故事時間線為 EP.02〈擁抱〉大一上、EP.03〈安平之光〉大二暑假、EP.01〈夏夜晚風〉大三下初夏；發表順序維持 EP.01 → EP.02 → EP.03。三篇全文核對後僅修正 `content/works/tainan-youth-wind/chapters/ep03.md` 一句，將「最近專題寫得太煩」改成「上學期的期末專題才剛交出去」。EP.01／02、26 則註解、歌曲與播放器未改。`npm run check`、`npm test`、台南及正式發布瀏覽器回歸、release gate 通過；初次瀏覽器測試因預覽服務未啟動失敗，啟動後重跑通過。這次未 Commit、Push 或部署，正式站仍是舊句；使用者未追蹤的根目錄 `封面.png` 未觸碰。下方收錄時三篇與首發包雜湊相同的紀錄是歷史狀態，EP.03 目前已有這一處本機校訂。
+
 台南三篇閱讀顯示已將原稿開篇重複的系列／聆聽引言移出正文前方，章標題統一為 `EP.XX｜篇名`；曲目與場景在正文最後的「延伸聆聽」，Scroll 模式排在章末註釋之後。原始三篇 Markdown 未修改。`npm run check`、台南系列 390／1440px 瀏覽器測試、正式發布回歸通過；本次修改的 Git／Pages 狀態以最新 `git log` 與 Actions 為準。
 
 此排版修正的內容 commit `22e5639` 已 Push；Actions run `40294081883` build／deploy 成功。正式 EP.02 Markdown 首行與篇末聆聽資訊及線上閱讀器腳本均已核對為新版。後續狀態紀錄提交以 `git log -1` 為準。
@@ -128,7 +130,6 @@ Gary 已確認目前播放器並明確指示「OK PUSH」。本次發布包含�
 作者已驗收並指示 OK PUSH。播放器程式與回歸提交 3980c85 已 Push 至 main，GitHub Pages Actions 40341375076 的 build／deploy 均成功。工作區及精確待提交樹的 check、6 項單元測試、release gate 通過；vinyl 320／375／390／430／1440、tainan 390／1440、ux 375／390／430／1440 回歸通過。獨立驗證副本初次因 Windows archive CRLF 及缺少 node_modules 失敗，改用 core.autocrlf=false 匯出並連結既有依賴後完整通過，未修改小說或略過檢查。
 
 正式站 reader.html、reader.css、music-player.css、music-player.js 與 EP.03 顯示產物 SHA-256 均和提交樹建置一致；390／1440px Edge headless 驗證 12px 選曲小標、無重複資訊、MP3 播放／暫停與旋轉，無腳本錯誤。截圖 .local/vinyl/live-{390,1440}.png。Safari 真機未驗。EP.03 本機校訂、.gitignore、其他既有接續差異與未追蹤來源包仍未提交，未混入發布。此前「待驗收／未發布」段落為歷史紀錄，以本段為準。
-
 ## 2026-10-26 手機閱讀器寬度／線條／底部工具布局（本機待驗收）
 
 僅改 web/css/reader.css 與 music-player.css 的 <=599px 響應式規則，沿用原 DOM、分頁／量測與 dock ResizeObserver。正文 Page／Scroll 卡片收至 88vw，兩側6vw（包含安全區下限）；Page 內距28px，Scroll內距22px，保留使用者字級與行距。375／390／430px 卡片約330／343／378px，播放器 width:min(72vw,280px)，約270／280／280px。Aa為獨立44px圓形按鈕，位於播放器上方右側、間距8px；去除共同大外框，保留原 always／auto／hidden 偏好。Page繼續依實際兩列dock高度預留書高，Scroll保留既有底部進度與安全預留機制。
@@ -163,7 +164,6 @@ Gary 已指示「push一下」，授權本輪手機閱讀寬度、底部工具�
 正式站 reader.html、reader.css、music-player.css、reader.js、music-player.js 及 EP.03 顯示產物 SHA-256 與本次提交樹建置一致，沒有混入本機 EP.03 校訂。Edge headless 正式站375×667、390×844、430×932測得正文區分別280×421、293.21875×598、328.40625×686px，頁數49／34／28；逐頁操作、重載進度、Aa、音樂播放／暫停均通過。1440px桌面預設20px與雙頁通過。線上截圖 .local/mobile-capacity/live-{375,390,430}.png。iPhone Safari真機仍未驗。
 
 原工作區 .gitignore、EP.03校訂、其他既有文件差異、來源包與根目錄圖片保留，沒有納入本輪提交。前述「本機待驗收／未發布」為歷史紀錄，以本段為準。
-
 ## 2026-10-27 手機新增14／16px字級（本機未發布）
 
 依作者要求在既有手機font-size選單加入14／16，完整選項為14、16、18、20、22、24；預設18不改。web/js/reader.js沿用原變更／分頁／保存流程，讓小字級通過設定驗證並使用實際字級量測。桌面仍只顯示18／20／22／24；若讀取手機儲存的14／16，桌面顯示20但不覆寫原偏好，切回手機恢復原字級。未改CSS、正文、音樂、註解資料或雲端。
@@ -181,7 +181,6 @@ Gary 已明確指示 push，授權本次手機14／16px選項及相關測試發�
 依Gary「push」授權，程式提交034e3d6已Push至main；Pages Actions 40381740371的build／deploy均成功。工作區與精確提交樹check、6項單元測試、release gate通過；14／16px在375／390／430px深淺12組逐頁全文及三組重排／偏好／進度回歸通過。正式站reader.js、reader.html及EP.03產物SHA-256與提交樹建置一致，未混入本機小說校訂。
 
 正式站Edge headless 375／390／430px驗證預設18、可選16與14、相符頁數、重載字級與閱讀位置保存；切至1440px桌面只顯示18／20／22／24並使用20px，返回手機恢復14px，無腳本錯誤。Safari真機仍未驗。原.gitignore、EP.03、其他既有接續差異與來源包均保留於本機，未混入提交；此前未發布紀錄為歷史狀態。
-
 ## 2026-10-27 手機翻書底部空間回收（本機待驗收）
 
 依作者要求僅處理手機Page：web/js/reader.js的syncFloating在phonePage且mode=page時設hidden，不覆寫always／auto／hidden偏好，Scroll維持原規則；首次量測dock前先套模式與隱藏狀態。web/css/reader.css沿599px手機與959px觸控橫向斷點，僅Page播放器回調width:min(82vw,320px)、置中且無共用外框與gap。書高／body底部預留直接使用實際dock高度，移除最低44／56px保留槽；safe area、100dvh與100vh後備沿用。上方工具列、桌面、Scroll、音訊／小說／註解／TTS未改。
@@ -205,3 +204,57 @@ Gary 已指示 push，授權本次手機Page隱藏重複Aa、回收正文空間�
 正式站reader.html、reader.css、reader.js及EP.03顯示產物SHA-256與提交樹建置一致，未混入本機小說校訂。直接在正式站執行bottom測試，375×667、390×844、430×932及1440×900全部通過，涵蓋手機Page Aa隱藏、dock無空列／無歌曲歸零、正文與播放器尺寸、上方Aa、翻頁／繁簡／註解、播放暫停／進度／音量及Scroll浮動Aa恢復，無腳本錯誤。線上截圖與量測在.local/mobile-bottom/live/。Safari真機仍未驗。
 
 .gitignore、EP.03校訂、其他既有接續差異、來源包與根目錄圖片均保留本機，未納入發布。前述未發布段落為歷史紀錄，以本段為準。
+## 2026-10-27 品牌Favicon轉檔與整合（本機未發布）
+
+唯一來源為作者根目錄favicon.jpg：JPEG／RGB／2048×2048／無ICC與EXIF方向；SHA-256 7fec420fe4614f5dbe9c5aeda2905566cf3eeabbb3563b3ae3401a85b022d062。先驗證轉檔，再原樣移至web/assets/branding/favicon-source.jpg，移動前後位元雜湊相同，未重新壓縮，根目錄不保留無用途副本。README保留來源與重製說明。所有縮圖從完整原圖直接Lanczos縮小，保留深墨綠、暖金與象牙白，不裁切／拉伸／去背或增加邊框。
+
+新增web/favicon.ico（真正ICO，16／32／48三份PNG編碼影格）及web/assets/icons下六份RGB PNG：favicon-16x16、32x32、48x48、apple-touch-icon180、icon192與icon512。scripts/generate-favicons.py使用已提供的Pillow可重製；從歸檔來源重跑後七份檔案位元完全一致。Python逐像素與完整原圖Lanczos結果比較、PNG簽章／尺寸／RGB／深色角落、ICO目錄與三個解碼影格均通過。
+
+四頁index／work／reader／prototype的空白data:,圖示改為相對網址ICO、16／32 PNG及180 Apple Touch Icon；沒有既有Manifest，不新增PWA。HTML移除圖示link後與HEAD逐字相同（僅正規化換行），未更動其他UI。build.mjs只增ICO與icons目錄至dist，來源JPEG／README不部署；preview.mjs補ICO MIME，未改小說／播放器機制。
+
+新增tests/favicon.test.mjs（真實PNG／ICO格式與多尺寸、四頁唯一相對引用）與tests/favicon.mjs（臨時127.0.0.1隨機埠，模擬/imaginary-library/子目錄，四頁載入／MIME／瀏覽器解碼及六PNG路徑）。npm run check（語法／4進度測試／build／公開稽核）、npm test共8項、release gate與圖示瀏覽器測試全通過。另讀取本次測試專用Edge profile的Favicons SQLite，四個頁面均實際選用子目錄ICO、快取16／32px，快取像素與產出PNG相符；不是只檢查HTML。所有七份dist資產與web位元相同，確認dist無原始JPEG。
+
+曾嘗試停止既有預覽程序與另啟背景服務，均遭自動核准審查以blocked by policy拒絕，未繼續操作該程序；改採測試程式內短暫HTTP服務，驗證後自動關閉，既有4173服務完整保留。一次臨時inline驗證命令引號解析失敗，改為.local/favicon/check-build.mjs後通過，未影響資產。報告資料在.local/favicon/validation.json、browser-results.json、tab-icons.json與contact-sheet.png。正式站未部署，不宣稱線上圖示已更新。未Commit／Push／部署，保留原有工作樹其他差異。
+
+## 2026-10-27 頁首品牌 Logo（本機未發布）
+
+- 依作者要求，首頁、作品頁與閱讀預覽頁的「臆」字方框改為既有品牌 Logo；沿用 assets/icons/icon-192x192.png，完整保留背景與圖案。
+- 桌面 36px、手機 32px 正方形，object-fit: contain；保留品牌文字及連結，圖片為裝飾性空替代文字。正式閱讀器上方工具列不變。
+- 修改 web/index.html、web/work.html、web/prototype.html、web/css/reader.css。
+- npm run check、npm test（8/8）通過；Edge 實測 375/390/430/1440px 三頁 Logo 正確載入、比例正常、無水平溢出；四頁 Favicon 子路徑驗證通過。
+- 截圖：.local/favicon/header-{375,390,430,1440}.png。未 Commit、Push 或部署。
+
+
+## 2026-10-27 小尺寸 Favicon 候選預覽（待作者視覺確認）
+
+- 新增 scripts/preview-favicons.py，僅輸出 .local/favicon-review；不覆蓋原始 JPEG、現用圖示、Apple Touch Icon、大型品牌圖示或網站 UI。
+- 原圖 2048×2048；以亮度 >=120 分離主體，邊界 [342,553,1706,1614]，寬 66.6%、高 51.8%；此為閾值測量，忽略 JPEG 暗色邊緣噪點。
+- 產生原版與 +20/+25/+30% 置中正方形縮圖候選，每版含 16/32/48/64px RGB PNG、16/32/48px ICO；只收減背景留白，保留完整主體、無拉伸、無銳化。
+- actual-size-comparison.png 為淺深分頁背景的實際 16/32/64px 並排預覽。初步建議 +30%；16px 複雜拱門仍受限，極簡方案僅提出兩片書頁與單層拱門、刪除內層門洞與細小光點，尚未重繪。
+- Python 候選產生與 ICO 三尺寸驗證通過；npm run check、npm test（8/8）、node tests/favicon.mjs 通過，現有四頁 GitHub Pages 子路徑圖示引用正常。候選尚未接入網站，待作者確認後才定稿。
+- 原圖 SHA256 維持 7fec420fe4614f5dbe9c5aeda2905566cf3eeabbb3563b3ae3401a85b022d062；未 Commit、Push、部署。
+
+
+## 2026-10-27 D 版 Favicon 歸檔及整合（本機未發布）
+
+- 依作者要求直接使用 Favicon/ 的 12 個既有檔案，不產圖、不重新壓縮；盤點／目的地／尺寸／RGB 格式／SHA256 全記於 web/assets/branding/README.md 與 favicon-inventory.json。12 檔目的地 SHA256 全數一致。
+- 七個正式資產集中 web/assets/icons/，含四尺寸 ICO 與六個 PNG；64px PNG、兩份 1024px 母版、331px 去字來源及 550×200 預覽歸檔 branding/，不部署。原始 favicon-source.jpg 完整保留；舊七個圖示與兩個製作腳本轉存 legacy/，避免誤覆蓋 D 版。
+- 根目錄 Favicon/ 驗證後清空移除；web/favicon.ico 舊位置移除，舊檔完整歸檔。原有其他未提交變更及小說資料不碰觸。
+- 四個 HTML Head 改用 assets/icons/favicon.ico，相對子路徑，sizes 對應 16/32/48/64；無 Manifest。頁首原圖另存 branding/brand-logo.png，僅改路徑而保留原圖位元與外觀，沒有改 UI。
+- Build 沿用自訂腳本，不是 Vite；dist/ 被 Git 忽略且無追蹤，完全由 Build 重建。Build 只明確複製 icons/ 與 brand-logo.png，實測母版／預覽均不公開，舊 dist/favicon.ico 不再存在。
+- npm run check（含 Build）、npm test（9/9）、node tests/favicon.mjs（Chrome）、node scripts/check-release.mjs 通過。Chrome 四頁實際快取 D 版 ICO，共 8 個 16/32px 點陣，逐像素比對 ICO 相符；所有引用 HTTP200、正確 MIME、瀏覽器解碼及 Pages 子路徑驗證通過。
+- 補充比對原套件 ICO 和同尺寸 PNG 最大通道色階差為 1/1/2/3（16/32/48/64px）；首次逐像素完全相同斷言失敗，確認為提供套件原有微量色差，保留原檔並記錄，後續以格式／尺寸／SHA256 驗證，不重產。
+- 完整盤點與實際 16/32/64px 預覽見 branding/README.md、favicon-preview.png；無功能方面未解問題。未 Commit、Push 或部署，待作者確認。
+
+
+## 2026-10-27 完整本地網站同步（作者已驗收，準備發布）
+
+- 作者改為授權整體已驗收網站同步，不只 Favicon：含 EP.03 專題一句校訂、D 版七個圖示、頁首完整 Logo、必要 HTML/CSS、Build/預覽 MIME、測試與正式專案文件。其餘閱讀器／播放器 JS、歌曲、26 則註解、作品清單與封面未做功能或內容修改。
+- fetch 後本地 HEAD 與 origin/main 均 fa085c21087749c80460e40e7d0dfb09c245c9f4；Pages 成功 run 40447243336 與 github-pages deployment 7349978282 同 SHA，無遠端落後或衝突。
+- 正式站逐檔盤點 45 檔：初始 27 檔完全相同，其餘包含 8 個新資產、4 HTML、reader.css、EP.03 與索引，另 3 JS 純換行差異；已加 .gitattributes 將網站 JS/CSS/HTML 固定 LF，無 JS 邏輯差異，確保 Windows/Linux Build 一致。
+- .gitignore 保留 _archive/、未參與建置的叫我沈總_正式上架包/ 與 branding/ 設計檔於本地；只有 brand-logo.png 納入 Git。舊圖示、母版、預覽及來源不提交；正式盤點文件在 FAVICON_ASSETS.md，測試讀八個公開資產雜湊 fixture，不依賴本地設計素材。dist/ 忽略且不追蹤，沿用 main 的既有 Pages workflow；無新增 MP3。
+- 工作區 npm run check、npm test 9/9、npm run build、release gate、Chrome favicon 瀏覽器測試通過；tainan 390/1440（26 註解、三歌、音量/進度/切章）、release 390/1440/1720（書庫、封面、繁簡、逐頁導航）通過。
+- 後續將以精確暫存樹的獨立目錄驗證建置與產物雜湊，再 Commit/Push；部署與正式站驗證結果另行續記。此段不宣稱發布已完成。
+
+
+完整同步發布前最終確認：精確暫存樹匯出到獨立 .local/sync/verified-tree，以 npm ci 安裝（0 漏洞），check、9/9 tests、build、release gate、Chrome favicon 測試全部通過；獨立目錄沒有母版／預覽／legacy 或上架包。正式 Build 45 檔與主工作區逐位元完全相同。mobile-bottom 375/390/430/1440 回歸通過。明確 Stage 名單僅包含正式網站、EP.03、文件、測試與必要設定；無新增 MP3、憑證或忽略素材；git diff --check 通過。作者已授權 Commit/Push 及既有 Pages 正式部署，部署後結果記於本輪最終回報及 .local/sync/ 實測報告。

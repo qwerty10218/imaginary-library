@@ -249,3 +249,7 @@ details[open]>summary .when-closed{display:none}
  .reader-page[data-mode=page] .reader-dock{inset-inline:50% auto;width:min(82vw,320px);max-width:88vw;margin-inline-start:0;transform:translateX(-50%);gap:0;padding:0;border:0;border-radius:0;background:none;box-shadow:none}
  .reader-page[data-mode=page] .reader-dock .music-panel{width:100%;max-width:none;flex:none}
 }
+
+/* Header identity uses the existing full, opaque brand artwork. */
+.brand-logo{display:block;width:36px;height:36px;flex:none;object-fit:contain}
+@media(max-width:599px){.brand-logo{width:32px;height:32px}}

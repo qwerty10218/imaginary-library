@@ -13,3 +13,9 @@ Thumbs.db
 drafts/
 台南少年追風記_首發包/
 台南少年追風記_MP3唱盤整合版新版/
+/_archive/
+
+# Local source packages and brand design archives; only the page logo ships.
+/叫我沈總_正式上架包/
+/web/assets/branding/*
+!/web/assets/branding/brand-logo.png

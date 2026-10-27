@@ -6,7 +6,7 @@ const root = path.resolve('dist');
 const prefix = '/imaginary-library/';
 const musicRoot = path.resolve('台南少年追風記_MP3唱盤整合版新版/台南少年追風記_首發包/music');
 const musicMap = JSON.parse(await fs.readFile(new URL('./local-music.json',import.meta.url),'utf8'));
-const types = {'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json; charset=utf-8','.md':'text/plain; charset=utf-8','.mp3':'audio/mpeg','.png':'image/png'};
+const types = {'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json; charset=utf-8','.md':'text/plain; charset=utf-8','.mp3':'audio/mpeg','.png':'image/png','.ico':'image/x-icon'};
 http.createServer(async (req, res) => {
   try {
     const url = new URL(req.url, 'http://localhost');
