@@ -66,7 +66,7 @@ try{
   await page.locator('#music-panel[open]').waitFor();
   await page.locator('#music-panel summary').click();
   await page.locator('#music-panel:not([open])').waitFor();
-  await page.locator('#contents-button').click();await page.locator('#contents-chapters a').nth(1).click();await page.waitForURL(/chapter=ep02/);assert.match(await page.locator('#music-chapter-song').textContent(),/五月天.*擁抱/);assert.match(await page.locator('#music-summary').innerText(),/夏夜晚風/);assert.equal(await page.locator('#music-audio').evaluate(a=>a.paused),false);
+  await page.locator('#contents-button').click();await page.locator('#contents-chapters a').nth(1).click();await page.waitForURL(/chapter=ep02/);assert.match(await page.locator('#music-chapter-song').textContent(),/五月天.*擁抱/);assert.match(await page.locator('#music-summary').innerText(),/擁抱/);assert.equal(await page.locator('#music-audio').evaluate(a=>a.paused),true);assert.equal(await page.locator('#music-audio').evaluate(a=>a.currentTime),0);
   await page.locator('#music-panel summary').click();await page.locator('#music-play').click();
   await mode(page,'page');await page.waitForTimeout(300);
   for(const chapter of ['ep01','ep02','ep03']){

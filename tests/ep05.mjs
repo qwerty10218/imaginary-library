@@ -45,8 +45,9 @@ try{
   await page.waitForFunction(()=>!document.querySelector('#music-audio').paused);
   await page.locator('#next-chapter').click();await page.waitForURL(/chapter=ep05/);
   assert.match(await page.locator('#music-chapter-song').innerText(),/夢醒時分/);
-  assert.match(await page.locator('#music-summary').innerText(),/30CM/);
-  assert.equal(await page.locator('#music-audio').evaluate(a=>a.paused),false);
+  assert.match(await page.locator('#music-summary').innerText(),/夢醒時分/);
+  assert.equal(await page.locator('#music-audio').evaluate(a=>a.paused),true);
+  assert.equal(await page.locator('#music-audio').evaluate(a=>a.currentTime),0);
   assert.equal(await page.locator('#next-chapter').evaluate(e=>e.hidden),true);
   assert.match(await page.locator('#previous-chapter').getAttribute('href'),/chapter=ep04/);
   const text=await page.locator('#scroll-content').innerText();
@@ -62,7 +63,7 @@ try{
   }
   await page.evaluate(()=>scrollTo(0,0));
   if(!await page.locator('#music-panel').evaluate(e=>e.open))await page.locator('#music-panel summary').click();
-  await page.locator('#music-switch').click();await page.locator('#music-play').click();
+  await page.locator('#music-play').click();
   await page.waitForFunction(()=>!document.querySelector('#music-audio').paused&&document.querySelector('#music-audio').duration>0);
   const duration=await page.locator('#music-audio').evaluate(a=>a.duration);assert.ok(duration>60);
   await page.locator('#music-volume').fill('40');assert.equal(await page.locator('#music-audio').evaluate(a=>a.volume),.4);
@@ -86,7 +87,7 @@ try{
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
   await scanPages(page);
   await page.screenshot({path:`.local/ep05/reader-${width}.png`});assert.deepEqual(errors,[]);
-  results.push({width,duration,notes:10,chapterNavigation:true,crossChapterMusic:true,progressRestored:true});
+  results.push({width,duration,notes:10,chapterNavigation:true,chapterMusicResetsPaused:true,progressRestored:true});
   await context.close();console.log('PASS EP.05',width,duration);
  }
  await fs.writeFile('.local/ep05/browser-results.json',JSON.stringify(results,null,2));

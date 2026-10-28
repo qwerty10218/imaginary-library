@@ -33,7 +33,7 @@ npm run dev
 
 《台南少年追風記》的正式來源位於 `content/works/tainan-youth-wind/chapters/`，現有 EP.01–04；EP.04〈30CM〉依作者原稿加入，只按作者指示將三處「大屌歌」改為「大屌哥」。31 則文化註解在同作品 `notes.json`，Build 驗證正文註碼後轉為閱讀器腳註。EP.03 保留已確認的專題時間線校訂。
 
-四篇的歌曲對應、歌手與正式 MP3 路徑集中於 metadata，音檔來源為 `web/assets/music/`；預覽相容路由與測試也使用正式來源，不依賴根目錄交付包。播放器沿用既有黑膠、播放／暫停、音量、進度、跨章播放及本機選檔；本機選檔不會上傳。歷史台南交付包只在本地 `_archive/source-packages/` 保存，不參與 Build；無關第四首舊音檔留在歸檔區，不上線。根目錄新交付素材按 [協作 SOP](00_PROJECT/AI_COLLAB_WORKFLOW.md) 處理，完整上線依 [同步流程](00_PROJECT/SITE_SYNC_WORKFLOW.md)。
+四篇的歌曲對應、歌手與正式 MP3 路徑集中於 metadata，音檔來源為 `web/assets/music/`；預覽相容路由與測試也使用正式來源，不依賴根目錄交付包。播放器沿用既有黑膠、播放／暫停、音量、進度及本機選檔；切換章節會自動載入該章配歌、歸零並顯示未開始的「聆聽」狀態，須由讀者按播放才出聲；本機選檔不會上傳。歷史台南交付包只在本地 `_archive/source-packages/` 保存，不參與 Build；無關第四首舊音檔留在歸檔區，不上線。根目錄新交付素材按 [協作 SOP](00_PROJECT/AI_COLLAB_WORKFLOW.md) 處理，完整上線依 [同步流程](00_PROJECT/SITE_SYNC_WORKFLOW.md)。
 
 ## 驗證與發布狀態
 

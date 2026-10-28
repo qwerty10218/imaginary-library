@@ -50,16 +50,15 @@ try {
   await page.locator('#music-panel summary').click();
   assert.equal(await page.locator('#music-vinyl').evaluate(el=>el.classList.contains('is-playing')),true);
   assert.equal(await page.locator('#music-needle').evaluate(el=>el.classList.contains('needle-on')),true);
-  const before=await page.locator('#music-audio').evaluate(el=>el.currentTime);
   await page.locator('#music-volume').fill('35');
   assert.equal(await page.locator('#music-audio').evaluate(el=>el.volume),.35);
   await page.locator('#contents-button').click();await page.locator('#contents-chapters a').nth(1).click();
   await page.waitForURL(/chapter=ep02/);
   assert.match(await page.locator('#music-chapter-song').innerText(),/五月天.*擁抱/);
-  assert.match(await page.locator('#music-summary').innerText(),/伍佰.*夏夜晚風/);
-  assert.equal(await page.locator('#music-audio').evaluate(el=>el.paused),false);
-  assert.ok(await page.locator('#music-audio').evaluate(el=>el.currentTime)>=before);
-  await page.locator('#music-switch').click();await page.locator('#music-play').click();
+  assert.match(await page.locator('#music-summary').innerText(),/五月天.*擁抱/);
+  assert.equal(await page.locator('#music-audio').evaluate(el=>el.paused),true);
+  assert.equal(await page.locator('#music-audio').evaluate(el=>el.currentTime),0);
+  await page.locator('#music-play').click();
   await page.waitForFunction(()=>!document.querySelector('#music-audio').paused);
   await page.locator('#music-panel[open]').waitFor();
   await page.locator('#music-panel summary').click();
@@ -79,7 +78,7 @@ try {
    assert.match(await page.locator('#music-chapter-song').textContent(),new RegExp(`${artist}.*${title}`));
    if(id==='ep03'||id==='ep04'){
     if(!await page.locator('#music-panel').evaluate(e=>e.open))await page.locator('#music-panel summary').click();
-    await page.locator('#music-switch').click();await page.locator('#music-play').click();
+    await page.locator('#music-play').click();
     await page.waitForFunction(()=>!document.querySelector('#music-audio').paused);
     assert.match(await page.locator('#music-audio').getAttribute('src'),id==='ep03'?/anping-light\.mp3$/:/thirty-centimeters\.mp3$/);
     await page.locator('#music-panel[open]').waitFor();

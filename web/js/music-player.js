@@ -5,14 +5,14 @@ export function createMusicPlayer(work) {
   const songs=new Map(work.songs.map(song=>[song.id,song]));
   const local=['127.0.0.1','localhost'].includes(location.hostname);
   const localFiles=new Map(),objectUrls=new Set();
-  let chapterSong,loadedSong;
+  let chapterSong,loadedSong,sourceVersion=0,hasStarted=false;
   const format=seconds=>Number.isFinite(seconds)?`${Math.floor(seconds/60)}:${String(Math.floor(seconds%60)).padStart(2,'0')}`:'0:00';
   const label=id=>{const song=songs.get(id);return song?`${song.artist}〈${song.title}〉`:'';};
   function status(message){$('music-status').textContent=message;}
-  function sync(){const playing=!audio.paused&&!audio.ended;$('music-vinyl').classList.toggle('is-playing',playing);$('music-needle').classList.toggle('needle-on',playing);play.dataset.playing=String(playing);play.setAttribute('aria-label',playing?'暫停音樂':'播放音樂');$('music-summary').textContent=`${playing?'播放中':loadedSong?'已暫停':'聆聽'} · ${label(loadedSong||chapterSong)}`;$('music-switch').hidden=!loadedSong||loadedSong===chapterSong;seek.value=audio.duration?String(Math.round(audio.currentTime/audio.duration*1000)):'0';$('music-current').textContent=format(audio.currentTime);$('music-duration').textContent=format(audio.duration);}
-  function select(id){const song=songs.get(id);if(!song)return false;const source=localFiles.get(id)||song.audio||(local?`local-audio/${encodeURIComponent(id)}.mp3`:null);if(!source){status('請選擇本機 MP3；音檔只在這個瀏覽器頁面使用。');return false;}audio.pause();loadedSong=id;audio.src=source;audio.load();status('');sync();return true;}
+  function sync(){const playing=!audio.paused&&!audio.ended;$('music-vinyl').classList.toggle('is-playing',playing);$('music-needle').classList.toggle('needle-on',playing);play.dataset.playing=String(playing);play.setAttribute('aria-label',playing?'暫停音樂':'播放音樂');$('music-summary').textContent=`${playing?'播放中':hasStarted?'已暫停':'聆聽'} · ${label(loadedSong||chapterSong)}`;$('music-switch').hidden=!loadedSong||loadedSong===chapterSong;seek.value=audio.duration?String(Math.round(audio.currentTime/audio.duration*1000)):'0';$('music-current').textContent=format(audio.currentTime);$('music-duration').textContent=format(audio.duration);}
+  function select(id){sourceVersion++;hasStarted=false;const song=songs.get(id);play.disabled=!song;if(!song){audio.pause();loadedSong=null;audio.removeAttribute('src');audio.load();status('本章未設定配樂。');sync();return false;}const source=localFiles.get(id)||song.audio||(local?`local-audio/${encodeURIComponent(id)}.mp3`:null);if(!source){status('請選擇本機 MP3；音檔只在這個瀏覽器頁面使用。');return false;}audio.pause();loadedSong=id;audio.src=source;audio.load();status('');sync();return true;}
   panel.hidden=false;audio.volume=.7;
-  play.onclick=async()=>{if(!audio.paused){audio.pause();return;}if(!loadedSong||!audio.getAttribute('src'))if(!select(loadedSong||chapterSong))return;try{await audio.play();status('');}catch{status('音檔不存在或無法播放；可選擇本機 MP3。');sync();}};
+  play.onclick=async()=>{if(!audio.paused){audio.pause();return;}if(!loadedSong||!audio.getAttribute('src'))if(!select(loadedSong||chapterSong))return;const version=sourceVersion;try{await audio.play();if(version===sourceVersion)status('');}catch{if(version!==sourceVersion)return;status('音檔不存在或無法播放；可選擇本機 MP3。');sync();}};
   $('music-switch').onclick=()=>select(chapterSong);
   seek.oninput=()=>{if(audio.duration)audio.currentTime=Number(seek.value)/1000*audio.duration;};
   $('music-volume').oninput=event=>{audio.volume=Number(event.target.value)/100;};
@@ -27,12 +27,13 @@ export function createMusicPlayer(work) {
       const url=URL.createObjectURL(file);objectUrls.add(url);localFiles.set(song.id,url);loaded++;
     }
     status(loaded?`已載入 ${loaded} 個本機音檔；不會上傳。${files.length>loaded?' 其餘檔名無法確定對應。':''}`:'無法辨識音檔；請在對應章節選擇單一 MP3。');
-    if(loaded&&!loadedSong)select(chapterSong);
+    if(loaded&&localFiles.has(chapterSong))select(chapterSong);
     event.target.value='';
   };
+  audio.addEventListener('playing',()=>{hasStarted=true;sync();});
   for(const event of ['play','pause','ended','timeupdate','loadedmetadata'])audio.addEventListener(event,sync);
   audio.addEventListener('error',()=>{status('音檔不存在或無法播放。');sync();});
   if(!local&&!work.songs.some(song=>song.audio))status('公開版音源尚未備妥；可自行選擇本機檔案試聽。');
   addEventListener('pagehide',()=>objectUrls.forEach(url=>URL.revokeObjectURL(url)),{once:true});
-  return {chapter(id){chapterSong=id;$('music-chapter-song').textContent=label(id);$('music-summary').textContent=label(id);if(loadedSong&&loadedSong!==id&& !audio.paused)status('原曲繼續播放；可自行切換本篇歌曲。');sync();}};
+  return {chapter(id){chapterSong=id;$('music-chapter-song').textContent=label(id);select(id);}};
 }

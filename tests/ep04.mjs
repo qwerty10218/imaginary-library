@@ -24,8 +24,9 @@ try{
   await page.waitForFunction(()=>!document.querySelector('#music-audio').paused);
   await page.locator('#next-chapter').click();await page.waitForURL(/chapter=ep04/);
   assert.match(await page.locator('#music-chapter-song').innerText(),/30CM/);
-  assert.match(await page.locator('#music-summary').innerText(),/安平之光/);
-  assert.equal(await page.locator('#music-audio').evaluate(a=>a.paused),false);
+  assert.match(await page.locator('#music-summary').innerText(),/30CM/);
+  assert.equal(await page.locator('#music-audio').evaluate(a=>a.paused),true);
+  assert.equal(await page.locator('#music-audio').evaluate(a=>a.currentTime),0);
   assert.match(await page.locator('#next-chapter').getAttribute('href'),/chapter=ep05/);
   assert.ok(await page.locator('a[href*="chapter=ep05"]').count()>0);
   assert.match(await page.locator('#previous-chapter').getAttribute('href'),/chapter=ep03/);
@@ -36,7 +37,7 @@ try{
   await page.locator('#scroll-content .fn-ref').nth(4).click();
   assert.match(await page.locator('#note-text').innerText(),/饒舌歌曲/);await page.locator('#note .panel-head button').click();
   if(!await page.locator('#music-panel').evaluate(e=>e.open))await page.locator('#music-panel summary').click();
-  await page.locator('#music-switch').click();await page.locator('#music-play').click();
+  await page.locator('#music-play').click();
   await page.waitForFunction(()=>!document.querySelector('#music-audio').paused&&document.querySelector('#music-audio').duration>0);
   const duration=await page.locator('#music-audio').evaluate(a=>a.duration);assert.ok(duration>60);
   await page.locator('#music-volume').fill('40');assert.equal(await page.locator('#music-audio').evaluate(a=>a.volume),.4);
@@ -58,7 +59,7 @@ try{
   assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('imaginary-library:v1:progress:tainan-youth-wind')).chapterId),'ep04');
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
   await page.screenshot({path:`.local/ep04/reader-${width}.png`});assert.deepEqual(errors,[]);
-  results.push({width,duration,notes:5,chapterNavigation:true,crossChapterMusic:true,progressRestored:true});
+  results.push({width,duration,notes:5,chapterNavigation:true,chapterMusicResetsPaused:true,progressRestored:true});
   await context.close();console.log('PASS EP.04',width,duration);
  }
  await fs.writeFile('.local/ep04/browser-results.json',JSON.stringify(results,null,2));
