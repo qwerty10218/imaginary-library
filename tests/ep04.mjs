@@ -15,8 +15,8 @@ try{
   const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto(base+'work.html?id=tainan-youth-wind');
   await page.locator('#chapter-list a').last().waitFor();
-  assert.equal(await page.locator('#chapter-list a').count(),4);
-  assert.match(await page.locator('#chapter-list a').last().getAttribute('href'),/chapter=ep04/);
+  assert.equal(await page.locator('#chapter-list a').count(),5);
+  assert.match(await page.locator('#chapter-list a').last().getAttribute('href'),/chapter=ep05/);
   await page.goto(base+'reader.html?work=tainan-youth-wind&chapter=ep03');
   await page.locator('body[data-ready=true]').waitFor();
   assert.match(await page.locator('#next-chapter').getAttribute('href'),/chapter=ep04/);
@@ -26,8 +26,8 @@ try{
   assert.match(await page.locator('#music-chapter-song').innerText(),/30CM/);
   assert.match(await page.locator('#music-summary').innerText(),/安平之光/);
   assert.equal(await page.locator('#music-audio').evaluate(a=>a.paused),false);
-  assert.equal(await page.locator('#next-chapter').evaluate(e=>e.hidden),true);
-  assert.equal(await page.locator('a[href*="chapter=ep05"]').count(),0);
+  assert.match(await page.locator('#next-chapter').getAttribute('href'),/chapter=ep05/);
+  assert.ok(await page.locator('a[href*="chapter=ep05"]').count()>0);
   assert.match(await page.locator('#previous-chapter').getAttribute('href'),/chapter=ep03/);
   assert.equal(await page.locator('#scroll-content .fn-ref').count(),5);
   const text=await page.locator('#scroll-content').innerText();

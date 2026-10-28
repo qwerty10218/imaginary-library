@@ -28,3 +28,11 @@
 - 根目錄 `頑童-30CM.mp3`（4,874,874 bytes，ID3/MPEG，可由瀏覽器解碼，378.160181 秒，SHA-256 `557b96d9ec60eac1c2e1a0914b351d111c133a0fc2cab4043c648c648fd3924e`）→ `web/assets/music/thirty-centimeters.mp3`，依作者本次指示隨章接入播放器。原件同批歸檔，複製位元一致。
 - 兩個歷史台南包已移至 `_archive/source-packages/tainan/legacy-first-release/` 與 `legacy-vinyl-package/`；連同本輪新來源共 28 檔全部 SHA256 校驗相同，manifest 在該區 `2026-10-27-manifest.json`，不公開。預覽／現行測試改用正式音檔，歷史本地快照的舊路徑保留為歷史，不作現行執行入口。
 - 根目錄新 `30CM/` 及 MP3 重複副本依作者要求，待部署與線上全文／音檔核對成功後才移除；歸檔原件持續保留。其他作品來源、備份及 .migration-backup 不動。以上更新取代初始盤點中台南來源仍在根目錄的狀態。
+
+
+## 2026-10-28 EP.05〈夢醒時分〉完整交付
+
+- 實際入口為根目錄 `夢醒時分完整上架包/`（已解包六檔），未提供指定 ZIP，故無 ZIP 解壓。四份文件均通過 SHA256SUMS；章節原稿 SHA-256 `9242b77d1a674cb204541dca5a63d9b57f59bf98661701033a923f0ea3f7cd76`。
+- 正文 → content/works/tainan-youth-wind/chapters/ep05.md；兩份 CREATIVE 文件 → 00_PROJECT/ 同名檔；README／SHA256SUMS 只歸檔。原件完整保存 `_archive/source-packages/chatgpt/2026-10-28/tainan-ep05/`，manifest.json 記六檔大小與雜湊，複製後逐檔核對。
+- `伍佰-夢醒時分.mp3` → web/assets/music/dream-awakening.mp3，5,431,934 bytes，ID3/MPEG，瀏覽器解碼 226.255238 秒；SHA-256 `8f203eccea798bd1c57504cfa119bb6abd744daee6680d1ffe0ae1b923e84e26`，原件及正式檔位元相同。作者本次明確要求隨章發布；公開音樂與歌詞授權仍由作者另行確認。
+- 歸檔不進 Git／Build；部署核對成功後才清除本次入口重複副本。發布結果以本輪最終回報為準。

@@ -8,7 +8,7 @@ await fs.mkdir('.local/tainan',{recursive:true});
 try {
  const works=JSON.parse(await fs.readFile('dist/data/works.json','utf8')).works;
  assert.equal(works.length,3);
- assert.deepEqual(works.find(work=>work.id==='tainan-youth-wind').chapters.map(chapter=>chapter.songId),['summer-night-wind','embrace','anping-light','thirty-centimeters']);
+ assert.deepEqual(works.find(work=>work.id==='tainan-youth-wind').chapters.map(chapter=>chapter.songId),['summer-night-wind','embrace','anping-light','thirty-centimeters','dream-awakening']);
  for(const [id,title] of [['ep01','夏夜晚風'],['ep02','擁抱'],['ep03','安平之光'],['ep04','30CM']]){
   const markdown=await fs.readFile(`dist/content/tainan-youth-wind/${id}.md`,'utf8');
   assert.ok(markdown.startsWith(`# ${id.replace('ep','EP.')}｜${title}\n\n`));
@@ -17,7 +17,7 @@ try {
   assert.ok(markdown.lastIndexOf('## 延伸聆聽')<markdown.indexOf('<section class="footnotes">'));
  }
  const files=await fs.readdir('dist',{recursive:true});
- assert.deepEqual(files.filter(file=>/\.mp3$/i.test(file)).map(file=>file.split(/[\\/]/).at(-1)).sort(),['anping-light.mp3','embrace.mp3','summer-night-wind.mp3','thirty-centimeters.mp3']);
+ assert.deepEqual(files.filter(file=>/\.mp3$/i.test(file)).map(file=>file.split(/[\\/]/).at(-1)).sort(),['anping-light.mp3','dream-awakening.mp3','embrace.mp3','summer-night-wind.mp3','thirty-centimeters.mp3']);
  for(const [width,height] of [[1440,900],[390,844]]){
   const context=await browser.newContext({viewport:{width,height}});
   await context.addInitScript(()=>localStorage.setItem('imaginary-library:v1:reader:settings',JSON.stringify({theme:'warm',mode:'page',size:20,line:1.9,font:'serif',motion:'none'})));
