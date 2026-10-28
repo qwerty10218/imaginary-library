@@ -8,6 +8,11 @@ const results=[];await fs.mkdir('.local/ep05',{recursive:true});
 async function scanPages(page){
  await page.locator('#settings-button').click();await page.locator('#motion').selectOption('none');await page.locator('#settings .panel-head button').click();
  for(let turn=0;turn<150;turn++){
+  const ref=page.locator('.sheet:not([aria-hidden="true"]) .fn-ref').first();
+  if(await ref.count()){
+   const marker=await ref.innerText();await ref.click();assert.ok((await page.locator('#note-text').innerText()).startsWith(marker));
+   await page.locator('#note .panel-head button').click();assert.equal(await ref.evaluate(el=>document.activeElement===el),true);
+  }
   const result=await page.evaluate(()=>{
    const sheets=[...document.querySelectorAll('.sheet:not([aria-hidden="true"])')];
    const overflow=sheets.some(sheet=>{const content=sheet.querySelector('.page-content'),body=sheet.querySelector('.book-page-body'),notes=sheet.querySelector('.page-footnotes');return [...body.children].some(child=>child.getBoundingClientRect().bottom>(notes?.getBoundingClientRect().top??content.getBoundingClientRect().bottom)+2);});
@@ -46,7 +51,16 @@ try{
   assert.match(await page.locator('#previous-chapter').getAttribute('href'),/chapter=ep04/);
   const text=await page.locator('#scroll-content').innerText();
   for(const term of ['高雄巨蛋','嘉豪 & China Blue','明天誰有早八','樹枝孤鳥','你是我的花朵'])assert.ok(text.includes(term));
-  assert.equal(await page.locator('#scroll-content .fn-ref').count(),0);
+  assert.equal(await page.locator('#scroll-content .fn-ref').count(),10);
+  const notes=JSON.parse(await fs.readFile('content/works/tainan-youth-wind/notes.json','utf8')).ep05;
+  assert.deepEqual(await page.locator('#scroll-content .fn-ref').evaluateAll(refs=>refs.map(r=>r.dataset.fnId)),Object.keys(notes));
+  for(const [id,note] of Object.entries(notes)){
+   const ref=page.locator('#scroll-content .fn-ref').filter({hasText:'〔'+id+'〕'});
+   await ref.click();if(id==='10')await page.screenshot({path:`.local/ep05/notes-${width}.png`});assert.equal(await page.locator('#note-text').innerText(),'〔'+id+'〕 '+note.term+'：'+note.explanation);
+   await page.locator('#note .panel-head button').click();assert.equal(await page.locator('#note').evaluate(el=>el.open),false);
+   assert.equal(await ref.evaluate(el=>document.activeElement===el),true);
+  }
+  await page.evaluate(()=>scrollTo(0,0));
   if(!await page.locator('#music-panel').evaluate(e=>e.open))await page.locator('#music-panel summary').click();
   await page.locator('#music-switch').click();await page.locator('#music-play').click();
   await page.waitForFunction(()=>!document.querySelector('#music-audio').paused&&document.querySelector('#music-audio').duration>0);
@@ -56,6 +70,7 @@ try{
   await page.locator('#music-play').click();await page.waitForFunction(()=>document.querySelector('#music-audio').paused);
   await page.locator('#music-panel summary').click();
   await page.locator('[data-language-toggle]').click();assert.match(await page.locator('#scroll-content').innerText(),/梦醒时分/);
+  await page.locator('#scroll-content .fn-ref').last().click();assert.match(await page.locator('#note-text').innerText(),/早上八点开始的课/);await page.locator('#note .panel-head button').click();
   await page.locator('[data-language-toggle]').click();
   await page.evaluate(()=>scrollTo(0,0));await page.waitForTimeout(250);
   await page.locator('#settings-button').click();await page.locator('button[data-mode=page]').click();await page.locator('#settings .panel-head button').click();
@@ -71,7 +86,7 @@ try{
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
   await scanPages(page);
   await page.screenshot({path:`.local/ep05/reader-${width}.png`});assert.deepEqual(errors,[]);
-  results.push({width,duration,notes:0,chapterNavigation:true,crossChapterMusic:true,progressRestored:true});
+  results.push({width,duration,notes:10,chapterNavigation:true,crossChapterMusic:true,progressRestored:true});
   await context.close();console.log('PASS EP.05',width,duration);
  }
  await fs.writeFile('.local/ep05/browser-results.json',JSON.stringify(results,null,2));
