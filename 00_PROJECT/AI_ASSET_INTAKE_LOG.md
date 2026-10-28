@@ -36,3 +36,12 @@
 - 正文 → content/works/tainan-youth-wind/chapters/ep05.md；兩份 CREATIVE 文件 → 00_PROJECT/ 同名檔；README／SHA256SUMS 只歸檔。原件完整保存 `_archive/source-packages/chatgpt/2026-10-28/tainan-ep05/`，manifest.json 記六檔大小與雜湊，複製後逐檔核對。
 - `伍佰-夢醒時分.mp3` → web/assets/music/dream-awakening.mp3，5,431,934 bytes，ID3/MPEG，瀏覽器解碼 226.255238 秒；SHA-256 `8f203eccea798bd1c57504cfa119bb6abd744daee6680d1ffe0ae1b923e84e26`，原件及正式檔位元相同。作者本次明確要求隨章發布；公開音樂與歌詞授權仍由作者另行確認。
 - 歸檔不進 Git／Build；部署核對成功後才清除本次入口重複副本。發布結果以本輪最終回報為準。
+
+
+## 2026-10-28 EP.04〈30CM〉v3 精簡定稿（本輪授權發布）
+
+- 作者指定根目錄 `04-30CM_精簡試讀版_v3_統一大屌哥.md` 為唯一母本；9,719 bytes，SHA-256 `267a6986f42440dbe3d2d8aca7fdd86571cae574073918eb0cedafc8d499a3ff`。原樣取代 content/works/tainan-youth-wind/chapters/ep04.md，來源與正式檔逐位元一致，無正文重寫。大屌哥實測 5 處、大屌歌 0 處，保留散步、翔宇道歉、十年之約、合照與紅燈歌曲結尾。
+- 沿用原 slug、章節順序、五則文化註解、延伸聆聽及歌曲；v3 的註4優先於先前未提交的簡短措辭，notes.json 已與 v3 同步（內容回到已提交版本），舊差異僅留本地稽核記錄。其他四章、閱讀器、播放器、繁簡原始位元未變。
+- npm run check、npm test（9 項）、npm run build、release gate、EP.04 四尺寸、台南舊四篇註解／音樂回歸、chapter-music 390/1440 通過。另以 375/390/430/1440 逐頁掃描所有五註，無空頁／溢出，確認章末聆聽；iPhone Safari 實機未驗。發布前仍須精確暫存樹獨立驗證。
+- 作者特別允許此次交付副本驗證後直接刪除、不另歸檔；檢查未追蹤狀態、路徑及正式程式無引用後，只刪除本輪根目錄 v3 副本。既有舊版原件與 v3 內容不同且屬歷史來源，完整保留，未刪備份。
+- 初始 main／origin/main 為 fd8ea0a；既有沈總整理等無關文件差異保留、不夾帶。本輪已授權 Commit／Push，準備依既有 Pages 流程發布；實際結果以本輪最終回報及 .local/ep04-v3/ 證據為準。
