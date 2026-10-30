@@ -328,3 +328,8 @@ npm run check、11 項單元測試、build、release gate、workflow 通過；37
 原始兩圖已複製核對保存於忽略的 _archive/source-packages/chatgpt/2026-10-30/rules-ep01-illustrations/，manifest.json 記對照；ep01_shiqiao_checkpoint.png：2325808 bytes，SHA-256 9a90c57a50a05cd4021fe8c0ea6b7d50c4ba9276d43d5c8be37e66d3e6a4faaa；ep01_shiqiao_gunpoint.png：2353153 bytes，SHA-256 b1a5bd5faa2068b67e9faf4a42c18066f03421d870c4eb0776bf1441f117024b。待本輪部署與線上核對成功後清除根目錄兩個 PNG，原圖歸檔保留。
 
 作者本輪已明確授權 Commit／Push／部署與原圖歸檔、入口清理。寫入時尚待精確暫存樹及 Pages 驗證；既有五份歷史文件差異安全排除，發布結果見本輪最終回報及 .local/ep01-illustrations/。
+
+
+## 2026-10-31 第一章插圖改至正文開頭
+
+依作者最新指示，兩張內文插圖從中段移至章名之後、第一段正文之前，順序為遞菸→拔槍，各引用一次。正式封面與圖片位元不變；移除圖片標記後正文與上一版逐位元相同。無新增來源交付，不需歸檔或清理。check、11 項單元測試、build、release gate 已通過；手機／桌面與精確提交版本驗證進行中，通過後沿用本次上線授權發布。原有五份文件未提交內容保留且排除；最終測試／部署結果見本輪回報與 .local/ep01-opening/。
