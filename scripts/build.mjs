@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {createHash} from 'node:crypto';
+import {marked} from 'marked';
 
 const root = path.resolve('dist');
 const source = path.resolve('content/works');
@@ -28,6 +29,7 @@ function withCulturalNotes(markdown, notes, label, chapter) {
 if (path.dirname(root) !== process.cwd()) throw new Error('Invalid build directory');
 
 const works = [];
+const illustrations = new Set();
 for (const entry of await fs.readdir(source, {withFileTypes:true})) {
   if (!entry.isDirectory() || !slug.test(entry.name)) fail(`非法作品資料夾 ${entry.name}`);
   const dir = path.join(source, entry.name);
@@ -52,6 +54,12 @@ for (const entry of await fs.readdir(source, {withFileTypes:true})) {
     const original = await fs.readFile(path.join(dir, 'chapters', filename), 'utf8');
     const markdown = notes ? withCulturalNotes(original, notes[chapter.id], `${work.id}/${filename}`, chapter) : original;
     if (!markdown.trim()) fail(`${work.id}/${filename} 是空檔案`);
+    // Publish only images referenced by a registered chapter in its own asset directory.
+    for (const [,src] of marked.parse(markdown).matchAll(/<img\b[^>]*\bsrc="([^"]+)"[^>]*>/gi)) {
+      if (!new RegExp(`^assets/illustrations/${work.id}/[a-z0-9_-]+\\.(?:webp|png|jpe?g)$`).test(src)) fail(`${work.id}/${filename} 插圖路徑無效：${src}`);
+      await fs.access(path.join('web',src));
+      illustrations.add(src);
+    }
     return {id:chapter.id,title:chapter.title,volume:chapter.volume || '',songId:chapter.songId || null,file:`content/${work.id}/${filename}`,version:createHash('sha256').update(markdown).digest('hex').slice(0,16)};
   }));
   if (work.cover) await fs.access(path.join('web', work.cover));
@@ -67,6 +75,10 @@ await fs.cp('web/assets/icons',path.join(root,'assets/icons'),{recursive:true});
 // Only the page logo is public; masters, previews and provenance stay private.
 await fs.mkdir(path.join(root,'assets/branding'),{recursive:true});
 await fs.copyFile('web/assets/branding/brand-logo.png',path.join(root,'assets/branding/brand-logo.png'));
+for (const src of illustrations) {
+  await fs.mkdir(path.dirname(path.join(root,src)),{recursive:true});
+  await fs.copyFile(path.join('web',src),path.join(root,src));
+}
 const assetHash=createHash('sha256');
 for (const file of ['web/css/reader.css',...(await fs.readdir('web/js',{recursive:true})).filter(name=>name.endsWith('.js')).sort().map(name=>path.join('web/js',name))]) assetHash.update(await fs.readFile(file));
 const assetVersion=assetHash.digest('hex').slice(0,12);

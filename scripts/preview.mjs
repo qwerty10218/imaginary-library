@@ -6,7 +6,7 @@ const root = path.resolve('dist');
 const prefix = '/imaginary-library/';
 const musicRoot = path.resolve('web/assets/music');
 const musicMap = JSON.parse(await fs.readFile(new URL('./local-music.json',import.meta.url),'utf8'));
-const types = {'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json; charset=utf-8','.md':'text/plain; charset=utf-8','.mp3':'audio/mpeg','.png':'image/png','.ico':'image/x-icon'};
+const types = {'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json; charset=utf-8','.md':'text/plain; charset=utf-8','.mp3':'audio/mpeg','.png':'image/png','.webp':'image/webp','.ico':'image/x-icon'};
 async function sendAudio(req,res,file){
  const {size}=await fs.stat(file);
  const range=req.headers.range?.match(/^bytes=(\d+)-(\d*)$/);

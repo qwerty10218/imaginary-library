@@ -317,3 +317,14 @@ EP.04 發布前最終驗證：本地 check（含 Build）、9 項單元測試、
 ## 2026-10-30 繁簡詞語修正
 
 共用 language.js 補正「倒楣→倒霉」，保留「門楣→门楣」與既有「擡→抬」修正，繁體正文不變。新增 language.test.mjs，檢查乾／幹、髮／發、后／後、鍊／鏈、菸／煙、人物地名與繁體還原。check、11 項單元測試、build、release gate 通過；390/1440 實際閱讀頁簡體詞語、重載與繁體恢復、HTML 屬性／路由／code 保護通過，並批次檢查四作品 metadata 與十章轉換及原文還原。此段寫入時尚待精確提交樹與 Pages，沿用本輪新書發布後修正授權；部署結果見本輪最終回報及 .local/language-fix/。未收到新增素材，未搬移來源，既有文件差異保留且排除提交。
+
+
+## 2026-10-30 第一章雙插圖
+
+兩張 1536×1024 PNG 已轉無損 WebP，解碼像素一致，沿用現有閱讀器 img 與等比例 CSS；章節只新增兩個 img 標記（含 alt、width/height、lazy），刪除標記後正文逐位元等於原稿。圖一在捧出三炮台之後／一點意思之前；圖二在抽出手槍之後／你他媽也配之前，各一次。既有 Build 僅複製已發布章節引用的同作品插圖，預覽補 WebP MIME；workflow 測試新增引用資產、未引用排除、缺檔與越界拒絕。
+
+npm run check、11 項單元測試、build、release gate、workflow 通過；375/390/430/1440，Dark/Light/Warm、scroll/page、單頁/雙頁、兩圖依序各一次、完整比例、無空頁或溢出、章末與進度重載、繁簡 alt 通過。既有章節 390/1440/1720、播放器 390/1440、favicon 回歸通過。無獨立 lint/typecheck；iOS 實機未驗。其他作品、metadata、封面未變。
+
+原始兩圖已複製核對保存於忽略的 _archive/source-packages/chatgpt/2026-10-30/rules-ep01-illustrations/，manifest.json 記對照；ep01_shiqiao_checkpoint.png：2325808 bytes，SHA-256 9a90c57a50a05cd4021fe8c0ea6b7d50c4ba9276d43d5c8be37e66d3e6a4faaa；ep01_shiqiao_gunpoint.png：2353153 bytes，SHA-256 b1a5bd5faa2068b67e9faf4a42c18066f03421d870c4eb0776bf1441f117024b。待本輪部署與線上核對成功後清除根目錄兩個 PNG，原圖歸檔保留。
+
+作者本輪已明確授權 Commit／Push／部署與原圖歸檔、入口清理。寫入時尚待精確暫存樹及 Pages 驗證；既有五份歷史文件差異安全排除，發布結果見本輪最終回報及 .local/ep01-illustrations/。
