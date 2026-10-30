@@ -50,3 +50,8 @@
 ## 2026-10-30 《規矩是死的，你也是》第一包
 
 六檔來源已逐檔 SHA-256 核對保存於忽略的 _archive/source-packages/chatgpt/2026-10-30/rules-first-package/（manifest.json）。正文原樣整合，SHA-256 0b2f2e41cccdf81bf5ab36c5f2c06bbdd98611461d6c1a43e90358c94a5b7fcd。依作者補充以 cover.png 為準，以 Pillow 無損轉 WebP，1024×1536、解碼像素完全一致；正式 WebP SHA-256 031677c9afae2f49934c394cd1bc46b1161d9230e56480e39b8712c709528d9f。原包 WebP 不採用。來源包不進 Git／Build；待部署逐檔核對成功才清除根目錄入口。
+
+
+## 2026-10-30 繁簡詞語修正
+
+共用 language.js 補正「倒楣→倒霉」，保留「門楣→门楣」與既有「擡→抬」修正，繁體正文不變。新增 language.test.mjs，檢查乾／幹、髮／發、后／後、鍊／鏈、菸／煙、人物地名與繁體還原。check、11 項單元測試、build、release gate 通過；390/1440 實際閱讀頁簡體詞語、重載與繁體恢復、HTML 屬性／路由／code 保護通過，並批次檢查四作品 metadata 與十章轉換及原文還原。此段寫入時尚待精確提交樹與 Pages，沿用本輪新書發布後修正授權；部署結果見本輪最終回報及 .local/language-fix/。未收到新增素材，未搬移來源，既有文件差異保留且排除提交。

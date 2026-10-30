@@ -11,8 +11,8 @@ try { if(localStorage.getItem(key)==='cn') language='cn'; } catch {}
 document.documentElement.lang=language==='cn'?'zh-CN':'zh-TW';
 
 export const getLanguage=()=>language;
-// OpenCC's tw→cn table maps 抬 to the variant 擡; standardize the displayed Simplified glyph.
-export const convertText=text=>language==='cn'?convert(String(text)).replace(/擡/g,'抬'):String(text);
+// Normalize Simplified variants and the Taiwanese phrase 倒楣 without changing 門楣.
+export const convertText=text=>language==='cn'?convert(String(text)).replace(/擡/g,'抬').replace(/倒楣/g,'倒霉'):String(text);
 export function setLanguage(next) {
   language=next==='cn'?'cn':'tw';
   try { localStorage.setItem(key,language); } catch {}
