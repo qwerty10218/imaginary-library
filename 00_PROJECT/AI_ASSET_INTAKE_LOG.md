@@ -45,3 +45,8 @@
 - npm run check、npm test（9 項）、npm run build、release gate、EP.04 四尺寸、台南舊四篇註解／音樂回歸、chapter-music 390/1440 通過。另以 375/390/430/1440 逐頁掃描所有五註，無空頁／溢出，確認章末聆聽；iPhone Safari 實機未驗。發布前仍須精確暫存樹獨立驗證。
 - 作者特別允許此次交付副本驗證後直接刪除、不另歸檔；檢查未追蹤狀態、路徑及正式程式無引用後，只刪除本輪根目錄 v3 副本。既有舊版原件與 v3 內容不同且屬歷史來源，完整保留，未刪備份。
 - 初始 main／origin/main 為 fd8ea0a；既有沈總整理等無關文件差異保留、不夾帶。本輪已授權 Commit／Push，準備依既有 Pages 流程發布；實際結果以本輪最終回報及 .local/ep04-v3/ 證據為準。
+
+
+## 2026-10-30 《規矩是死的，你也是》第一包
+
+六檔來源已逐檔 SHA-256 核對保存於忽略的 _archive/source-packages/chatgpt/2026-10-30/rules-first-package/（manifest.json）。正文原樣整合，SHA-256 0b2f2e41cccdf81bf5ab36c5f2c06bbdd98611461d6c1a43e90358c94a5b7fcd。依作者補充以 cover.png 為準，以 Pillow 無損轉 WebP，1024×1536、解碼像素完全一致；正式 WebP SHA-256 031677c9afae2f49934c394cd1bc46b1161d9230e56480e39b8712c709528d9f。原包 WebP 不採用。來源包不進 Git／Build；待部署逐檔核對成功才清除根目錄入口。

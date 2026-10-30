@@ -253,3 +253,5 @@ details[open]>summary .when-closed{display:none}
 /* Header identity uses the existing full, opaque brand artwork. */
 .brand-logo{display:block;width:36px;height:36px;flex:none;object-fit:contain}
 @media(max-width:599px){.brand-logo{width:32px;height:32px}}
+/* Preserve this work's approved 2:3 cover in the library and detail view. */
+.work-cover:has(> img[src="assets/covers/rules_are_dead_so_are_you_cover.webp"]){aspect-ratio:2/3}
