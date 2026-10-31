@@ -28,7 +28,7 @@
 | 作品資料 | 同作品 `metadata.json`；沿用 genres、tags、chapters、songId 等 schema，不建立平行索引 |
 | 文化註解 | 依作品 metadata 的 culturalNotes；台南系列為 `content/works/tainan-youth-wind/notes.json`，維持正文註碼對應 |
 | 人物、時間線、伏筆／Story Bible | 先找作品既有設定檔；目前《叫我沈總》有 `content/works/jiao-wo-shen-zong/plot-notes.md`，不是所有作品的共用 Story Bible。其他作品未建立時先保留來源、按該作品需求決定，不套用另一部作品規範 |
-| 正式封面 | `web/assets/covers/`，由 metadata 指定，保留主體比例；插圖目前沒有統一現成目錄，先查該作品引用與 Build 支援，不能假定任意新子目錄會部署 |
+| 正式封面 | `web/assets/covers/`，由 metadata 指定，保留主體比例；內文插圖使用 `web/assets/illustrations/<work-id>/`，僅 Build 已登錄章節引用的資產；位置與整理依 [章節上架通則](CHAPTER_PUBLISH_WORKFLOW.md) |
 | Favicon | `web/assets/icons/`，僅放需要的正式成品，保持同一套引用 |
 | Logo／設計來源 | `web/assets/branding/`；目前只有 `brand-logo.png` 納入 Git／Build，其餘忽略素材是本地來源，詳見 [FAVICON_ASSETS.md](FAVICON_ASSETS.md) |
 | HTML/CSS/JS 參考 | 在 `.local/` 隔離檢視，提取必要修改到既有 `web/`、`web/css/`、`web/js/`；示範頁不取代正式首頁或另建閱讀器 |

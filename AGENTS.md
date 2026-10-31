@@ -42,3 +42,5 @@
 - 撰寫《台南少年追風記》前，讀取 [共創記憶](00_PROJECT/CREATIVE_MEMORY_台南少年追風記.md) 及最新正式章節（目前為 [EP.05](content/works/tainan-youth-wind/chapters/ep05.md)）。
 - 核准的 Markdown 正文優先於記憶摘要、舊聊天與網路整理；即興可以放，定稿必須剪；補回收，不補贅字。
 - 原有工程／Git 安全保護規則持續有效，新的寫作規則不得覆蓋。
+
+- 章節上架、插圖預設章首及完整來源清理依 [章節上架通則](00_PROJECT/CHAPTER_PUBLISH_WORKFLOW.md)；作者當次明確指定優先。
