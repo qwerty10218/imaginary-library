@@ -450,3 +450,10 @@ check、11 項單元測試、build、release gate、workflow 已執行通過；4
 依作者指定根目錄 `第二章_你他娘的_二十大洋_完整修訂.md` 更新既有 ep02；來源 34,134 bytes，SHA-256 `37ac0d58e453985f5f45981f45e6d102fb9d472649d1c44d39a16bd174d826af`。原件保存忽略的 `_archive/source-packages/chatgpt/2026-11-01/rules-ep02-full/`，manifest 記雜湊。正文逐字比對一致，僅移除來源中段圖標記、保留現行三圖章首 HTML，適配兩則新版註腳至既有格式。未潤稿或刪減；其他章節、metadata、正式圖片、封面、閱讀器及規則均不改。
 
 check、11 項單元測試、build、release gate 已通過；四尺寸三主題逐頁／滾動、圖片／註腳／繁簡／進度測試、精確暫存版本獨立驗證與 Pages 發布依本輪證據 `.local/rules-ep02-full/` 及最終回報確認，不提前宣稱上線。既有五份文件差異保留且排除提交。成功後核對原件歸檔再清理本次根目錄副本。
+
+
+## 2026-11-01 第二章 fixed 稿更新
+
+作者指定 `ep02_fixed_preview_and_source/chapters/ep02.md` 為本次唯一文字來源；實際包內只有此檔，無額外修正 Prompt。24,079 bytes，SHA-256 `4b827c69ac8eb5c9855452a7d8757736acc0a85d2da5d0340f5813da098dc072`，原件逐位元核對保存 `_archive/source-packages/chatgpt/2026-11-01/rules-ep02-fixed/chapters/ep02.md`，manifest 記雜湊。正文核對來源一致，保留內文場景分隔，四則註腳轉現有格式；三張圖與章首標記完全沿用，不改圖片、metadata、其他章節、UI 或規則。
+
+check、11 項單元測試、build、release gate 通過；四寬度三主題逐頁／滾動、腳註／繁簡／進度、精確暫存樹建置與 Pages 依 `.local/rules-ep02-fixed/` 及本輪最終回報確認，不提前宣稱發布成功。沿用作者本輪更新上線與整理流程授權，成功後只清理核對過的交付副本；既有文件差異安全排除且保留。
