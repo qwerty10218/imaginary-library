@@ -38,7 +38,7 @@ try{
    assert.equal(result.empty,false);assert.equal(result.overflow,false);assert.equal(result.horizontal,false);
    if(result.last)break;assert.ok(turn<179);await page.locator('#next').click();
   }
-  assert.ok((await page.locator('#book').innerText()).includes('是妳。'));assert.deepEqual(errors,[]);
+  assert.ok((await page.locator('#book').innerText()).includes('Who Cares 胡凱兒〈菸癮〉'));assert.deepEqual(errors,[]);
   await page.screenshot({path:`.local/ep06/${width}-${theme}.png`});await context.close();console.log('PASS EP.06',width,theme);
  }
 }finally{await browser.close();}
