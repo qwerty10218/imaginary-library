@@ -15,8 +15,8 @@ try{
   const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto(base+'work.html?id=tainan-youth-wind');
   await page.locator('#chapter-list a').last().waitFor();
-  assert.equal(await page.locator('#chapter-list a').count(),5);
-  assert.match(await page.locator('#chapter-list a').last().getAttribute('href'),/chapter=ep05/);
+  assert.equal(await page.locator('#chapter-list a').count(),6);
+  assert.match(await page.locator('#chapter-list a').last().getAttribute('href'),/chapter=ep06/);
   await page.goto(base+'reader.html?work=tainan-youth-wind&chapter=ep03');
   await page.locator('body[data-ready=true]').waitFor();
   assert.match(await page.locator('#next-chapter').getAttribute('href'),/chapter=ep04/);

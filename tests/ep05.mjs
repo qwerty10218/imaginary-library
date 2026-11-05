@@ -36,8 +36,8 @@ try{
   const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto(base+'work.html?id=tainan-youth-wind');
   await page.locator('#chapter-list a').last().waitFor();
-  assert.equal(await page.locator('#chapter-list a').count(),5);
-  assert.match(await page.locator('#chapter-list a').last().getAttribute('href'),/chapter=ep05/);
+  assert.equal(await page.locator('#chapter-list a').count(),6);
+  assert.match(await page.locator('#chapter-list a').last().getAttribute('href'),/chapter=ep06/);
   await page.goto(base+'reader.html?work=tainan-youth-wind&chapter=ep04');
   await page.locator('body[data-ready=true]').waitFor();
   assert.match(await page.locator('#next-chapter').getAttribute('href'),/chapter=ep05/);
@@ -48,7 +48,7 @@ try{
   assert.match(await page.locator('#music-summary').innerText(),/夢醒時分/);
   assert.equal(await page.locator('#music-audio').evaluate(a=>a.paused),true);
   assert.equal(await page.locator('#music-audio').evaluate(a=>a.currentTime),0);
-  assert.equal(await page.locator('#next-chapter').evaluate(e=>e.hidden),true);
+  assert.match(await page.locator('#next-chapter').getAttribute('href'),/chapter=ep06/);
   assert.match(await page.locator('#previous-chapter').getAttribute('href'),/chapter=ep04/);
   const text=await page.locator('#scroll-content').innerText();
   for(const term of ['高雄巨蛋','嘉豪 & China Blue','明天誰有早八','樹枝孤鳥','你是我的花朵'])assert.ok(text.includes(term));

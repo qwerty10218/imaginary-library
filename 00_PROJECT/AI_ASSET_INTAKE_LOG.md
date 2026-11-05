@@ -90,3 +90,12 @@ check、11 項單元測試、build、release gate 已通過；四尺寸三主題
 作者指定 `ep02_fixed_preview_and_source/chapters/ep02.md` 為本次唯一文字來源；實際包內只有此檔，無額外修正 Prompt。24,079 bytes，SHA-256 `4b827c69ac8eb5c9855452a7d8757736acc0a85d2da5d0340f5813da098dc072`，原件逐位元核對保存 `_archive/source-packages/chatgpt/2026-11-01/rules-ep02-fixed/chapters/ep02.md`，manifest 記雜湊。正文核對來源一致，保留內文場景分隔，四則註腳轉現有格式；三張圖與章首標記完全沿用，不改圖片、metadata、其他章節、UI 或規則。
 
 check、11 項單元測試、build、release gate 通過；四寬度三主題逐頁／滾動、腳註／繁簡／進度、精確暫存樹建置與 Pages 依 `.local/rules-ep02-fixed/` 及本輪最終回報確認，不提前宣稱發布成功。沿用作者本輪更新上線與整理流程授權，成功後只清理核對過的交付副本；既有文件差異安全排除且保留。
+
+
+## 2026-11-06 EP.06〈菸癮〉上架
+
+依作者本輪授權新增第六章及 Who Cares 胡凱兒〈菸癮〉MP3，驗證通過後直接 Commit／Push，沿用既有 Pages。正文完整逐位元採用指定稿，EP.01～05 原文不變；metadata 登錄 ep06、配歌與日期。本章無文化註解，以章節 culturalNotes:false 明確沿用原稿，建置仍保留其他章既有註解驗證。未改閱讀器、繁簡、介面或播放器。
+
+來源保存於忽略的 `_archive/source-packages/chatgpt/2026-11-06/tainan-ep06/`，manifest 記大小、SHA-256 與正式對照。Markdown：ba42ba8eb958fda7d54bfa8a9c789902955f3c2dad00a4db42d7f719335746e2；MP3：a07af6923370177d6781a6ed8361e3fba400bc74fa08b09fbe302ee94983b6d8（8,234,977 bytes，瀏覽器解碼 343.061769 秒）。部署核對成功後僅清理根目錄兩份重複交付物，歸檔原件保留。
+
+check、11 項單元測試及 release gate 通過；EP.06 四寬度三主題、滾動／逐頁、繁簡還原、進度重載、目錄前後章與 MP3 操作通過。EP.04／05、台南系列、六首歌曲切換、favicon 回歸及精確暫存樹獨立驗證依本輪 `.local/ep06/` 證據確認。寫入時尚未發布，不預先宣稱部署成功；最終 Commit、Actions／Pages SHA 與線上逐檔比對以本輪回報為準。既有五份工程文件未提交內容完整保留，排除於本次提交。iOS 實機未驗。

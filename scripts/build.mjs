@@ -52,7 +52,7 @@ for (const entry of await fs.readdir(source, {withFileTypes:true})) {
     ids.add(chapter.id);
     const filename = `${chapter.id}.md`;
     const original = await fs.readFile(path.join(dir, 'chapters', filename), 'utf8');
-    const markdown = notes ? withCulturalNotes(original, notes[chapter.id], `${work.id}/${filename}`, chapter) : original;
+    const markdown = notes && chapter.culturalNotes !== false ? withCulturalNotes(original, notes[chapter.id], `${work.id}/${filename}`, chapter) : original;
     if (!markdown.trim()) fail(`${work.id}/${filename} 是空檔案`);
     // Publish only images referenced by a registered chapter in its own asset directory.
     for (const [,src] of marked.parse(markdown).matchAll(/<img\b[^>]*\bsrc="([^"]+)"[^>]*>/gi)) {
@@ -60,7 +60,7 @@ for (const entry of await fs.readdir(source, {withFileTypes:true})) {
       await fs.access(path.join('web',src));
       illustrations.add(src);
     }
-    return {id:chapter.id,title:chapter.title,volume:chapter.volume || '',songId:chapter.songId || null,file:`content/${work.id}/${filename}`,version:createHash('sha256').update(markdown).digest('hex').slice(0,16)};
+    return {id:chapter.id,title:chapter.title,volume:chapter.volume || '',songId:chapter.songId || null,culturalNotes:chapter.culturalNotes,file:`content/${work.id}/${filename}`,version:createHash('sha256').update(markdown).digest('hex').slice(0,16)};
   }));
   if (work.cover) await fs.access(path.join('web', work.cover));
   works.push(work);
@@ -106,7 +106,7 @@ for (const work of works) {
   const notes = work.culturalNotes ? JSON.parse(await fs.readFile(path.join(dir, work.culturalNotes), 'utf8')) : null;
   for (const chapter of work.chapters) {
     const original=await fs.readFile(path.join(dir,'chapters',`${chapter.id}.md`),'utf8');
-    await fs.writeFile(path.join(dest,`${chapter.id}.md`),notes?withCulturalNotes(original,notes[chapter.id],`${work.id}/${chapter.id}.md`,chapter):original);
+    await fs.writeFile(path.join(dest,`${chapter.id}.md`),notes && chapter.culturalNotes !== false?withCulturalNotes(original,notes[chapter.id],`${work.id}/${chapter.id}.md`,chapter):original);
   }
 }
 await fs.mkdir(path.join(root,'js/vendor'), {recursive:true});

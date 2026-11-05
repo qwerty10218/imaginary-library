@@ -28,12 +28,12 @@ try{
   await page.locator('#music-play').click();await page.waitForFunction(()=>document.querySelector('#music-audio').currentTime>0);
   assert.match(await page.locator('#music-summary').textContent(),/^播放中/);
   await page.locator('#music-play').click();await page.waitForFunction(()=>document.querySelector('#music-summary').textContent.startsWith('已暫停'));assert.match(await page.locator('#music-summary').textContent(),/^已暫停/);
-  for(const index of [1,2,3,4,0]){
+  for(const index of [1,2,3,4,5,0]){
    // Exercise both playing and paused transitions; every target must reset paused.
    if(index%2){await page.locator('#music-play').click();await page.waitForFunction(()=>!document.querySelector('#music-audio').paused);}
    await page.locator('#contents-button').click();await page.locator('#contents-chapters a').nth(index).click();await selected(page,index);
   }
-  await page.goBack();await selected(page,4);await page.goForward();await selected(page,0);
+  await page.goBack();await selected(page,5);await page.goForward();await selected(page,0);
   await page.reload();await page.locator('body[data-ready=true]').waitFor();await selected(page,0);
   await page.locator('#music-panel summary').click();
   await page.locator('#music-file').setInputFiles('web/assets/music/summer-night-wind.mp3');
@@ -42,7 +42,7 @@ try{
   await page.locator('#music-play').click();await page.waitForFunction(()=>!document.querySelector('#music-audio').paused);
   await page.locator('#contents-button').click();await page.locator('#contents-chapters a').nth(1).click();await selected(page,1);
   await page.screenshot({path:`.local/chapter-music/not-started-${width}.png`});
-  assert.deepEqual(errors,[]);await page.close();console.log('PASS chapter music defaults, five songs, playing/paused transitions, history, reload and local file',width);
+  assert.deepEqual(errors,[]);await page.close();console.log('PASS chapter music defaults, six songs, playing/paused transitions, history, reload and local file',width);
  }
  const page=await browser.newPage();
  await page.route('**/data/works.json',async route=>{
