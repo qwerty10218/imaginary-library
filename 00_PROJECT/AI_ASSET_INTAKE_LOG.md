@@ -104,3 +104,31 @@ check、11 項單元測試及 release gate 通過；EP.06 四寬度三主題、�
 ## 2026-11-06 EP.06 延伸聆聽位置修正
 
 依作者指示將章首延伸聆聽移至正文後，使用前五章既有「## 延伸聆聽」格式，歌手與曲名不變。除移位及標題格式外正文不變，前五章、音檔、播放器與閱讀介面不改；更新末頁回歸預期。check（含 build）、11 項單元測試與 release gate 通過，四尺寸三主題逐頁／繁簡／進度／音樂及精確暫存樹依本輪驗證記錄確認。沿用本輪發布授權；寫入時尚待 Pages，最終結果另補記。既有文件差異保留且排除提交。
+
+## 2026-11-06 《規矩》第三章〈凡事講個誠〉本地整合
+
+附件 ZIP 已完成安全列目錄與隔離解壓：2 檔、總輸出 41,083 bytes；本批上限 10 檔、單檔 1 MiB、總量 2 MiB、壓縮比 100，適用純文字小包，無越界或特殊檔。ZIP SHA-256：046f170f28005dd9ddbecc0327ae3867de26315ee4877d2c172ac242b791ae88。定稿 35,426 bytes，SHA-256 c9e0503d2e7bb94f24000d9ae2e5f059bf68d6ab493bdf89d9bdab5f4fc0c95d，符合包內標示。
+
+正式正文為 content/works/rules-are-dead-so-are-you/chapters/ep03.md，metadata 新增 ep03 並更新日期。六節正文逐字核對一致；僅將一則 Markdown 註腳轉為既有 sup.fn-ref／section.footnotes，移除註解區原分隔線與標題以免產生空白尾頁。無插圖，前兩章及其他作品未改。正式檔 SHA-256 cb392f4e5f7d22ecc762c4660725626fbf9bcf6b23172dda8fa4445182c8df50，Build 副本逐位元相同。
+
+原 ZIP、定稿與 Prompt 已保存忽略的 _archive/source-packages/chatgpt/2026-11-06/rules-ep03/，manifest.json 逐檔校驗通過；附件原件保留，根目錄沒有新增交付副本。check（含 build）、11 項單元測試、release gate、workflow 通過。閱讀回歸證據與截圖在 .local/asset-intake/rules-ep03/；完整瀏覽器結果另補記。原有五份工程文件差異保留。僅本地整合，未 Commit／Push／部署，待作者預覽與明確發布授權；iOS 實機未驗。
+
+第三章閱讀回歸完成：375／390／430／1440、dark／light／warm 共 12 組全部通過，含目錄、第二章下一章入口、返回第二章、六節、註腳點擊、繁簡原文還原、進度重載及逐頁至結尾；無空頁、溢出或 JavaScript 錯誤。初次測試的標題統計與初始化設定問題已修正，workflow 重建造成的一次讀取逾時於穩定建置後完整重跑通過。
+
+## 2026-11-06 《規矩》角色視覺規則與正式插圖索引
+
+依作者最新指示，本輪只整理第一、二章五張正式插圖路徑並建立 VISUAL_RULES_規矩是死的你也是.md，AGENTS.md 加入入口。規範已採用形象優先、五官與傷痕連續性、阿順及場景審查、候選圖待作者核准與既有資產目錄沿用。本輪未接收新圖、未搬移素材；未執行跨章視覺審查，不宣稱角色一致或指定唯一人物標準。正文、圖片、metadata 與既有未提交工作保持原狀；未 Commit／Push／部署。作者將先請 ChatGPT 重生第三章圖片，再交回審查。
+
+本輪 npm run check（含建置與 4 項進度測試）通過；文件尾端多餘空行已修正，git diff --check 重新檢查。
+
+## 2026-11-06 《規矩》第三章與雙插圖發布準備
+
+作者明確授權第三章、看房／吃麵雙圖及本輪角色視覺規則驗證後 Commit／Push／Pages。衣長被遮擋，作者確認看起來為長衣，保留正文與原圖；金雞納霜經教育部辭典及中研院民初上海醫藥廣告研究核對為當時用語，非特定品牌，招牌保留。正式圖 ep03_rental_inspection.webp（1536×500）與 ep03_noodle_shop.webp（1536×516）按順序置章首，無損轉換並實測 RGB 像素一致，原 PNG 未改。排除圖標與註腳格式適配後正文與唯一定稿逐字相同。
+
+兩張原 PNG 與 manifest／integration.json 保存於忽略的 _archive/source-packages/chatgpt/2026-11-06/rules-ep03-illustrations/，原下載檔保留。原圖 SHA-256：0ad323613b10aeb192b7d38bedcf076561262eb0a67479ab27499cbd834e014d、8f581d88874622604a101fd5b0c08d8e85adf3147b4bfba996e63ca03934b7d2。資產目錄新增的 rules-are-dead-so-are-you.rar 經只列目錄辨識為五張舊圖來源包，原位保留、不提交、不進 Build，未解壓或執行。前兩章、其他作品、閱讀器與播放器不改。
+
+check（含 build）、11 項單元測試、release gate、workflow、favicon 通過；新章 375／390／430／1440 三主題、翻頁至結尾、滾動、兩圖解碼與比例／順序、註腳、繁簡還原、進度重載與前後章入口通過。既有 tests/release.mjs 固定三作品，現有四作品使原測試失敗；使用臨時副本從正式索引讀取作品數，其餘原斷言不變，390／1440／1720 回歸通過，原檔未改。初次無預覽服務的連線失敗已於啟動服務後重跑。iOS 實機未驗。
+
+發布前 A 為本地第三章與雙圖，B origin/main 與 C 成功 Pages 均為 17c5ccf4a5f2b4873f52f0fd9983a4d6b9cbdaa3；無遠端分歧。既有五份歷史文件差異留工作區，僅暫存本任務新增章節／插圖／規則及相應文件增量。精確暫存樹將獨立 npm ci／check／test／build／release gate，並比對全份 dist；本段寫入時尚未發布，最終部署 SHA、Actions 與線上逐檔比對以本輪回報及 .local/rules-ep03-release/ 證據確認。
+
+作者補充要求既有 release 測試隨實際作品更新：tests/release.mjs 已改從正式 dist/data/works.json 取得作品 ID，核對卡片數量及完整 ID 集合，其餘章節、繁簡與導航斷言保留。此更新取代前述僅執行臨時副本且原檔不改的處理。

@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 
 const base='http://127.0.0.1:4173/imaginary-library/';
+const {works}=JSON.parse(await fs.readFile('dist/data/works.json','utf8'));
+const expectedWorkIds=works.map(work=>work.id).sort();
 const browser=await chromium.launch({headless:true,channel:process.env.BROWSER_CHANNEL||'msedge'});
 await fs.mkdir('.local/release',{recursive:true});
 async function scanPages(page){
@@ -28,7 +30,9 @@ try{
   page.on('pageerror',error=>errors.push(error.message));
   page.on('response',response=>{if(response.status()>=400)failed.push(response.url());});
   await page.goto(base);await page.locator('.work-card').first().waitFor();
-  assert.equal(await page.locator('.work-card').count(),3);
+  assert.equal(await page.locator('.work-card').count(),expectedWorkIds.length);
+  const actualWorkIds=await page.locator('.work-card a[href*="work.html?id="]').evaluateAll(links=>links.map(link=>new URL(link.href).searchParams.get('id')).sort());
+  assert.deepEqual(actualWorkIds,expectedWorkIds,'library cards must match the published work index');
   const firstCover=page.locator('.work-card').filter({has:page.locator('a[href="work.html?id=zhen-du-chuanyue"]')}).locator('.work-cover img');
   await firstCover.evaluate(img=>img.decode());
   assert.equal(await firstCover.evaluate(img=>img.naturalWidth===1086),true);
