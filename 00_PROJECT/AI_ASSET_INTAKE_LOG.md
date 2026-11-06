@@ -132,3 +132,11 @@ check（含 build）、11 項單元測試、release gate、workflow、favicon �
 發布前 A 為本地第三章與雙圖，B origin/main 與 C 成功 Pages 均為 17c5ccf4a5f2b4873f52f0fd9983a4d6b9cbdaa3；無遠端分歧。既有五份歷史文件差異留工作區，僅暫存本任務新增章節／插圖／規則及相應文件增量。精確暫存樹將獨立 npm ci／check／test／build／release gate，並比對全份 dist；本段寫入時尚未發布，最終部署 SHA、Actions 與線上逐檔比對以本輪回報及 .local/rules-ep03-release/ 證據確認。
 
 作者補充要求既有 release 測試隨實際作品更新：tests/release.mjs 已改從正式 dist/data/works.json 取得作品 ID，核對卡片數量及完整 ID 集合，其餘章節、繁簡與導航斷言保留。此更新取代前述僅執行臨時副本且原檔不改的處理。
+
+## 2026-11-06 第三章吃麵圖修字版本採用
+
+作者提供新的完整吃麵圖與兩張招牌局部參考，要求修正「大新綢緞莊／中國旅行社」。使用內建 imagegen 局部修字兩次；作者明確確認最後一版「字這樣可以了，直接 push」，依此採用第二次生成結果，不再改字、不使用程式覆字。保留人物場景的生成式編修不宣稱與輸入逐像素一致；只有生成 PNG → 正式 WebP 的 RGB 像素一致性已實測。
+
+正式 ep03_noodle_shop.webp 更新為 1672×941，SHA-256 cdd3fa761e94c558717090865269ebf07af72eec2cb9eb6b4001fd0329a849e5；ep03.md 僅適配該圖 width／height，正文、看房圖、其他章節不改。原輸入、局部參考、兩次生成、舊正式圖與 approved-integration.json 保存於忽略的 _archive/source-packages/chatgpt/2026-11-06/rules-ep03-signs/，無唯一原件刪除。提示要求只修兩塊直式金字招牌、保留人物與構圖；最終採用依作者視覺確認，不宣稱生成字形機械校驗通過。
+
+前次提交 4b6cf069b3ae53de9e464daa01a8483062d29300 已 Push，但 Actions 42170281824 的 deploy-pages 發布步驟逾時，建置成功；正式站仍為先前版本。此次沿既有工作流程用更新提交重新發布，不改部署設定、不 force Push。新版本 check（含 build）、11 項單元測試、release gate 已通過；閱讀／release／圖示回歸、精確暫存樹獨立建置及線上內容一致性依本輪證據核對，寫入時未提前宣稱部署成功。iOS 實機未驗。
